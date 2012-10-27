@@ -1,0 +1,165 @@
+//
+//  ZZArchive.mm
+//  zipzap
+//
+//  Created by Glen Low on 25/09/12.
+//  Copyright (c) 2012, Pixelglow Software. All rights reserved.
+//
+
+#include <algorithm>
+#include <fcntl.h>
+
+#import "ZZOldArchiveEntry.h"
+#import "ZZArchiveEntryWriter.h"
+#import "ZZArchive.h"
+#import "ZZHeaders.h"
+
+@interface ZZArchive ()
+{
+@protected
+	NSURL* _URL;
+	NSData* _contents;
+	NSMutableArray* _entries;
+}
+
+@end
+
+@implementation ZZArchive
+
+@synthesize URL = _URL;
+@synthesize entries = _entries;
+
++ (id)archiveWithContentsOfURL:(NSURL*)URL
+{
+	return [[ZZArchive alloc] initWithContentsOfURL:URL];
+}
+
+- (id)initWithContentsOfURL:(NSURL*)URL
+{
+	if ((self = [super init]))
+	{
+		_URL = URL;
+		_entries = [NSMutableArray array];
+		_contents = nil;
+		
+		[self reload];
+	}
+	return self;
+}
+
+- (void)reload
+{
+	// memory-map the contents from the zip file
+	[_entries removeAllObjects];
+	_contents = [NSData dataWithContentsOfURL:_URL
+									  options:NSDataReadingMappedAlways
+										error:nil];
+	
+	if (_contents)
+	{
+		const uint8_t* beginContent = (const uint8_t*)_contents.bytes;
+		const uint8_t* endContent = beginContent + _contents.length;
+		
+		// search for the end of directory signature in last 64K of file
+		const uint8_t* beginRangeEndOfCentralDirectory = std::max(beginContent, endContent - sizeof(ZZEndOfCentralDirectory) - 0xFFFF);
+		const uint8_t* endRangeEndOfCentralDirectory = std::max(beginContent, endContent - sizeof(ZZEndOfCentralDirectory) + sizeof(ZZEndOfCentralDirectory::signature));
+		uint32_t sign = ZZEndOfCentralDirectory::sign;
+		const uint8_t* endOfCentralDirectory = std::find_end(beginRangeEndOfCentralDirectory,
+															 endRangeEndOfCentralDirectory,
+															 (const uint8_t*)&sign,
+															 (const uint8_t*)(&sign + 1));
+		
+		if (endOfCentralDirectory != endRangeEndOfCentralDirectory)
+		{
+			// sanity check end of directory
+			const ZZEndOfCentralDirectory* endOfCentralDirectoryRecord = (const ZZEndOfCentralDirectory*)endOfCentralDirectory;
+			if (endOfCentralDirectoryRecord->numberOfThisDisk == 0
+				&& endOfCentralDirectoryRecord->numberOfTheDiskWithTheStartOfTheCentralDirectory == 0
+				&& endOfCentralDirectoryRecord->totalNumberOfEntriesInTheCentralDirectoryOnThisDisk == endOfCentralDirectoryRecord->totalNumberOfEntriesInTheCentralDirectory
+				&& endContent == endOfCentralDirectory + sizeof(ZZEndOfCentralDirectory) + endOfCentralDirectoryRecord->zipFileCommentLength)
+			{
+				ZZCentralFileHeader* nextCentralFileHeader = (ZZCentralFileHeader*)(beginContent
+																					+ endOfCentralDirectoryRecord->offsetOfStartOfCentralDirectoryWithRespectToTheStartingDiskNumber);
+				
+				// add an entry for each central header in the sequence
+				for (uint16_t entryIndex = 0; entryIndex < endOfCentralDirectoryRecord->totalNumberOfEntriesInTheCentralDirectory; ++entryIndex)
+				{
+					ZZLocalFileHeader* nextLocalFileHeader = (ZZLocalFileHeader*)(beginContent
+																				  + nextCentralFileHeader->relativeOffsetOfLocalHeader);
+					[_entries addObject:[[ZZOldArchiveEntry alloc] initWithCentralFileHeader:nextCentralFileHeader
+																		 localFileHeader:nextLocalFileHeader]];
+					
+					nextCentralFileHeader = nextCentralFileHeader->nextCentralFileHeader();
+				}
+			}
+		}
+	}
+}
+
+@end
+
+@implementation ZZMutableZipFile
+
+- (void)setEntries:(NSArray*)newEntries
+{
+	// get an entry writer for each new entry, and allow it to skip writing out its local file if the initial old and new entries match
+	NSMutableArray* newEntryWriters = [NSMutableArray array];
+	NSUInteger oldEntriesCount = _entries.count;
+	BOOL canSkipLocalFile = YES;
+	for (NSUInteger index = 0, count = newEntries.count; index < count; ++index)
+	{
+		ZZArchiveEntry* nextNewEntry = [newEntries objectAtIndex:index];
+		
+		if (canSkipLocalFile)
+		{
+			ZZArchiveEntry* nextOldEntry = index < oldEntriesCount ? [_entries objectAtIndex:index] : nil;
+			canSkipLocalFile = nextNewEntry == nextOldEntry;
+		}
+		
+		[newEntryWriters addObject:[nextNewEntry writerCanSkipLocalFile:canSkipLocalFile]];
+	}
+	
+	// clear entries + content
+	[_entries removeAllObjects];
+	_contents = nil;
+	
+	// open or create the file
+	NSFileHandle* fileHandle = [[NSFileHandle alloc] initWithFileDescriptor:open(_URL.path.UTF8String,
+																				 O_WRONLY | O_CREAT,
+																				 S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH)
+															 closeOnDealloc:YES];
+	
+	// write out all local files
+	for (id<ZZArchiveEntryWriter> newZipEntryWriter in newEntryWriters)
+		[newZipEntryWriter writeLocalFileToFileHandle:fileHandle];
+	
+	ZZEndOfCentralDirectory endOfCentralDirectory;
+	endOfCentralDirectory.signature = ZZEndOfCentralDirectory::sign;
+	endOfCentralDirectory.numberOfThisDisk
+		= endOfCentralDirectory.numberOfTheDiskWithTheStartOfTheCentralDirectory
+		= 0;
+	endOfCentralDirectory.totalNumberOfEntriesInTheCentralDirectoryOnThisDisk
+		= endOfCentralDirectory.totalNumberOfEntriesInTheCentralDirectory
+		= newEntryWriters.count;
+	endOfCentralDirectory.offsetOfStartOfCentralDirectoryWithRespectToTheStartingDiskNumber = (uint32_t)[fileHandle offsetInFile];
+	
+	// write out all central file headers
+	for (id<ZZArchiveEntryWriter> newZipEntryWriter in newEntryWriters)
+		[newZipEntryWriter writeCentralFileHeaderToFileHandle:fileHandle];
+	
+	endOfCentralDirectory.sizeOfTheCentralDirectory = (uint32_t)[fileHandle offsetInFile]
+		- endOfCentralDirectory.offsetOfStartOfCentralDirectoryWithRespectToTheStartingDiskNumber;
+	endOfCentralDirectory.zipFileCommentLength = 0;
+	
+	// write out the end of central directory
+	[fileHandle writeData:[NSData dataWithBytesNoCopy:&endOfCentralDirectory
+													 length:sizeof(endOfCentralDirectory)
+											   freeWhenDone:NO]];
+	
+	// clean up + reload
+	[fileHandle truncateFileAtOffset:[fileHandle offsetInFile]];
+	[fileHandle closeFile];
+	[self reload];
+}
+
+@end
