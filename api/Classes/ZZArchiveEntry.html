@@ -1,0 +1,1106 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="html/html; charset=utf-8" />
+		<title>ZZArchiveEntry Class Reference</title>
+		<meta id="xcode-display" name="xcode-display" content="render"/>
+		<meta name="viewport" content="width=550" />
+		<link rel="stylesheet" type="text/css" href="../css/styles.css" media="all" />
+		<link rel="stylesheet" type="text/css" media="print" href="../css/stylesPrint.css" />
+		<meta name="generator" content="appledoc 2.0.5 (build 737)" />
+	</head>
+	<body>
+		<header id="top_header">
+			<div id="library" class="hideInXcode">
+				<h1><a id="libraryTitle" href="../index.html">zipzap </a></h1>
+				<a id="developerHome" href="../index.html">Pixelglow Sofware</a>
+			</div>
+			
+			<div id="title" role="banner">
+				<h1 class="hideInXcode">ZZArchiveEntry Class Reference</h1>
+			</div>
+			<ul id="headerButtons" role="toolbar">
+				<li id="toc_button">
+					<button aria-label="Show Table of Contents" role="checkbox" class="open" id="table_of_contents"><span class="disclosure"></span>Table of Contents</button>
+				</li>
+				<li id="jumpto_button" role="navigation">
+					<select id="jumpTo">
+	<option value="top">Jump To&#133;</option>
+	
+	<option value="overview">Overview</option>
+	
+	
+	
+	
+	<option value="tasks">Tasks</option>
+	
+	
+	
+	
+	
+	<option value="properties">Properties</option>
+	
+	<option value="//api/name/compressed">&nbsp;&nbsp;&nbsp;&nbsp;compressed</option>
+	
+	<option value="//api/name/compressedSize">&nbsp;&nbsp;&nbsp;&nbsp;compressedSize</option>
+	
+	<option value="//api/name/crc32">&nbsp;&nbsp;&nbsp;&nbsp;crc32</option>
+	
+	<option value="//api/name/fileMode">&nbsp;&nbsp;&nbsp;&nbsp;fileMode</option>
+	
+	<option value="//api/name/fileName">&nbsp;&nbsp;&nbsp;&nbsp;fileName</option>
+	
+	<option value="//api/name/lastModified">&nbsp;&nbsp;&nbsp;&nbsp;lastModified</option>
+	
+	<option value="//api/name/uncompressedSize">&nbsp;&nbsp;&nbsp;&nbsp;uncompressedSize</option>
+	
+	
+	
+	
+	<option value="class_methods">Class Methods</option>
+	
+	<option value="//api/name/archiveEntryWithDirectoryName:">&nbsp;&nbsp;&nbsp;&nbsp;+ archiveEntryWithDirectoryName:</option>
+	
+	<option value="//api/name/archiveEntryWithFileName:compress:dataBlock:">&nbsp;&nbsp;&nbsp;&nbsp;+ archiveEntryWithFileName:compress:dataBlock:</option>
+	
+	<option value="//api/name/archiveEntryWithFileName:compress:dataConsumerBlock:">&nbsp;&nbsp;&nbsp;&nbsp;+ archiveEntryWithFileName:compress:dataConsumerBlock:</option>
+	
+	<option value="//api/name/archiveEntryWithFileName:compress:streamBlock:">&nbsp;&nbsp;&nbsp;&nbsp;+ archiveEntryWithFileName:compress:streamBlock:</option>
+	
+	<option value="//api/name/archiveEntryWithFileName:fileMode:lastModified:compressionLevel:dataBlock:streamBlock:dataConsumerBlock:">&nbsp;&nbsp;&nbsp;&nbsp;+ archiveEntryWithFileName:fileMode:lastModified:compressionLevel:dataBlock:streamBlock:dataConsumerBlock:</option>
+	
+	
+	
+	
+	<option value="instance_methods">Instance Methods</option>
+	
+	<option value="//api/name/data">&nbsp;&nbsp;&nbsp;&nbsp;- data</option>
+	
+	<option value="//api/name/newDataProvider">&nbsp;&nbsp;&nbsp;&nbsp;- newDataProvider</option>
+	
+	<option value="//api/name/stream">&nbsp;&nbsp;&nbsp;&nbsp;- stream</option>
+	
+	
+	
+</select>
+				</li>
+			</ul>
+		</header>
+		<nav id="tocContainer" class="isShowingTOC">
+			<ul id="toc" role="tree">
+				
+<li role="treeitem"><span class="nodisclosure"></span><span class="sectionName"><a href="#overview">Overview</a></span></li>
+
+
+
+
+<li role="treeitem" id="task_treeitem"><span class="nodisclosure"></span><span class="sectionName"><a href="#tasks">Tasks</a></span><ul>
+	
+</ul></li>
+
+
+
+
+
+<li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#properties">Properties</a></span><ul>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/compressed">compressed</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/compressedSize">compressedSize</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/crc32">crc32</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/fileMode">fileMode</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/fileName">fileName</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/lastModified">lastModified</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/uncompressedSize">uncompressedSize</a></span></li>
+	
+</ul></li>
+
+
+
+<li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#class_methods">Class Methods</a></span><ul>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/archiveEntryWithDirectoryName:">archiveEntryWithDirectoryName:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/archiveEntryWithFileName:compress:dataBlock:">archiveEntryWithFileName:compress:dataBlock:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/archiveEntryWithFileName:compress:dataConsumerBlock:">archiveEntryWithFileName:compress:dataConsumerBlock:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/archiveEntryWithFileName:compress:streamBlock:">archiveEntryWithFileName:compress:streamBlock:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/archiveEntryWithFileName:fileMode:lastModified:compressionLevel:dataBlock:streamBlock:dataConsumerBlock:">archiveEntryWithFileName:fileMode:lastModified:compressionLevel:dataBlock:streamBlock:dataConsumerBlock:</a></span></li>
+	
+</ul></li>
+
+
+
+<li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#instance_methods">Instance Methods</a></span><ul>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/data">data</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/newDataProvider">newDataProvider</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/stream">stream</a></span></li>
+	
+</ul></li>
+
+
+			</ul>
+		</nav>
+		<article>
+			<div id="contents" class="isShowingTOC" role="main">
+				<a title="ZZArchiveEntry Class Reference" name="top"></a>
+				<div class="main-navigation navigation-top">
+					<ul>
+	<li><a href="../index.html">Index</a></li>
+	<li><a href="../hierarchy.html">Hierarchy</a></li>
+</ul>
+				</div>
+				<div id="header">
+					<div class="section-header">
+						<h1 class="title title-header">ZZArchiveEntry Class Reference</h1>
+					</div>		
+				</div>
+				<div id="container">	
+					
+					<div class="section section-specification"><table cellspacing="0"><tbody>
+						<tr>
+	<td class="specification-title">Inherits from</td>
+	<td class="specification-value">NSObject</td>
+</tr><tr>
+	<td class="specification-title">Declared in</td>
+	<td class="specification-value">ZZArchiveEntry.h</td>
+</tr>
+						</tbody></table></div>
+					
+					
+					
+					
+					<div class="section section-overview">
+						<a title="Overview" name="overview"></a>
+						<h2 class="subtitle subtitle-overview">Overview</h2>
+						<p>The ZZArchiveEntry class represents an entry in the <a href="../Classes/ZZArchive.html">ZZArchive</a> or <a href="../Classes/ZZMutableArchive.html">ZZMutableArchive</a> zip file.</p>
+					</div>
+					
+					
+					
+					
+					
+					<div class="section section-tasks">
+						<a title="Tasks" name="tasks"></a>
+						<h2 class="subtitle subtitle-tasks">Tasks</h2>
+						
+						
+						
+						
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/compressed">&nbsp;&nbsp;compressed</a></code>
+		<span class="tooltip"><p>Whether the entry is compressed.</p></span>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/lastModified">&nbsp;&nbsp;lastModified</a></code>
+		<span class="tooltip"><p>The last modified date and time of the entry. The time value is only accurate to 2 seconds.</p></span>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/crc32">&nbsp;&nbsp;crc32</a></code>
+		<span class="tooltip"><p>The CRC32 code of the entry file: 0 for new entries.</p></span>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/compressedSize">&nbsp;&nbsp;compressedSize</a></code>
+		<span class="tooltip"><p>The compressed size of the entry file: 0 for new entries.</p></span>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/uncompressedSize">&nbsp;&nbsp;uncompressedSize</a></code>
+		<span class="tooltip"><p>The uncompressed size of the entry file: 0 for new entries.</p></span>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/fileMode">&nbsp;&nbsp;fileMode</a></code>
+		<span class="tooltip"><p>The UNIX file mode for the entry: 0 for new or non-UNIX entries. This includes the file type bits.</p></span>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/fileName">&nbsp;&nbsp;fileName</a></code>
+		<span class="tooltip"><p>The file name of the entry.</p></span>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/archiveEntryWithFileName:compress:streamBlock:">+&nbsp;archiveEntryWithFileName:compress:streamBlock:</a></code>
+		<span class="tooltip"><p>Creates a new file entry from a streaming callback.</p></span>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/archiveEntryWithFileName:compress:dataBlock:">+&nbsp;archiveEntryWithFileName:compress:dataBlock:</a></code>
+		<span class="tooltip"><p>Creates a new file entry from a data callback.</p></span>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/archiveEntryWithFileName:compress:dataConsumerBlock:">+&nbsp;archiveEntryWithFileName:compress:dataConsumerBlock:</a></code>
+		<span class="tooltip"><p>Creates a new file entry from a data-consuming callback.</p></span>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/archiveEntryWithDirectoryName:">+&nbsp;archiveEntryWithDirectoryName:</a></code>
+		<span class="tooltip"><p>Creates a new directory entry.</p></span>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/archiveEntryWithFileName:fileMode:lastModified:compressionLevel:dataBlock:streamBlock:dataConsumerBlock:">+&nbsp;archiveEntryWithFileName:fileMode:lastModified:compressionLevel:dataBlock:streamBlock:dataConsumerBlock:</a></code>
+		<span class="tooltip"><p>Creates a new entry.</p></span>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/stream">&ndash;&nbsp;stream</a></code>
+		<span class="tooltip"><p>Creates a stream to represent the entry file.</p></span>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/data">&ndash;&nbsp;data</a></code>
+		<span class="tooltip"><p>Creates data to represent the entry file.</p></span>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/newDataProvider">&ndash;&nbsp;newDataProvider</a></code>
+		<span class="tooltip"><p>Creates a data provider to represent the entry file.</p></span>
+	</span>
+	
+	
+</li>
+						</ul>
+						
+					</div>
+					
+					
+					
+					
+					
+					<div class="section section-methods">
+						<a title="Properties" name="properties"></a>
+						<h2 class="subtitle subtitle-methods">Properties</h2>
+						
+						<div class="section-method">
+	<a name="//api/name/compressed" title="compressed"></a>
+	<h3 class="subsubtitle method-title">compressed</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Whether the entry is compressed.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>@property (readonly, nonatomic) BOOL compressed</code></div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">ZZArchiveEntry.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/compressedSize" title="compressedSize"></a>
+	<h3 class="subsubtitle method-title">compressedSize</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>The compressed size of the entry file: 0 for new entries.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>@property (readonly, nonatomic) NSUInteger compressedSize</code></div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">ZZArchiveEntry.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/crc32" title="crc32"></a>
+	<h3 class="subsubtitle method-title">crc32</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>The CRC32 code of the entry file: 0 for new entries.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>@property (readonly, nonatomic) NSUInteger crc32</code></div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">ZZArchiveEntry.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/fileMode" title="fileMode"></a>
+	<h3 class="subsubtitle method-title">fileMode</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>The UNIX file mode for the entry: 0 for new or non-UNIX entries. This includes the file type bits.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>@property (readonly, nonatomic) mode_t fileMode</code></div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">ZZArchiveEntry.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/fileName" title="fileName"></a>
+	<h3 class="subsubtitle method-title">fileName</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>The file name of the entry.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>@property (readonly, nonatomic) NSString *fileName</code></div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">ZZArchiveEntry.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/lastModified" title="lastModified"></a>
+	<h3 class="subsubtitle method-title">lastModified</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>The last modified date and time of the entry. The time value is only accurate to 2 seconds.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>@property (readonly, nonatomic) NSDate *lastModified</code></div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">ZZArchiveEntry.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/uncompressedSize" title="uncompressedSize"></a>
+	<h3 class="subsubtitle method-title">uncompressedSize</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>The uncompressed size of the entry file: 0 for new entries.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>@property (readonly, nonatomic) NSUInteger uncompressedSize</code></div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">ZZArchiveEntry.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+					</div>
+					
+					
+					
+					<div class="section section-methods">
+						<a title="Class Methods" name="class_methods"></a>
+						<h2 class="subtitle subtitle-methods">Class Methods</h2>
+						
+						<div class="section-method">
+	<a name="//api/name/archiveEntryWithDirectoryName:" title="archiveEntryWithDirectoryName:"></a>
+	<h3 class="subsubtitle method-title">archiveEntryWithDirectoryName:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Creates a new directory entry.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>+ (id)archiveEntryWithDirectoryName:(NSString *)<em>directoryName</em></code></div>
+	
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>directoryName</em></dt>
+			<dd><p>The directory name for the entry. Only ASCII directory names are supported.</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p>The created entry.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">ZZArchiveEntry.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/archiveEntryWithFileName:compress:dataBlock:" title="archiveEntryWithFileName:compress:dataBlock:"></a>
+	<h3 class="subsubtitle method-title">archiveEntryWithFileName:compress:dataBlock:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Creates a new file entry from a data callback.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>+ (id)archiveEntryWithFileName:(NSString *)<em>fileName</em> compress:(BOOL)<em>compress</em> dataBlock:(NSData *( ^ ) ( ))<em>dataBlock</em></code></div>
+	
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>fileName</em></dt>
+			<dd><p>The file name for the entry. Only ASCII file names are supported.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>compress</em></dt>
+			<dd><p>Whether to compress the entry.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>dataBlock</em></dt>
+			<dd><p>The callback to return the entry&rsquo;s data.</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p>The created entry.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">ZZArchiveEntry.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/archiveEntryWithFileName:compress:dataConsumerBlock:" title="archiveEntryWithFileName:compress:dataConsumerBlock:"></a>
+	<h3 class="subsubtitle method-title">archiveEntryWithFileName:compress:dataConsumerBlock:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Creates a new file entry from a data-consuming callback.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>+ (id)archiveEntryWithFileName:(NSString *)<em>fileName</em> compress:(BOOL)<em>compress</em> dataConsumerBlock:(void ( ^ ) ( CGDataConsumerRef dataConsumer ))<em>dataConsumerBlock</em></code></div>
+	
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>fileName</em></dt>
+			<dd><p>The file name for the entry. Only ASCII file names are supported.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>compress</em></dt>
+			<dd><p>Whether to compress the entry.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>dataConsumerBlock</em></dt>
+			<dd><p>The callback to put the entry&rsquo;s data into the data consumer.</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p>The created entry.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">ZZArchiveEntry.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/archiveEntryWithFileName:compress:streamBlock:" title="archiveEntryWithFileName:compress:streamBlock:"></a>
+	<h3 class="subsubtitle method-title">archiveEntryWithFileName:compress:streamBlock:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Creates a new file entry from a streaming callback.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>+ (id)archiveEntryWithFileName:(NSString *)<em>fileName</em> compress:(BOOL)<em>compress</em> streamBlock:(void ( ^ ) ( NSOutputStream *stream ))<em>streamBlock</em></code></div>
+	
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>fileName</em></dt>
+			<dd><p>The file name for the entry. Only ASCII file names are supported.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>compress</em></dt>
+			<dd><p>Whether to compress the entry.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>streamBlock</em></dt>
+			<dd><p>The callback to write the entry&rsquo;s data to the stream.</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p>The created entry.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">ZZArchiveEntry.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/archiveEntryWithFileName:fileMode:lastModified:compressionLevel:dataBlock:streamBlock:dataConsumerBlock:" title="archiveEntryWithFileName:fileMode:lastModified:compressionLevel:dataBlock:streamBlock:dataConsumerBlock:"></a>
+	<h3 class="subsubtitle method-title">archiveEntryWithFileName:fileMode:lastModified:compressionLevel:dataBlock:streamBlock:dataConsumerBlock:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Creates a new entry.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>+ (id)archiveEntryWithFileName:(NSString *)<em>fileName</em> fileMode:(mode_t)<em>fileMode</em> lastModified:(NSDate *)<em>lastModified</em> compressionLevel:(NSInteger)<em>compressionLevel</em> dataBlock:(NSData *( ^ ) ( ))<em>dataBlock</em> streamBlock:(void ( ^ ) ( NSOutputStream *stream ))<em>streamBlock</em> dataConsumerBlock:(void ( ^ ) ( CGDataConsumerRef dataConsumer ))<em>dataConsumerBlock</em></code></div>
+	
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>fileName</em></dt>
+			<dd><p>The file name for the entry. Only ASCII file names are supported.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>fileMode</em></dt>
+			<dd><p>The UNIX file mode for the entry. This includes the file type bits.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>lastModified</em></dt>
+			<dd><p>The last modified date and time for the entry. The time value is only accurate to 2 seconds.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>compressionLevel</em></dt>
+			<dd><p>The compression level for the entry: 0 for stored, -1 for default deflate, 1 &ndash; 9 for custom deflate levels.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>dataBlock</em></dt>
+			<dd><p>The callback that returns the entry file data.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>streamBlock</em></dt>
+			<dd><p>The callback that writes the entry file to the stream.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>dataConsumerBlock</em></dt>
+			<dd><p>The callback that writes the entry file to the data consumer.</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p>The created entry.</p>
+	</div>
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>The archive entry will choose the first non-<em>nil</em> dataBlock, streamBlock and dataConsumerBlock to supply its data.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">ZZArchiveEntry.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+					</div>
+					
+					
+					
+					<div class="section section-methods">
+						<a title="Instance Methods" name="instance_methods"></a>
+						<h2 class="subtitle subtitle-methods">Instance Methods</h2>
+						
+						<div class="section-method">
+	<a name="//api/name/data" title="data"></a>
+	<h3 class="subsubtitle method-title">data</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Creates data to represent the entry file.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>- (NSData *)data</code></div>
+	
+	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p>The new data: <em>nil</em> for new entries.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">ZZArchiveEntry.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/newDataProvider" title="newDataProvider"></a>
+	<h3 class="subsubtitle method-title">newDataProvider</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Creates a data provider to represent the entry file.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>- (CGDataProviderRef)newDataProvider</code></div>
+	
+	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p>The new data provider: <em>nil</em> for new entries.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">ZZArchiveEntry.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/stream" title="stream"></a>
+	<h3 class="subsubtitle method-title">stream</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Creates a stream to represent the entry file.</p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>- (NSInputStream *)stream</code></div>
+	
+	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p>The new stream: <em>nil</em> for new entries.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">ZZArchiveEntry.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+					</div>
+					
+					
+				</div>
+				<div class="main-navigation navigation-bottom">
+					<ul>
+	<li><a href="../index.html">Index</a></li>
+	<li><a href="../hierarchy.html">Hierarchy</a></li>
+</ul>
+				</div>
+				<div id="footer">
+					<hr />
+					<div class="footer-copyright">
+						<p><span class="copyright">&copy; 2012 Pixelglow Sofware. All rights reserved. (Last updated: 2012-10-29)</span><br />
+						
+						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.0.5 (build 737)</a>.</span></p>
+						
+					</div>
+				</div>
+			</div>
+		</article>
+		<script type="text/javascript">
+			function jumpToChange()
+			{
+				window.location.hash = this.options[this.selectedIndex].value;
+			}
+			
+			function toggleTOC()
+			{
+				var contents = document.getElementById('contents');
+				var tocContainer = document.getElementById('tocContainer');
+				
+				if (this.getAttribute('class') == 'open')
+				{
+					this.setAttribute('class', '');
+					contents.setAttribute('class', '');
+					tocContainer.setAttribute('class', '');
+					
+					window.name = "hideTOC";
+				}
+				else
+				{
+					this.setAttribute('class', 'open');
+					contents.setAttribute('class', 'isShowingTOC');
+					tocContainer.setAttribute('class', 'isShowingTOC');
+					
+					window.name = "";
+				}
+				return false;
+			}
+			
+			function toggleTOCEntryChildren(e)
+			{
+				e.stopPropagation();
+				var currentClass = this.getAttribute('class');
+				if (currentClass == 'children') {
+					this.setAttribute('class', 'children open');
+				}
+				else if (currentClass == 'children open') {
+					this.setAttribute('class', 'children');
+				}
+				return false;
+			}
+			
+			function tocEntryClick(e)
+			{
+				e.stopPropagation();
+				return true;
+			}
+			
+			function init()
+			{
+				var selectElement = document.getElementById('jumpTo');
+				selectElement.addEventListener('change', jumpToChange, false);
+				
+				var tocButton = document.getElementById('table_of_contents');
+				tocButton.addEventListener('click', toggleTOC, false);
+				
+				var taskTreeItem = document.getElementById('task_treeitem');
+				if (taskTreeItem.getElementsByTagName('li').length > 0)
+				{
+					taskTreeItem.setAttribute('class', 'children');
+					taskTreeItem.firstChild.setAttribute('class', 'disclosure');
+				}
+				
+				var tocList = document.getElementById('toc');
+				
+				var tocEntries = tocList.getElementsByTagName('li');
+				for (var i = 0; i < tocEntries.length; i++) {
+					tocEntries[i].addEventListener('click', toggleTOCEntryChildren, false);
+				}
+				
+				var tocLinks = tocList.getElementsByTagName('a');
+				for (var i = 0; i < tocLinks.length; i++) {
+					tocLinks[i].addEventListener('click', tocEntryClick, false);
+				}
+				
+				if (window.name == "hideTOC") {
+					toggleTOC.call(tocButton);
+				}
+			}
+			
+			window.onload = init;
+		</script>
+	</body>
+</html>
