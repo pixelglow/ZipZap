@@ -34,7 +34,7 @@
 	NSURL* _zipFileURL;
 	NSArray* _entryFilePaths;
 	NSString* _extraFilePath;
-	ZZMutableZipFile* _zipFile;
+	ZZMutableArchive* _zipFile;
 }
 
 - (void)setUp
@@ -62,7 +62,7 @@
 
 - (void)openZipFile
 {
-	_zipFile = [[ZZMutableZipFile alloc] initWithContentsOfURL:_zipFileURL];
+	_zipFile = [[ZZMutableArchive alloc] initWithContentsOfURL:_zipFileURL];
 }
 
 - (NSData*)dataAtFilePath:(NSString*)filePath

@@ -98,7 +98,7 @@
 
 @end
 
-@implementation ZZMutableZipFile
+@implementation ZZMutableArchive
 
 - (void)setEntries:(NSArray*)newEntries
 {

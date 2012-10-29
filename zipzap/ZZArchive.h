@@ -43,7 +43,7 @@
 
 @end
 
-@interface ZZMutableZipFile : ZZArchive
+@interface ZZMutableArchive : ZZArchive
 
 /**
  * The array of entries (<ZZArchiveEntry>) within this archive.
