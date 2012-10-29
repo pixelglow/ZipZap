@@ -8,6 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
+/**
+ * The ZZArchive class represents a zip file for reading only.
+ */
 @interface ZZArchive : NSObject
 
 /**
@@ -16,7 +19,7 @@
 @property (readonly, nonatomic) NSURL* URL;
 
 /**
- * The array of entries (<ZZArchiveEntry>) within this archive.
+ * The array of <ZZArchiveEntry> entries within this archive.
  */
 @property (readonly, copy, nonatomic) NSArray* entries;
 
@@ -37,16 +40,20 @@
 - (id)initWithContentsOfURL:(NSURL*)URL;
 
 /**
- * Reloads the contents from the URL.
+ * Reloads the entries from the URL.
  */
 - (void)reload;
 
 @end
 
+/**
+ * The ZZMutableArchive class represents a zip file for reading and writing.
+ */
 @interface ZZMutableArchive : ZZArchive
 
 /**
- * The array of entries (<ZZArchiveEntry>) within this archive.
+ * The array of <ZZArchiveEntry> entries within this archive.
+ * To write new entries in the zip file, set this property to a different array of <ZZArchiveEntry> entries.
  */
 @property (copy, nonatomic) NSArray* entries;
 
