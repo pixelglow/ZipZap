@@ -20,15 +20,20 @@ As an independent project:
 As a project integrated with your own workspace:
 
 * In the Terminal, run `cd workspace` then `git submodule add https://github.com/pixelglow/zipzap.git`.
-* In your Xcode workspace, choose the *File | Add Files to "workspace"* menu item, then within the *zipzap* directory pick the *zipzap.xcodeproj* Xcode project.
-* In any target that uses *zipzap*, under *Build Phases*:
-  * add *zipzap (OS X)* or *zipzap (iOS)* as a *Target Dependencies* item
-  * add the corresponding *libzipzap.a* and any other library listed in the Require Link section below as *Link Binary with Libraries* items.
-* You can now build, test or analyze those targets.
+* In your Xcode workspace, choose the *File > Add Files to "workspace"* menu item, then within the *zipzap* directory pick the *zipzap.xcodeproj* Xcode project.
+* In any project target that will use *zipzap*:
+  * In *Build Phases > Link Binary With Libraries*, add the corresponding *libzipzap.a* and any other library listed in the Require Link section below.
+  * Under *Build Settings > Search Paths > Header Search Paths*, add *../zipzap*.
+* You can now build, test or analyze those project targets.
 
 Use
 ---
 
+Header includes:
+
+	#include <zipzap/ZZArchive.h>
+	#include <zipzap/ZZArchiveEntry.h>
+	
 Reading an existing zip file:
 
 	ZZArchive* oldArchive = [ZZArchive archiveWithContentsOfURL:[NSURL fileURLWithPath:@"/tmp/old.zip"]];
@@ -62,6 +67,7 @@ Require
 * **Link**: Only system libraries; no third-party libraries needed.
   * *ApplicationServices.framework* (Mac OS X) or *ImageIO.framework* (iOS)
   * *Foundation.framework*
+  * *libc++.dylib* if your project doesn't already use C++ or Objective-C++.
   * *libz.dylib*
 * **Run**: Mac OS X 10.7 (Lion) or iOS 4.0 and later.
 
