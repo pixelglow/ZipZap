@@ -6,9 +6,9 @@
 //
 //
 
+#import <zipzap/zipzap.h>
+
 #import "ZZTasks.h"
-#import "ZZArchiveEntry.h"
-#import "ZZArchive.h"
 #import "ZZZipTests.h"
 
 @interface ZZZipTests ()

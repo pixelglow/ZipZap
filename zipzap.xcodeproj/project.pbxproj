@@ -43,8 +43,6 @@
 		D899D001162C608300112F49 /* ZZNewArchiveEntryWriter.mm in Sources */ = {isa = PBXBuildFile; fileRef = D899CFE8162C608300112F49 /* ZZNewArchiveEntryWriter.mm */; };
 		D899D002162C608300112F49 /* ZZNewArchiveEntryWriter.mm in Sources */ = {isa = PBXBuildFile; fileRef = D899CFE8162C608300112F49 /* ZZNewArchiveEntryWriter.mm */; };
 		D899D003162C608300112F49 /* ZZArchiveEntryWriter.h in Headers */ = {isa = PBXBuildFile; fileRef = D899CFE9162C608300112F49 /* ZZArchiveEntryWriter.h */; };
-		D899D00F162C638B00112F49 /* ZZArchiveEntry.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D899CFD8162C608300112F49 /* ZZArchiveEntry.h */; };
-		D899D010162C639200112F49 /* ZZArchive.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D899CFDA162C608300112F49 /* ZZArchive.h */; };
 		D899D014162CCA0400112F49 /* li-europan-lingues.txt in Resources */ = {isa = PBXBuildFile; fileRef = D899D013162CCA0400112F49 /* li-europan-lingues.txt */; };
 		D899D015162CCA8200112F49 /* lorem-ipsum.txt in Resources */ = {isa = PBXBuildFile; fileRef = D899D012162CC8F100112F49 /* lorem-ipsum.txt */; };
 		D899D017162CCEDC00112F49 /* pangram.txt in Resources */ = {isa = PBXBuildFile; fileRef = D899D016162CCEDC00112F49 /* pangram.txt */; };
@@ -53,6 +51,10 @@
 		D899D01E162CD57700112F49 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D899D01D162CD57700112F49 /* libc++.dylib */; };
 		D899D021162F6C9700112F49 /* ZZZipTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D899D020162F6C9700112F49 /* ZZZipTests.m */; };
 		D899D0241631888100112F49 /* ZZTasks.m in Sources */ = {isa = PBXBuildFile; fileRef = D899D0231631888000112F49 /* ZZTasks.m */; };
+		D8B0FD621640A6B000727A70 /* zipzap.h in Headers */ = {isa = PBXBuildFile; fileRef = D8B0FD611640A6B000727A70 /* zipzap.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D8B0FD661640A77F00727A70 /* zipzap.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8B0FD611640A6B000727A70 /* zipzap.h */; };
+		D8B0FD671640A77F00727A70 /* ZZArchive.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D899CFDA162C608300112F49 /* ZZArchive.h */; };
+		D8B0FD681640A77F00727A70 /* ZZArchiveEntry.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D899CFD8162C608300112F49 /* ZZArchiveEntry.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -72,8 +74,9 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
-				D899D00F162C638B00112F49 /* ZZArchiveEntry.h in CopyFiles */,
-				D899D010162C639200112F49 /* ZZArchive.h in CopyFiles */,
+				D8B0FD661640A77F00727A70 /* zipzap.h in CopyFiles */,
+				D8B0FD671640A77F00727A70 /* ZZArchive.h in CopyFiles */,
+				D8B0FD681640A77F00727A70 /* ZZArchiveEntry.h in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -124,6 +127,7 @@
 		D899D0231631888000112F49 /* ZZTasks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZZTasks.m; sourceTree = "<group>"; };
 		D8A32627163BFF3D008606AC /* README.markdown */ = {isa = PBXFileReference; lastKnownFileType = text; path = README.markdown; sourceTree = "<group>"; };
 		D8A32673163C2240008606AC /* LICENSE.text */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE.text; sourceTree = "<group>"; };
+		D8B0FD611640A6B000727A70 /* zipzap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zipzap.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -194,6 +198,7 @@
 		D899CF8B162C5EC100112F49 /* zipzap */ = {
 			isa = PBXGroup;
 			children = (
+				D8B0FD611640A6B000727A70 /* zipzap.h */,
 				D899CFDA162C608300112F49 /* ZZArchive.h */,
 				D899CFDB162C608300112F49 /* ZZArchive.mm */,
 				D899CFD8162C608300112F49 /* ZZArchiveEntry.h */,
@@ -262,8 +267,9 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D899CFEA162C608300112F49 /* ZZArchiveEntry.h in Headers */,
+				D8B0FD621640A6B000727A70 /* zipzap.h in Headers */,
 				D899CFED162C608300112F49 /* ZZArchive.h in Headers */,
+				D899CFEA162C608300112F49 /* ZZArchiveEntry.h in Headers */,
 				D899D003162C608300112F49 /* ZZArchiveEntryWriter.h in Headers */,
 				D899CFF0162C608300112F49 /* ZZInflateInputStream.h in Headers */,
 				D899CFF3162C608300112F49 /* ZZDeflateOutputStream.h in Headers */,
@@ -552,6 +558,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = ../zipzap;
 				INFOPLIST_FILE = "zipzapTests/zipzapTests-Info.plist";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				ONLY_ACTIVE_ARCH = YES;
@@ -582,6 +589,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = ../zipzap;
 				INFOPLIST_FILE = "zipzapTests/zipzapTests-Info.plist";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = zipzapTests;

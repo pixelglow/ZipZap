@@ -6,13 +6,12 @@
 //
 //
 
-#include <zlib.h>
 #include <ImageIO/ImageIO.h>
+
+#import <zipzap/zipzap.h>
 
 #import "ZZTasks.h"
 #import "ZZUnzipTests.h"
-#import "ZZArchiveEntry.h"
-#import "ZZArchive.h"
 
 @interface ZZUnzipTests ()
 

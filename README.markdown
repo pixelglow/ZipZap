@@ -31,8 +31,7 @@ Use
 
 Header includes:
 
-	#include <zipzap/ZZArchive.h>
-	#include <zipzap/ZZArchiveEntry.h>
+	#import <zipzap/zipzap.h>
 	
 Reading an existing zip file:
 
