@@ -31,7 +31,7 @@
 
 + (id)archiveWithContentsOfURL:(NSURL*)URL
 {
-	return [[ZZArchive alloc] initWithContentsOfURL:URL];
+	return [[self alloc] initWithContentsOfURL:URL];
 }
 
 - (id)initWithContentsOfURL:(NSURL*)URL
@@ -99,11 +99,6 @@
 @end
 
 @implementation ZZMutableArchive
-
-+ (id)archiveWithContentsOfURL:(NSURL*)URL
-{
-	return [[ZZMutableArchive alloc] initWithContentsOfURL:URL];
-}
 
 - (void)setEntries:(NSArray*)newEntries
 {
