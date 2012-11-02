@@ -62,7 +62,7 @@
 
 - (void)openZipFile
 {
-	_zipFile = [[ZZMutableArchive alloc] initWithContentsOfURL:_zipFileURL];
+	_zipFile = [ZZMutableArchive archiveWithContentsOfURL:_zipFileURL];
 }
 
 - (NSData*)dataAtFilePath:(NSString*)filePath

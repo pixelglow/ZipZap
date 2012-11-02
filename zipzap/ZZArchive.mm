@@ -100,6 +100,11 @@
 
 @implementation ZZMutableArchive
 
++ (id)archiveWithContentsOfURL:(NSURL*)URL
+{
+	return [[ZZMutableArchive alloc] initWithContentsOfURL:URL];
+}
+
 - (void)setEntries:(NSArray*)newEntries
 {
 	// get an entry writer for each new entry, and allow it to skip writing out its local file if the initial old and new entries match

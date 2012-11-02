@@ -39,7 +39,7 @@
 	[ZZTasks zipFiles:_entryFilePaths
 			   toPath:_zipFileURL.path];
 	
-	_zipFile = [[ZZArchive alloc] initWithContentsOfURL:_zipFileURL];
+	_zipFile = [ZZArchive archiveWithContentsOfURL:_zipFileURL];
 }
 
 - (void)tearDown
