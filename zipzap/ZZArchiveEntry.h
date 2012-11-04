@@ -85,19 +85,19 @@
  *
  * @param fileName The file name for the entry. Only ASCII file names are supported.
  * @param compress Whether to compress the entry.
- * @param streamBlock The callback to write the entry's data to the stream.
+ * @param streamBlock The callback to write the entry's data to the stream. Returns whether the write was considered successful.
  * @return The created entry.
  */
 + (id)archiveEntryWithFileName:(NSString*)fileName
 					  compress:(BOOL)compress
-				   streamBlock:(void(^)(NSOutputStream* stream))streamBlock;
+				   streamBlock:(BOOL(^)(NSOutputStream* stream))streamBlock;
 
 /**
  * Creates a new file entry from a data callback.
  *
  * @param fileName The file name for the entry. Only ASCII file names are supported.
  * @param compress Whether to compress the entry.
- * @param dataBlock The callback to return the entry's data.
+ * @param dataBlock The callback to return the entry's data. Returns *nil* if the write was considered unsuccessful.
  * @return The created entry.
  */
 + (id)archiveEntryWithFileName:(NSString*)fileName
@@ -109,12 +109,12 @@
  *
  * @param fileName The file name for the entry. Only ASCII file names are supported.
  * @param compress Whether to compress the entry.
- * @param dataConsumerBlock The callback to put the entry's data into the data consumer.
+ * @param dataConsumerBlock The callback to put the entry's data into the data consumer. Returns whether the write was considered successful.
  * @return The created entry.
  */
 + (id)archiveEntryWithFileName:(NSString*)fileName
 					  compress:(BOOL)compress
-			 dataConsumerBlock:(void(^)(CGDataConsumerRef dataConsumer))dataConsumerBlock;
+			 dataConsumerBlock:(BOOL(^)(CGDataConsumerRef dataConsumer))dataConsumerBlock;
 
 /**
  * Creates a new directory entry.
@@ -133,9 +133,9 @@
  * @param fileMode The UNIX file mode for the entry. This includes the file type bits.
  * @param lastModified The last modified date and time for the entry. The time value is only accurate to 2 seconds.
  * @param compressionLevel The compression level for the entry: 0 for stored, -1 for default deflate, 1 - 9 for custom deflate levels.
- * @param dataBlock The callback that returns the entry file data.
- * @param streamBlock The callback that writes the entry file to the stream.
- * @param dataConsumerBlock The callback that writes the entry file to the data consumer.
+ * @param dataBlock The callback that returns the entry file data. Returns *nil* if the write was considered unsuccessful.
+ * @param streamBlock The callback that writes the entry file to the stream. Returns whether the write was considered successful.
+ * @param dataConsumerBlock The callback that writes the entry file to the data consumer. Returns whether the write was considered successful.
  * @return The created entry.
  */
 + (id)archiveEntryWithFileName:(NSString*)fileName
@@ -143,8 +143,8 @@
 				  lastModified:(NSDate*)lastModified
 			  compressionLevel:(NSInteger)compressionLevel
 					 dataBlock:(NSData*(^)())dataBlock
-				   streamBlock:(void(^)(NSOutputStream* stream))streamBlock
-			 dataConsumerBlock:(void(^)(CGDataConsumerRef dataConsumer))dataConsumerBlock;
+				   streamBlock:(BOOL(^)(NSOutputStream* stream))streamBlock
+			 dataConsumerBlock:(BOOL(^)(CGDataConsumerRef dataConsumer))dataConsumerBlock;
 
 /**
  * Creates a stream to represent the entry file.

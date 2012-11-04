@@ -40,8 +40,8 @@ namespace ZZDataConsumer
 	NSMutableData* _localFileHeader;
 	NSInteger _compressionLevel;
 	NSData* (^_dataBlock)();
-	void (^_streamBlock)(NSOutputStream* stream);
-	void (^_dataConsumerBlock)(CGDataConsumerRef dataConsumer);
+	BOOL (^_streamBlock)(NSOutputStream* stream);
+	BOOL (^_dataConsumerBlock)(CGDataConsumerRef dataConsumer);
 }
 
 - (id)initWithFileName:(NSString*)fileName
@@ -49,8 +49,8 @@ namespace ZZDataConsumer
 		  lastModified:(NSDate*)lastModified
 	  compressionLevel:(NSInteger)compressionLevel
 			 dataBlock:(NSData*(^)())dataBlock
-		   streamBlock:(void(^)(NSOutputStream* stream))streamBlock
-	 dataConsumerBlock:(void(^)(CGDataConsumerRef dataConsumer))dataConsumerBlock;
+		   streamBlock:(BOOL(^)(NSOutputStream* stream))streamBlock
+	 dataConsumerBlock:(BOOL(^)(CGDataConsumerRef dataConsumer))dataConsumerBlock;
 {
 	if ((self = [super init]))
 	{
@@ -148,7 +148,6 @@ namespace ZZDataConsumer
 		_dataBlock = dataBlock;
 		_streamBlock = streamBlock;
 		_dataConsumerBlock = dataConsumerBlock;
-		
 	}
 	return self;
 }
@@ -163,11 +162,12 @@ namespace ZZDataConsumer
 	return (ZZLocalFileHeader*)_localFileHeader.mutableBytes;
 }
 
-- (void)writeLocalFileToFileHandle:(NSFileHandle*)fileHandle
+- (BOOL)writeLocalFileToFileHandle:(NSFileHandle*)fileHandle
 {
 	// free any temp objects created while writing, especially via the callbacks which we don't control
 	@autoreleasepool
 	{
+		BOOL goodData = NO;
 		ZZCentralFileHeader* centralFileHeader = [self centralFileHeader];
 		
 		// save current offset, then write out all of local file to the file handle
@@ -186,23 +186,29 @@ namespace ZZDataConsumer
 			if (_dataBlock)
 			{
 				NSData* data = _dataBlock();
+				goodData = data != nil;
 				
-				const uint8_t* bytes;
-				NSUInteger bytesToWrite;
-				NSUInteger bytesWritten;
-				for (bytes = (const uint8_t*)data.bytes, bytesToWrite = data.length;
-					 bytesToWrite > 0;
-					 bytes += bytesWritten, bytesToWrite -= bytesWritten)
-					bytesWritten = [outputStream write:bytes maxLength:bytesToWrite];
+				if (data)
+				{
+					const uint8_t* bytes;
+					NSUInteger bytesToWrite;
+					NSUInteger bytesWritten;
+					for (bytes = (const uint8_t*)data.bytes, bytesToWrite = data.length;
+						 bytesToWrite > 0;
+						 bytes += bytesWritten, bytesToWrite -= bytesWritten)
+						bytesWritten = [outputStream write:bytes maxLength:bytesToWrite];
+				}
 			}
 			else if (_streamBlock)
-				_streamBlock(outputStream);
+				goodData = _streamBlock(outputStream);
 			else if (_dataConsumerBlock)
 			{
 				CGDataConsumerRef dataConsumer = CGDataConsumerCreate((__bridge void*)outputStream, &ZZDataConsumer::callbacks);
-				_dataConsumerBlock(dataConsumer);
+				goodData = _dataConsumerBlock(dataConsumer);
 				CGDataConsumerRelease(dataConsumer);
 			}
+			else
+				goodData = YES;
 			
 			[outputStream close];
 			
@@ -212,29 +218,34 @@ namespace ZZDataConsumer
 		}
 		else
 		{
-			// use of one the blocks to write to a stream that just outputs to the output file handle
 			if (_dataBlock)
 			{
+				// if data block, write the data directly to output file handle
 				NSData* data = _dataBlock();
+				goodData = data != nil;
 				
-				[fileHandle writeData:data];
+				if (data)
+					[fileHandle writeData:data];
 				
 				dataDescriptor.compressedSize = dataDescriptor.uncompressedSize = (uint32_t)data.length;
 				dataDescriptor.crc32 = (uint32_t)crc32(0, (const Bytef*)data.bytes, dataDescriptor.uncompressedSize);
 			}
 			else
 			{
+				// if stream block, data consumer block or no block, use to write to a stream that just outputs to the output file handle
 				ZZStoreOutputStream* outputStream = [[ZZStoreOutputStream alloc] initWithFileHandle:fileHandle];
 				[outputStream open];
 				
 				if (_streamBlock)
-					_streamBlock(outputStream);
+					goodData = _streamBlock(outputStream);
 				else if (_dataConsumerBlock)
 				{
 					CGDataConsumerRef dataConsumer = CGDataConsumerCreate((__bridge void*)outputStream, &ZZDataConsumer::callbacks);
-					_dataConsumerBlock(dataConsumer);
+					goodData = _dataConsumerBlock(dataConsumer);
 					CGDataConsumerRelease(dataConsumer);
 				}
+				else
+					goodData = YES;
 				
 				[outputStream close];
 				
@@ -243,13 +254,23 @@ namespace ZZDataConsumer
 			}
 		}
 		
-		// save the crc32, compressedSize, uncompressedSize, then write out the data descriptor
-		centralFileHeader->crc32 = dataDescriptor.crc32;
-		centralFileHeader->compressedSize = dataDescriptor.compressedSize;
-		centralFileHeader->uncompressedSize = dataDescriptor.uncompressedSize;
-		[fileHandle writeData:[NSData dataWithBytesNoCopy:&dataDescriptor
-												   length:sizeof(dataDescriptor)
-											 freeWhenDone:NO]];
+		if (goodData)
+		{
+			// save the crc32, compressedSize, uncompressedSize, then write out the data descriptor
+			centralFileHeader->crc32 = dataDescriptor.crc32;
+			centralFileHeader->compressedSize = dataDescriptor.compressedSize;
+			centralFileHeader->uncompressedSize = dataDescriptor.uncompressedSize;
+			[fileHandle writeData:[NSData dataWithBytesNoCopy:&dataDescriptor
+													   length:sizeof(dataDescriptor)
+												 freeWhenDone:NO]];
+			return YES;
+		}
+		else
+		{
+			// callback had erred: rewind the file handle
+			[fileHandle seekToFileOffset:centralFileHeader->relativeOffsetOfLocalHeader];
+			return NO;
+		}
 	}
 }
 

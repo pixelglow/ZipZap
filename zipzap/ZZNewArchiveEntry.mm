@@ -16,8 +16,8 @@
 	NSDate* _lastModified;
 	NSInteger _compressionLevel;
 	NSData* (^_dataBlock)();
-	void (^_streamBlock)(NSOutputStream* stream);
-	void (^_dataConsumerBlock)(CGDataConsumerRef dataConsumer);
+	BOOL (^_streamBlock)(NSOutputStream* stream);
+	BOOL (^_dataConsumerBlock)(CGDataConsumerRef dataConsumer);
 }
 
 - (id)initWithFileName:(NSString*)fileName
@@ -25,8 +25,8 @@
 		  lastModified:(NSDate*)lastModified
 	  compressionLevel:(NSInteger)compressionLevel
 			 dataBlock:(NSData*(^)())dataBlock
-		   streamBlock:(void(^)(NSOutputStream* stream))streamBlock
-	 dataConsumerBlock:(void(^)(CGDataConsumerRef dataConsumer))dataConsumerBlock;
+		   streamBlock:(BOOL(^)(NSOutputStream* stream))streamBlock
+	 dataConsumerBlock:(BOOL(^)(CGDataConsumerRef dataConsumer))dataConsumerBlock;
 {
 	if ((self = [super init]))
 	{

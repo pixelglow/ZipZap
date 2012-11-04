@@ -129,9 +129,11 @@
 																				 S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH)
 															 closeOnDealloc:YES];
 	
-	// write out all local files
-	for (id<ZZArchiveEntryWriter> newZipEntryWriter in newEntryWriters)
-		[newZipEntryWriter writeLocalFileToFileHandle:fileHandle];
+	// write out all local files, recording which are valid
+	NSMutableIndexSet* goodEntries = [NSMutableIndexSet indexSet];
+	for (NSUInteger index = 0, count = newEntryWriters.count; index < count; ++index)
+		if ([newEntryWriters[index] writeLocalFileToFileHandle:fileHandle])
+			[ goodEntries addIndex:index];
 	
 	ZZEndOfCentralDirectory endOfCentralDirectory;
 	endOfCentralDirectory.signature = ZZEndOfCentralDirectory::sign;
@@ -140,12 +142,14 @@
 		= 0;
 	endOfCentralDirectory.totalNumberOfEntriesInTheCentralDirectoryOnThisDisk
 		= endOfCentralDirectory.totalNumberOfEntriesInTheCentralDirectory
-		= newEntryWriters.count;
+		=  goodEntries.count;
 	endOfCentralDirectory.offsetOfStartOfCentralDirectoryWithRespectToTheStartingDiskNumber = (uint32_t)[fileHandle offsetInFile];
 	
-	// write out all central file headers
-	for (id<ZZArchiveEntryWriter> newZipEntryWriter in newEntryWriters)
-		[newZipEntryWriter writeCentralFileHeaderToFileHandle:fileHandle];
+	// write out central file headers for good entries only
+	[goodEntries enumerateIndexesUsingBlock:^(NSUInteger index, BOOL* stop)
+	 {
+		 [newEntryWriters[index] writeCentralFileHeaderToFileHandle:fileHandle];
+	 }];
 	
 	endOfCentralDirectory.sizeOfTheCentralDirectory = (uint32_t)[fileHandle offsetInFile]
 		- endOfCentralDirectory.offsetOfStartOfCentralDirectoryWithRespectToTheStartingDiskNumber;

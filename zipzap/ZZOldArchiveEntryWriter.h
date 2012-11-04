@@ -16,7 +16,7 @@
 				localFileHeader:(struct ZZLocalFileHeader*)localFileHeader
 			shouldSkipLocalFile:(BOOL)shouldSkipLocalFile;
 
-- (void)writeLocalFileToFileHandle:(NSFileHandle*)fileHandle;
+- (BOOL)writeLocalFileToFileHandle:(NSFileHandle*)fileHandle;
 - (void)writeCentralFileHeaderToFileHandle:(NSFileHandle*)fileHandle;
 
 @end

@@ -28,7 +28,7 @@
 
 + (id)archiveEntryWithFileName:(NSString*)fileName
 				  compress:(BOOL)compress
-			   streamBlock:(void(^)(NSOutputStream* stream))streamBlock
+			   streamBlock:(BOOL(^)(NSOutputStream* stream))streamBlock
 {
 	return [self archiveEntryWithFileName:fileName
 								 fileMode:S_IFREG | S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH
@@ -41,7 +41,7 @@
 
 + (id)archiveEntryWithFileName:(NSString*)fileName
 				  compress:(BOOL)compress
-		 dataConsumerBlock:(void(^)(CGDataConsumerRef dataConsumer))dataConsumerBlock
+		 dataConsumerBlock:(BOOL(^)(CGDataConsumerRef dataConsumer))dataConsumerBlock
 {
 	return [self archiveEntryWithFileName:fileName
 								 fileMode:S_IFREG | S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH
@@ -68,8 +68,8 @@
 				  lastModified:(NSDate*)lastModified
 			  compressionLevel:(NSInteger)compressionLevel
 					 dataBlock:(NSData*(^)())dataBlock
-				   streamBlock:(void(^)(NSOutputStream* stream))streamBlock
-			 dataConsumerBlock:(void(^)(CGDataConsumerRef dataConsumer))dataConsumerBlock
+				   streamBlock:(BOOL(^)(NSOutputStream* stream))streamBlock
+			 dataConsumerBlock:(BOOL(^)(CGDataConsumerRef dataConsumer))dataConsumerBlock
 {
 	return [[ZZNewArchiveEntry alloc] initWithFileName:fileName
 										  fileMode:fileMode

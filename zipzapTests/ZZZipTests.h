@@ -25,6 +25,15 @@
 - (void)testCreatingZipEntriesWithCompressedImage;
 - (void)testCreatingZipEntriesWithUncompressedImage;
 
+- (void)testCreatingZipEntriesWithCompressedBadData;
+- (void)testCreatingZipEntriesWithUncompressedBadData;
+- (void)testCreatingZipEntriesWithCompressedBadStreamWriteNone;
+- (void)testCreatingZipEntriesWithUncompressedBadStreamWriteNone;
+- (void)testCreatingZipEntriesWithCompressedBadStreamWriteSome;
+- (void)testCreatingZipEntriesWithUncompressedBadStreamWriteSome;
+- (void)testCreatingZipEntriesWithCompressedBadDataConsumerWriteNone;
+- (void)testCreatingZipEntriesWithUncompressedBadDataConsumerWriteNone;
+
 - (void)testInsertingZipEntryAtFront;
 - (void)testInsertingZipEntryAtBack;
 - (void)testInsertingZipEntryAtMiddle;

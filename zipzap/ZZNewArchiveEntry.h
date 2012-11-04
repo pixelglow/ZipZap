@@ -28,7 +28,7 @@
 		  lastModified:(NSDate*)lastModified
 	  compressionLevel:(NSInteger)compressionLevel
 			 dataBlock:(NSData*(^)())dataBlock
-		   streamBlock:(void(^)(NSOutputStream* stream))streamBlock
-	 dataConsumerBlock:(void(^)(CGDataConsumerRef dataConsumer))dataConsumerBlock;
+		   streamBlock:(BOOL(^)(NSOutputStream* stream))streamBlock
+	 dataConsumerBlock:(BOOL(^)(CGDataConsumerRef dataConsumer))dataConsumerBlock;
 
 @end

@@ -35,7 +35,7 @@
 	return self;
 }
 
-- (void)writeLocalFileToFileHandle:(NSFileHandle*)fileHandle
+- (BOOL)writeLocalFileToFileHandle:(NSFileHandle*)fileHandle
 {
 	ZZCentralFileHeader* centralFileHeader = (ZZCentralFileHeader*)_centralFileHeader.mutableBytes;
 	if (_localFile)
@@ -47,6 +47,8 @@
 	else
 		// can skip: seek to after where the local file ends
 		[fileHandle seekToFileOffset:centralFileHeader->relativeOffsetOfLocalHeader + _localFileLength];
+	
+	return YES;
 }
 
 - (void)writeCentralFileHeaderToFileHandle:(NSFileHandle*)fileHandle
