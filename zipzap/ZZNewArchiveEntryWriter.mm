@@ -55,9 +55,9 @@ namespace ZZDataConsumer
 	if ((self = [super init]))
 	{
 		// allocate central, local file headers with enough space for file name
-		NSRange fileNameRange = NSMakeRange(0, fileName.length);
-		_centralFileHeader = [NSMutableData dataWithLength:sizeof(ZZCentralFileHeader) + fileNameRange.length];
-		_localFileHeader = [NSMutableData dataWithLength:sizeof(ZZLocalFileHeader) + fileNameRange.length];
+		NSUInteger fileNameLength = [fileName lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
+		_centralFileHeader = [NSMutableData dataWithLength:sizeof(ZZCentralFileHeader) + fileNameLength];
+		_localFileHeader = [NSMutableData dataWithLength:sizeof(ZZLocalFileHeader) + fileNameLength];
 		
 		ZZCentralFileHeader* centralFileHeader = [self centralFileHeader];
 		centralFileHeader->signature = ZZCentralFileHeader::sign;
@@ -70,7 +70,7 @@ namespace ZZDataConsumer
 		centralFileHeader->fileAttributeCompatibility = ZZFileAttributeCompatibility::unix;
 		centralFileHeader->versionNeededToExtract = localFileHeader->versionNeededToExtract = 0x000a;
 		
-		// general purpose flag = approximate compression level + use of data descriptor (0x8)
+		// general purpose flag = approximate compression level + use of data descriptor (bit 3) + language encoding flag (EFS, bit 11)
 		uint32_t compressionFlag;
 		switch (compressionLevel)
 		{
@@ -91,14 +91,16 @@ namespace ZZDataConsumer
 			case 5:
 			case 6:
 			case 7:
+				// normal (-en)
 				compressionFlag = 0x0;
 				break;
 			case 8:
 			case 9:
+				// maximum (-ex)
 				compressionFlag = 0x1;
 				break;
 		}
-		centralFileHeader->generalPurposeBitFlag = localFileHeader->generalPurposeBitFlag = compressionFlag | 0x8;
+		centralFileHeader->generalPurposeBitFlag = localFileHeader->generalPurposeBitFlag = compressionFlag | (1 << 3) | (1 << 11);
 
 		centralFileHeader->compressionMethod = localFileHeader->compressionMethod = compressionLevel ? ZZCompressionMethod::deflated : ZZCompressionMethod::stored;
 		
@@ -115,7 +117,7 @@ namespace ZZDataConsumer
 		centralFileHeader->compressedSize = localFileHeader->compressedSize = 0;
 		centralFileHeader->uncompressedSize = localFileHeader->uncompressedSize = 0;
 		
-		centralFileHeader->fileNameLength = localFileHeader->fileNameLength = fileName.length;
+		centralFileHeader->fileNameLength = localFileHeader->fileNameLength = fileNameLength;
 		centralFileHeader->extraFieldLength = localFileHeader->extraFieldLength = 0;
 		centralFileHeader->fileCommentLength = 0;
 		
@@ -129,17 +131,18 @@ namespace ZZDataConsumer
 		centralFileHeader->relativeOffsetOfLocalHeader = 0;
 		
 		// filename is at end of central header, local header
+		NSRange fileNameRange = NSMakeRange(0, fileName.length);
 		[fileName getBytes:centralFileHeader->fileName()
-				 maxLength:fileNameRange.length
+				 maxLength:fileNameLength
 				usedLength:NULL
-				  encoding:NSASCIIStringEncoding
+				  encoding:NSUTF8StringEncoding
 				   options:0
 					 range:fileNameRange
 			remainingRange:NULL];
 		[fileName getBytes:localFileHeader->fileName()
-				 maxLength:fileNameRange.length
+				 maxLength:fileNameLength
 				usedLength:NULL
-				  encoding:NSASCIIStringEncoding
+				  encoding:NSUTF8StringEncoding
 				   options:0
 					 range:fileNameRange
 			remainingRange:NULL];

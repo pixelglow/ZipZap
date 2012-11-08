@@ -49,6 +49,7 @@ namespace ZZDataProvider
 @interface ZZOldArchiveEntry ()
 
 - (NSData*)fileData;
+- (NSString*)stringWithBytes:(uint8_t*)bytes length:(NSUInteger)length;
 - (id<ZZArchiveEntryWriter>)writerCanSkipLocalFile:(BOOL)canSkipLocalFile;
 
 @end
@@ -57,15 +58,18 @@ namespace ZZDataProvider
 {
 	ZZCentralFileHeader* _centralFileHeader;
 	ZZLocalFileHeader* _localFileHeader;
+	NSStringEncoding _encoding;
 }
 
 - (id)initWithCentralFileHeader:(struct ZZCentralFileHeader*)centralFileHeader
 				localFileHeader:(struct ZZLocalFileHeader*)localFileHeader
+					   encoding:(NSStringEncoding)encoding
 {
 	if ((self = [super init]))
 	{
 		_centralFileHeader = centralFileHeader;
 		_localFileHeader = localFileHeader;
+		_encoding = encoding;
 	}
 	return self;
 }
@@ -75,6 +79,14 @@ namespace ZZDataProvider
 	return [NSData dataWithBytesNoCopy:(void*)_localFileHeader->fileData()
 								length:_centralFileHeader->compressedSize
 						  freeWhenDone:NO];
+}
+
+- (NSString*)stringWithBytes:(uint8_t*)bytes length:(NSUInteger)length
+{
+	// if EFS bit is set, use UTF-8; otherwise use fallback encoding
+	return [[NSString alloc] initWithBytes:bytes
+									length:length
+								  encoding:_centralFileHeader->generalPurposeBitFlag & (1 << 11) ? NSUTF8StringEncoding : _encoding];
 }
 
 - (BOOL)compressed
@@ -120,9 +132,8 @@ namespace ZZDataProvider
 
 - (NSString*)fileName
 {
-	return [[NSString alloc] initWithBytes:_centralFileHeader->fileName()
-									length:_centralFileHeader->fileNameLength
-								  encoding:NSASCIIStringEncoding];
+	return [self stringWithBytes:_centralFileHeader->fileName()
+						  length:_centralFileHeader->fileNameLength];
 }
 
 - (NSInputStream*)stream

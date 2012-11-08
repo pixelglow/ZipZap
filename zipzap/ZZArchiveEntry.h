@@ -83,7 +83,7 @@
 /**
  * Creates a new file entry from a streaming callback.
  *
- * @param fileName The file name for the entry. Only ASCII file names are supported.
+ * @param fileName The file name for the entry.
  * @param compress Whether to compress the entry.
  * @param streamBlock The callback to write the entry's data to the stream. Returns whether the write was considered successful.
  * @return The created entry.
@@ -95,7 +95,7 @@
 /**
  * Creates a new file entry from a data callback.
  *
- * @param fileName The file name for the entry. Only ASCII file names are supported.
+ * @param fileName The file name for the entry.
  * @param compress Whether to compress the entry.
  * @param dataBlock The callback to return the entry's data. Returns *nil* if the write was considered unsuccessful.
  * @return The created entry.
@@ -107,7 +107,7 @@
 /**
  * Creates a new file entry from a data-consuming callback.
  *
- * @param fileName The file name for the entry. Only ASCII file names are supported.
+ * @param fileName The file name for the entry.
  * @param compress Whether to compress the entry.
  * @param dataConsumerBlock The callback to put the entry's data into the data consumer. Returns whether the write was considered successful.
  * @return The created entry.
@@ -119,7 +119,7 @@
 /**
  * Creates a new directory entry.
  *
- * @param directoryName The directory name for the entry. Only ASCII directory names are supported.
+ * @param directoryName The directory name for the entry.
  * @return The created entry.
  */
 + (id)archiveEntryWithDirectoryName:(NSString*)directoryName;
@@ -129,7 +129,7 @@
  *
  * The archive entry will choose the first non-*nil* dataBlock, streamBlock and dataConsumerBlock to supply its data.
  *
- * @param fileName The file name for the entry. Only ASCII file names are supported.
+ * @param fileName The file name for the entry.
  * @param fileMode The UNIX file mode for the entry. This includes the file type bits.
  * @param lastModified The last modified date and time for the entry. The time value is only accurate to 2 seconds.
  * @param compressionLevel The compression level for the entry: 0 for stored, -1 for default deflate, 1 - 9 for custom deflate levels.

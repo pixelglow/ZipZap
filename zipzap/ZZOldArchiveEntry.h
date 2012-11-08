@@ -28,7 +28,8 @@
 @property (readonly, nonatomic) NSString* fileName;
 
 - (id)initWithCentralFileHeader:(struct ZZCentralFileHeader*)centralFileHeader
-				localFileHeader:(struct ZZLocalFileHeader*)localFileHeader;
+				localFileHeader:(struct ZZLocalFileHeader*)localFileHeader
+					   encoding:(NSStringEncoding)encoding;
 
 - (NSInputStream*)stream;
 - (NSData*)data;

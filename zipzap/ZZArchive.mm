@@ -18,6 +18,7 @@
 {
 @protected
 	NSURL* _URL;
+	NSStringEncoding _encoding;
 	NSData* _contents;
 	NSMutableArray* _entries;
 }
@@ -31,14 +32,17 @@
 
 + (id)archiveWithContentsOfURL:(NSURL*)URL
 {
-	return [[self alloc] initWithContentsOfURL:URL];
+	return [[self alloc] initWithContentsOfURL:URL
+									  encoding:NSUTF8StringEncoding];
 }
 
 - (id)initWithContentsOfURL:(NSURL*)URL
+				   encoding:(NSStringEncoding)encoding
 {
 	if ((self = [super init]))
 	{
 		_URL = URL;
+		_encoding = encoding;
 		_entries = [NSMutableArray array];
 		_contents = nil;
 		
@@ -46,6 +50,7 @@
 	}
 	return self;
 }
+
 
 - (void)reload
 {
@@ -87,7 +92,8 @@
 					ZZLocalFileHeader* nextLocalFileHeader = (ZZLocalFileHeader*)(beginContent
 																				  + nextCentralFileHeader->relativeOffsetOfLocalHeader);
 					[_entries addObject:[[ZZOldArchiveEntry alloc] initWithCentralFileHeader:nextCentralFileHeader
-																		 localFileHeader:nextLocalFileHeader]];
+																		 localFileHeader:nextLocalFileHeader
+																					encoding:_encoding]];
 					
 					nextCentralFileHeader = nextCentralFileHeader->nextCentralFileHeader();
 				}

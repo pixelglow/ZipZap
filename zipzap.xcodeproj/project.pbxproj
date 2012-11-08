@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D810EBCF164B19DA00200834 /* 拉链.txt in Resources */ = {isa = PBXBuildFile; fileRef = D810EBCE164B19DA00200834 /* 拉链.txt */; };
 		D88E8DFF16375C66002207B3 /* dog.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D88E8DFD16375C66002207B3 /* dog.jpg */; };
 		D88E8E0016375C66002207B3 /* dog.png in Resources */ = {isa = PBXBuildFile; fileRef = D88E8DFE16375C66002207B3 /* dog.png */; };
 		D88E8E07163816FD002207B3 /* ZZOldArchiveEntry.h in Headers */ = {isa = PBXBuildFile; fileRef = D88E8E05163816FD002207B3 /* ZZOldArchiveEntry.h */; };
@@ -83,6 +84,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		D810EBCE164B19DA00200834 /* 拉链.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "拉链.txt"; sourceTree = "<group>"; };
 		D88E8DFD16375C66002207B3 /* dog.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = dog.jpg; sourceTree = "<group>"; };
 		D88E8DFE16375C66002207B3 /* dog.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dog.png; sourceTree = "<group>"; };
 		D88E8E05163816FD002207B3 /* ZZOldArchiveEntry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZZOldArchiveEntry.h; sourceTree = "<group>"; };
@@ -256,6 +258,7 @@
 				D899D013162CCA0400112F49 /* li-europan-lingues.txt */,
 				D899D012162CC8F100112F49 /* lorem-ipsum.txt */,
 				D899D016162CCEDC00112F49 /* pangram.txt */,
+				D810EBCE164B19DA00200834 /* 拉链.txt */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -376,6 +379,7 @@
 				D899D017162CCEDC00112F49 /* pangram.txt in Resources */,
 				D88E8DFF16375C66002207B3 /* dog.jpg in Resources */,
 				D88E8E0016375C66002207B3 /* dog.png in Resources */,
+				D810EBCF164B19DA00200834 /* 拉链.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

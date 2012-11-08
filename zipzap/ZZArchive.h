@@ -50,6 +50,8 @@
 /**
  * Creates a new archive with the zip file at the given file URL.
  *
+ * The archive will use UTF-8 encoding for reading entry file names and comments.
+ *
  * @param URL The file URL of the zip file.
  * @return The initialized archive. If the zip file does not exist, this will have no entries.
  */
@@ -59,9 +61,11 @@
  * Initializes a new archive with the zip file at the given file URL.
  *
  * @param URL The file URL of the zip file.
+ * @param encoding The encoding for reading entry file names and comments.
  * @return The initialized archive. If the zip file does not exist, this will have no entries.
  */
-- (id)initWithContentsOfURL:(NSURL*)URL;
+- (id)initWithContentsOfURL:(NSURL*)URL
+				   encoding:(NSStringEncoding)encoding;
 
 /**
  * Reloads the entries from the URL.
