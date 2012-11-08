@@ -138,7 +138,7 @@
 	// write out all local files, recording which are valid
 	NSMutableIndexSet* goodEntries = [NSMutableIndexSet indexSet];
 	for (NSUInteger index = 0, count = newEntryWriters.count; index < count; ++index)
-		if ([newEntryWriters[index] writeLocalFileToFileHandle:fileHandle])
+		if ([[newEntryWriters objectAtIndex:index] writeLocalFileToFileHandle:fileHandle])
 			[ goodEntries addIndex:index];
 	
 	ZZEndOfCentralDirectory endOfCentralDirectory;
@@ -154,7 +154,7 @@
 	// write out central file headers for good entries only
 	[goodEntries enumerateIndexesUsingBlock:^(NSUInteger index, BOOL* stop)
 	 {
-		 [newEntryWriters[index] writeCentralFileHeaderToFileHandle:fileHandle];
+		 [[newEntryWriters objectAtIndex:index] writeCentralFileHeaderToFileHandle:fileHandle];
 	 }];
 	
 	endOfCentralDirectory.sizeOfTheCentralDirectory = (uint32_t)[fileHandle offsetInFile]
