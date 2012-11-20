@@ -58,6 +58,16 @@
 + (id)archiveWithContentsOfURL:(NSURL*)URL;
 
 /**
+ * Creates a new archive with the raw zip file data given.
+ *
+ * The archive will use UTF-8 encoding for reading entry file names and comments.
+ *
+ * @param data The raw data of the zip file
+ * @return The initialized archive.
+ */
++ (id) archiveWithData:(NSData*)data;
+
+/**
  * Initializes a new archive with the zip file at the given file URL.
  *
  * @param URL The file URL of the zip file.
@@ -66,6 +76,16 @@
  */
 - (id)initWithContentsOfURL:(NSURL*)URL
 				   encoding:(NSStringEncoding)encoding;
+
+/**
+ * Initializes a new archive with the raw zip file data given.
+ *
+ * @param data The raw data of the zip file
+ * @param encoding The encoding for reading entry file names and comments.
+ * @return The initialized archive.
+ */
+- (id) initWithData:(NSData*)data
+		   encoding:(NSStringEncoding)encoding;
 
 /**
  * Reloads the entries from the URL.

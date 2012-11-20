@@ -188,6 +188,36 @@
 
 }
 
+- (void) testZipFromDataConsistentWithZipFromURL
+{
+	NSData * rawData = [NSData dataWithContentsOfURL:_zipFileURL];
+	ZZArchive * zipFileFromData = [[ZZArchive alloc] initWithData:rawData encoding:NSUTF8StringEncoding];
+    
+	STAssertEquals(_zipFile.entries.count,
+				   zipFileFromData.entries.count,
+				   @"zipFileFromData.entries.count must match the original file count.");
+	
+	for (NSUInteger index = 0, count = _zipFile.entries.count; index < count; ++index)
+	{
+		ZZArchiveEntry* zipEntry = _zipFile.entries[index];
+		ZZArchiveEntry* zipFromDataEntry = zipFileFromData.entries[index];
+
+		STAssertEquals(zipEntry.compressed, zipFromDataEntry.compressed, @"zipFromDataEntry.entries[%s].compressed must match the reference entry.", index);
+
+		STAssertEquals(zipEntry.crc32, zipFromDataEntry.crc32, @"zipFromDataEntry.entries[%s].crc32 must match the reference entry.", index);
+
+		STAssertEqualObjects(zipEntry.data, zipFromDataEntry.data, @"zipFromDataEntry.entries[%s].data must match the reference entry.", index);
+
+		STAssertEquals(zipEntry.fileMode, zipFromDataEntry.fileMode, @"zipFromDataEntry.entries[%s].fileMode must match the reference entry.", index);
+
+		STAssertEqualObjects(zipEntry.fileName, zipFromDataEntry.fileName, @"zipFromDataEntry.entries[%s].fileName must match the reference entry.", index);
+
+		STAssertEquals(zipEntry.compressedSize, zipFromDataEntry.compressedSize, @"zipFromDataEntry.entries[%s].compressedSize must match the reference entry.", index);
+
+		STAssertEquals(zipEntry.uncompressedSize, zipFromDataEntry.uncompressedSize, @"zipFromDataEntry.entries[%s].uncompressedSize must match the reference entry.", index);
+	}
+}
+
 - (void)testExtractingZipEntryData
 {
 	for (NSUInteger index = 0, count = _zipFile.entries.count; index < count; ++index)
