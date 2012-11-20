@@ -36,6 +36,12 @@
 									  encoding:NSUTF8StringEncoding];
 }
 
++ (id)archiveWithData:(NSData*)data
+{
+	return [[self alloc] initWithData:data
+							 encoding:NSUTF8StringEncoding];
+}
+
 - (id)initWithContentsOfURL:(NSURL*)URL
 				   encoding:(NSStringEncoding)encoding
 {
@@ -51,15 +57,39 @@
 	return self;
 }
 
+- (id) initWithData:(NSData*)data
+		   encoding:(NSStringEncoding)encoding
+{
+	if ((self = [super init]))
+	{
+		_URL = nil;
+		_encoding = encoding;
+		_entries = [NSMutableArray array];
+		_contents = data;
+
+		[self reloadInternal];
+	}
+	return self;
+}
+
 
 - (void)reload
 {
 	// memory-map the contents from the zip file
 	[_entries removeAllObjects];
-	_contents = [NSData dataWithContentsOfURL:_URL
-									  options:NSDataReadingMappedAlways
-										error:nil];
 	
+	if (_URL != nil)
+	{
+		_contents = [NSData dataWithContentsOfURL:_URL
+										  options:NSDataReadingMappedAlways
+											error:nil];
+	}
+
+	[self reloadInternal];
+}
+
+- (void) reloadInternal
+{	
 	if (_contents)
 	{
 		const uint8_t* beginContent = (const uint8_t*)_contents.bytes;
