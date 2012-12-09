@@ -156,8 +156,10 @@ namespace ZZDataProvider
 	switch (_centralFileHeader->compressionMethod)
 	{
 		case ZZCompressionMethod::stored:
-			// if stored, just use file data
-			return [self fileData];
+			// if stored, copy file data
+			return [NSData dataWithBytes:(void*)_localFileHeader->fileData()
+								  length:_centralFileHeader->compressedSize];
+
 		case ZZCompressionMethod::deflated:
 		{
 			// if deflated, inflate all into a buffer and use that
