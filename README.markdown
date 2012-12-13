@@ -42,7 +42,7 @@ Reading an existing zip file:
 	
 Writing a new zip file:
 
-	ZZMutableArchive* newArchive = [ZZArchive archiveWithContentsOfURL:[NSURL fileURLWithPath:@"/tmp/new.zip"]];
+	ZZMutableArchive* newArchive = [ZZMutableArchive archiveWithContentsOfURL:[NSURL fileURLWithPath:@"/tmp/new.zip"]];
 	newArchive.entries =
 	@[
 		[ZZArchiveEntry archiveEntryWithFileName:@"first.text"
@@ -52,7 +52,7 @@ Writing a new zip file:
 	
 Updating an existing zip file:
 
-	ZZMutableArchive* oldArchive = [ZZArchive archiveWithContentsOfURL:[NSURL fileURLWithPath:@"/tmp/old.zip"]];
+	ZZMutableArchive* oldArchive = [ZZMutableArchive archiveWithContentsOfURL:[NSURL fileURLWithPath:@"/tmp/old.zip"]];
 	oldArchive.entries = [oldArchive.entries arrayByAddingObject:
 		[ZZArchiveEntry archiveEntryWithFileName:@"second.text"
 										compress:YES
