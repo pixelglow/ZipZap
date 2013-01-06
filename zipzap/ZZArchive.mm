@@ -160,7 +160,7 @@
 	_contents = nil;
 	
 	// open or create the file
-	NSFileHandle* fileHandle = [[NSFileHandle alloc] initWithFileDescriptor:open(_URL.path.UTF8String,
+	NSFileHandle* fileHandle = [[NSFileHandle alloc] initWithFileDescriptor:open(_URL.path.fileSystemRepresentation,
 																				 O_WRONLY | O_CREAT,
 																				 S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH)
 															 closeOnDealloc:YES];
