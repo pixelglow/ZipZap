@@ -135,4 +135,9 @@
 	return nil;
 }
 
+- (void)writeToURL:(NSURL *)fileURL
+{
+    
+}
+
 @end

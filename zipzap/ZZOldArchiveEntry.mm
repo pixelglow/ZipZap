@@ -204,4 +204,40 @@ namespace ZZDataProvider
 											  shouldSkipLocalFile:canSkipLocalFile];
 }
 
+- (void)writeToURL:(NSURL *)fileURL
+{
+    NSString *entryPath = [fileURL path];
+    NSString *entryLocation = [entryPath stringByDeletingLastPathComponent];
+    if (![[NSFileManager defaultManager] fileExistsAtPath:entryLocation]) {
+        [[NSFileManager defaultManager] createDirectoryAtPath:entryLocation
+                                  withIntermediateDirectories:YES
+                                                   attributes:nil
+                                                        error:nil];
+    }
+    
+    NSInputStream *stream = [self stream];
+    
+    [stream open];
+    
+    NSInteger bytesRead = -1;
+    NSInteger chunkSize = 1024*10;
+    [[NSFileManager defaultManager] createFileAtPath:entryPath contents:nil attributes:nil];
+    NSFileHandle *file = [NSFileHandle fileHandleForWritingAtPath:entryPath];
+    while (bytesRead) {
+        @autoreleasepool {
+            uint8_t buf[chunkSize];
+            bytesRead = [stream read:buf maxLength:chunkSize];
+            if (bytesRead < 0) {
+                bytesRead = 0;
+            }
+            else if (bytesRead) {
+                NSData *data = [NSData dataWithBytes:buf length:bytesRead];
+                [file writeData:data];
+            }
+        }
+    }
+    [file closeFile];
+    [stream close];
+}
+
 @end

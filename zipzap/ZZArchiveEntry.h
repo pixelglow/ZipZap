@@ -169,4 +169,11 @@
 
 - (id<ZZArchiveEntryWriter>)writerCanSkipLocalFile:(BOOL)canSkipLocalFile;
 
+/**
+ * Writes the entry to the provided URL
+ *
+ * @param fileURL The url location to write to
+ */
+- (void)writeToURL:(NSURL *)fileURL;
+
 @end
