@@ -81,7 +81,7 @@
 	if (_URL != nil)
 	{
 		_contents = [NSData dataWithContentsOfURL:_URL
-										  options:NSDataReadingMappedAlways
+										  options:NSDataReadingMappedIfSafe
 											error:nil];
 	}
 
