@@ -19,6 +19,9 @@
 		D84A44AF16A0E8D600CF00A9 /* ZZDataChannel.h in Headers */ = {isa = PBXBuildFile; fileRef = D84A44AD16A0E8D600CF00A9 /* ZZDataChannel.h */; };
 		D84A44B016A0E8D600CF00A9 /* ZZDataChannel.m in Sources */ = {isa = PBXBuildFile; fileRef = D84A44AE16A0E8D600CF00A9 /* ZZDataChannel.m */; };
 		D84A44B116A0E8D600CF00A9 /* ZZDataChannel.m in Sources */ = {isa = PBXBuildFile; fileRef = D84A44AE16A0E8D600CF00A9 /* ZZDataChannel.m */; };
+		D84A44CF16A0F8B400CF00A9 /* ZZDataChannelOutput.h in Headers */ = {isa = PBXBuildFile; fileRef = D84A44CD16A0F8B400CF00A9 /* ZZDataChannelOutput.h */; };
+		D84A44D016A0F8B400CF00A9 /* ZZDataChannelOutput.m in Sources */ = {isa = PBXBuildFile; fileRef = D84A44CE16A0F8B400CF00A9 /* ZZDataChannelOutput.m */; };
+		D84A44D116A0F8B400CF00A9 /* ZZDataChannelOutput.m in Sources */ = {isa = PBXBuildFile; fileRef = D84A44CE16A0F8B400CF00A9 /* ZZDataChannelOutput.m */; };
 		D88E8DFF16375C66002207B3 /* dog.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D88E8DFD16375C66002207B3 /* dog.jpg */; };
 		D88E8E0016375C66002207B3 /* dog.png in Resources */ = {isa = PBXBuildFile; fileRef = D88E8DFE16375C66002207B3 /* dog.png */; };
 		D88E8E07163816FD002207B3 /* ZZOldArchiveEntry.h in Headers */ = {isa = PBXBuildFile; fileRef = D88E8E05163816FD002207B3 /* ZZOldArchiveEntry.h */; };
@@ -104,6 +107,8 @@
 		D84A44A916A0E30B00CF00A9 /* ZZFileChannelOutput.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZZFileChannelOutput.m; sourceTree = "<group>"; };
 		D84A44AD16A0E8D600CF00A9 /* ZZDataChannel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZZDataChannel.h; sourceTree = "<group>"; };
 		D84A44AE16A0E8D600CF00A9 /* ZZDataChannel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZZDataChannel.m; sourceTree = "<group>"; };
+		D84A44CD16A0F8B400CF00A9 /* ZZDataChannelOutput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZZDataChannelOutput.h; sourceTree = "<group>"; };
+		D84A44CE16A0F8B400CF00A9 /* ZZDataChannelOutput.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZZDataChannelOutput.m; sourceTree = "<group>"; };
 		D88E8DFD16375C66002207B3 /* dog.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = dog.jpg; sourceTree = "<group>"; };
 		D88E8DFE16375C66002207B3 /* dog.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dog.png; sourceTree = "<group>"; };
 		D88E8E05163816FD002207B3 /* ZZOldArchiveEntry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZZOldArchiveEntry.h; sourceTree = "<group>"; };
@@ -229,6 +234,8 @@
 				D84A44A116A0D99C00CF00A9 /* ZZChannelOutput.h */,
 				D84A44AD16A0E8D600CF00A9 /* ZZDataChannel.h */,
 				D84A44AE16A0E8D600CF00A9 /* ZZDataChannel.m */,
+				D84A44CD16A0F8B400CF00A9 /* ZZDataChannelOutput.h */,
+				D84A44CE16A0F8B400CF00A9 /* ZZDataChannelOutput.m */,
 				D899CFDE162C608300112F49 /* ZZDeflateOutputStream.h */,
 				D899CFDF162C608300112F49 /* ZZDeflateOutputStream.m */,
 				D84A44A316A0E2F300CF00A9 /* ZZFileChannel.h */,
@@ -314,6 +321,7 @@
 				D84A44A516A0E2F400CF00A9 /* ZZFileChannel.h in Headers */,
 				D84A44AA16A0E30C00CF00A9 /* ZZFileChannelOutput.h in Headers */,
 				D84A44AF16A0E8D600CF00A9 /* ZZDataChannel.h in Headers */,
+				D84A44CF16A0F8B400CF00A9 /* ZZDataChannelOutput.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -450,6 +458,7 @@
 				D84A44A616A0E2F400CF00A9 /* ZZFileChannel.m in Sources */,
 				D84A44AB16A0E30C00CF00A9 /* ZZFileChannelOutput.m in Sources */,
 				D84A44B016A0E8D600CF00A9 /* ZZDataChannel.m in Sources */,
+				D84A44D016A0F8B400CF00A9 /* ZZDataChannelOutput.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -479,6 +488,7 @@
 				D84A44A716A0E2F400CF00A9 /* ZZFileChannel.m in Sources */,
 				D84A44AC16A0E30C00CF00A9 /* ZZFileChannelOutput.m in Sources */,
 				D84A44B116A0E8D600CF00A9 /* ZZDataChannel.m in Sources */,
+				D84A44D116A0F8B400CF00A9 /* ZZDataChannelOutput.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

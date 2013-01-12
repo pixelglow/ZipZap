@@ -31,6 +31,7 @@
 @implementation ZZArchive
 
 @synthesize entries = _entries;
+@synthesize contents = _contents;
 
 + (id)archiveWithContentsOfURL:(NSURL*)URL
 {

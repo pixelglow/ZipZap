@@ -43,6 +43,11 @@
 @property (readonly, nonatomic) NSURL* URL;
 
 /**
+ * The uninterpreted contents of this archive.
+ */
+@property (readonly, nonatomic) NSData* contents;
+
+/**
  * The array of <ZZArchiveEntry> entries within this archive.
  */
 @property (readonly, copy, nonatomic) NSArray* entries;
@@ -102,6 +107,7 @@
 /**
  * The array of <ZZArchiveEntry> entries within this archive.
  * To write new entries in the zip file, set this property to a different array of <ZZArchiveEntry> entries.
+ * When you set this property, any old entries should be considered invalid.
  */
 @property (copy, nonatomic) NSArray* entries;
 

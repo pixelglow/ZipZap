@@ -7,6 +7,7 @@
 //
 
 #import "ZZDataChannel.h"
+#import "ZZDataChannelOutput.h"
 
 @implementation ZZDataChannel
 {
@@ -32,7 +33,7 @@
 
 - (id<ZZChannelOutput>)openOutput
 {
-	return nil;
+	return [[ZZDataChannelOutput alloc] initWithData:(NSMutableData*)_allData];
 }
 
 @end

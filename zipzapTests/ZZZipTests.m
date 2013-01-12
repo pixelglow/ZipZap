@@ -14,9 +14,14 @@
 @interface ZZZipTests ()
 
 - (NSData*)dataAtFilePath:(NSString*)filePath;
+- (void)createEmptyFileZip;
+- (void)createEmptyDataZip;
+- (void)createFullFileZip;
+- (void)createFullDataZip;
 
-- (void)checkZipEntries:(NSArray*)newEntries
-		   checkerBlock:(NSData*(^)(NSString* fileName))checkerBlock;
+- (NSArray*)recordsForZipEntries:(NSArray*)zipEntries;
+- (void)checkZipEntryRecords:(NSArray*)newEntries
+				checkerBlock:(NSData*(^)(NSString* fileName))checkerBlock;
 
 - (void)checkCreatingZipEntriesWithNoCheckEntries:(NSArray*)entries;
 - (void)checkCreatingZipEntriesWithDataCompressed:(BOOL)compressed;
@@ -47,7 +52,6 @@
 	_entryFilePaths = [allEntryFilePaths subarrayWithRange:NSMakeRange(0, allEntryFilePaths.count - 1)];
 	_extraFilePath = [allEntryFilePaths lastObject];
 
-	_zipFile = [ZZMutableArchive archiveWithContentsOfURL:_zipFileURL];
 }
 
 - (void)tearDown
@@ -66,22 +70,67 @@
 																						 ofType:nil]];
 }
 
-- (void)checkZipEntries:(NSArray*)newEntries
-		   checkerBlock:(NSData*(^)(NSString* fileName))checkerBlock
+- (void)createEmptyFileZip
 {
+	_zipFile = [ZZMutableArchive archiveWithContentsOfURL:_zipFileURL];
+}
+
+- (void)createEmptyDataZip
+{
+	_zipFile = [ZZMutableArchive archiveWithData:[NSMutableData data]];
+}
+
+- (void)createFullFileZip
+{
+	[ZZTasks zipFiles:_entryFilePaths
+			   toPath:_zipFileURL.path];
+
+	_zipFile = [ZZMutableArchive archiveWithContentsOfURL:_zipFileURL];
+}
+
+- (void)createFullDataZip
+{
+	[ZZTasks zipFiles:_entryFilePaths
+			   toPath:_zipFileURL.path];
+	
+	_zipFile = [ZZMutableArchive archiveWithData:[NSMutableData dataWithContentsOfURL:_zipFileURL]];
+}
+
+- (NSArray*)recordsForZipEntries:(NSArray*)zipEntries
+{
+	// record the values for the zip entries (before they get replaced by setting the zip entries)
+	NSMutableArray* records = [NSMutableArray array];
+	for (ZZArchiveEntry* zipEntry in zipEntries)
+		[records addObject:
+		 @{
+		 @"fileMode": @(zipEntry.fileMode),
+		 @"compressed": @(zipEntry.compressed),
+		 @"lastModified": zipEntry.lastModified,
+		 @"fileName": zipEntry.fileName
+		 }];
+	return records;
+}
+
+- (void)checkZipEntryRecords:(NSArray*)newEntryRecords
+				checkerBlock:(NSData*(^)(NSString* fileName))checkerBlock
+{
+	if (!_zipFile.URL)
+		// archive is a data archive, need to save it before we can check
+		[_zipFile.contents writeToURL:_zipFileURL atomically:YES];
+	
 	NSArray* zipInfo = [ZZTasks zipInfoAtPath:_zipFileURL.path];
 	
 	STAssertEquals(zipInfo.count,
-				   newEntries.count,
+				   newEntryRecords.count,
 				   @"Zip entry count must match new entry count.");
 	
 	for (NSUInteger index = 0, count = zipInfo.count; index < count; ++ index)
 	{
-		ZZArchiveEntry* nextNewEntry = newEntries[index];
+		NSDictionary* nextNewEntry = newEntryRecords[index];
 		NSArray* nextZipInfo = zipInfo[index];
 		
 		char nextModeString[12];
-		strmode(nextNewEntry.fileMode, nextModeString);
+		strmode([nextNewEntry[@"fileMode"] unsignedShortValue], nextModeString);
 		nextModeString[10] = '\0';	// only want the first 10 chars of the parsed mode
 		STAssertEqualObjects([NSString stringWithUTF8String:nextModeString],
 							 nextZipInfo[0],
@@ -97,21 +146,21 @@
 							 @"Zip entry #%d file attribute should be unix.",
 							 index);
 	
-		if (!nextNewEntry.compressed)
+		if (![nextNewEntry[@"compressed"] boolValue])
 			STAssertEqualObjects(nextZipInfo[3],
 								 nextZipInfo[5],
 								 @"Zip entry #%d compressed size must match uncompressed size if uncompressed.",
 								 index);
 
 		STAssertEqualObjects(nextZipInfo[6],
-							 nextNewEntry.compressed ? @"defN" : @"stor",
+							 [nextNewEntry[@"compressed"] boolValue]? @"defN" : @"stor",
 							 @"Zip entry #%d compression method must match new entry compressed.",
 							 index);
 		
 		NSDateComponents* dateComponents = [[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar]
 											components: NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit
 											| NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit
-											fromDate:nextNewEntry.lastModified];
+											fromDate:nextNewEntry[@"lastModified"]];
 		STAssertEquals(dateComponents.year,
 					   [[nextZipInfo[7] substringWithRange:NSMakeRange(0, 4)] integerValue],
 					   @"Zip entry #%d last modified year must match the new entry last modified year.",
@@ -140,14 +189,14 @@
 
 
 		STAssertEqualObjects(nextZipInfo[8],
-							 nextNewEntry.fileName,
+							 nextNewEntry[@"fileName"],
 							 @"Zip entry #%d file name must match new entry file name.",
 							 index);
 		
 		
 		if (checkerBlock)
 		{
-			NSData* fileData = checkerBlock(nextNewEntry.fileName);
+			NSData* fileData = checkerBlock(nextNewEntry[@"fileName"]);
 			NSString* fileDataLength = [NSString stringWithFormat:@"%lu", fileData.length];
 			
 			STAssertEqualObjects(nextZipInfo[3],
@@ -155,7 +204,7 @@
 								 @"Zip entry #%d uncompressed size must match original file length.",
 								 index);
 			
-			NSData* zipData = [ZZTasks unzipFile:nextNewEntry.fileName
+			NSData* zipData = [ZZTasks unzipFile:nextNewEntry[@"fileName"]
 										fromPath:_zipFileURL.path];
 			
 			STAssertEqualObjects(zipData,
@@ -170,8 +219,8 @@
 {
 	_zipFile.entries = entries;
 	
-	[self checkZipEntries:entries
-			 checkerBlock:nil];
+	[self checkZipEntryRecords:[self recordsForZipEntries:entries]
+				  checkerBlock:nil];
 }
 
 - (void)checkCreatingZipEntriesWithDataCompressed:(BOOL)compressed
@@ -183,8 +232,8 @@
 															 dataBlock:^{ return [self dataAtFilePath:entryFilePath]; }]];
 	
 	_zipFile.entries = newEntries;
-	[self checkZipEntries:newEntries
-			 checkerBlock:^(NSString* fileName){ return [self dataAtFilePath:fileName]; }];
+	[self checkZipEntryRecords:[self recordsForZipEntries:newEntries]
+				  checkerBlock:^(NSString* fileName){ return [self dataAtFilePath:fileName]; }];
 }
 
 - (void)checkCreatingZipEntriesWithStreamCompressed:(BOOL)compressed chunkSize:(NSUInteger)chunkSize
@@ -209,8 +258,8 @@
 							   }]];
 	
 	_zipFile.entries = newEntries;
-	[self checkZipEntries:newEntries
-			 checkerBlock:^(NSString* fileName){ return [self dataAtFilePath:fileName]; }];
+	[self checkZipEntryRecords:[self recordsForZipEntries:newEntries]
+				  checkerBlock:^(NSString* fileName){ return [self dataAtFilePath:fileName]; }];
 }
 
 - (void)checkCreatingZipEntriesWithImageCompressed:(BOOL)compressed
@@ -276,8 +325,8 @@
 	}
 	
 	_zipFile.entries = newEntries;
-	[self checkZipEntries:newEntries
-			 checkerBlock:^(NSString* fileName){ return fileNameCheck[fileName]; }];
+	[self checkZipEntryRecords:[self recordsForZipEntries:newEntries]
+				  checkerBlock:^(NSString* fileName){ return fileNameCheck[fileName]; }];
 }
 
 - (void)checkCreatingZipEntriesWithBadEntry:(ZZArchiveEntry*)badEntry
@@ -293,99 +342,110 @@
 	_zipFile.entries = newEntries;
 	[newEntries removeObjectAtIndex:insertIndex];
 	
-	[self checkZipEntries:newEntries
-			 checkerBlock:^(NSString* fileName){ return [self dataAtFilePath:fileName]; }];
+	[self checkZipEntryRecords:[self recordsForZipEntries:newEntries]
+				  checkerBlock:^(NSString* fileName){ return [self dataAtFilePath:fileName]; }];
 
 }
 
 - (void)checkUpdatingZipEntriesWithFile:(NSString*)file
 						 operationBlock:(void(^)(NSMutableArray*, id))operationBlock
 {
-	[ZZTasks zipFiles:_entryFilePaths
-			   toPath:_zipFileURL.path];
-	[_zipFile reload];
-	
 	NSMutableArray* entries = [NSMutableArray arrayWithArray:_zipFile.entries];
 	
 	operationBlock(entries, file ? [ZZArchiveEntry archiveEntryWithFileName:file
 																   compress:YES
 																  dataBlock:^{ return [self dataAtFilePath:file]; }] : nil);
 	
+	// since entries contains existing entries from the zip file, we need to take a record first before applying it
+	NSArray* records = [self recordsForZipEntries:entries];
 	_zipFile.entries = entries;
-	[self checkZipEntries:entries
-					 checkerBlock:^(NSString* fileName){ return [self dataAtFilePath:fileName]; }];
+	[self checkZipEntryRecords:records
+				  checkerBlock:^(NSString* fileName){ return [self dataAtFilePath:fileName]; }];
 }
 
-- (void)testCreatingZipWithNoEntries
+- (void)testCreatingFileZipWithNoEntries
 {
+	[self createEmptyFileZip];
 	[self checkCreatingZipEntriesWithNoCheckEntries:@[]];
 }
 
-- (void)testCreatingZipEntriesWithDirectory
+- (void)testCreatingFileZipEntriesWithDirectory
 {
+	[self createEmptyFileZip];
 	[self checkCreatingZipEntriesWithNoCheckEntries:@[[ZZArchiveEntry archiveEntryWithDirectoryName:@"directory"]]];
 }
 
-- (void)testCreatingZipEntriesWithCompressedData
+- (void)testCreatingFileZipEntriesWithCompressedData
 {
+	[self createEmptyFileZip];
 	[self checkCreatingZipEntriesWithDataCompressed:YES];
 }
 
-- (void)testCreatingZipEntriesWithUncompressedData
+- (void)testCreatingFileZipEntriesWithUncompressedData
 {
+	[self createEmptyFileZip];
 	[self checkCreatingZipEntriesWithDataCompressed:NO];
 }
 
-- (void)testCreatingZipEntriesWithCompressedStreamInSmallChunks
+- (void)testCreatingFileZipEntriesWithCompressedStreamInSmallChunks
 {
+	[self createEmptyFileZip];
 	[self checkCreatingZipEntriesWithStreamCompressed:YES
 											chunkSize:16];
 }
 
-- (void)testCreatingZipEntriesWithCompressedStreamInLargeChunks
+- (void)testCreatingFileZipEntriesWithCompressedStreamInLargeChunks
 {
+	[self createEmptyFileZip];
 	[self checkCreatingZipEntriesWithStreamCompressed:YES
 											chunkSize:1024];
 }
 
-- (void)testCreatingZipEntriesWithUncompressedStreamInSmallChunks
+- (void)testCreatingFileZipEntriesWithUncompressedStreamInSmallChunks
 {
+	[self createEmptyFileZip];
 	[self checkCreatingZipEntriesWithStreamCompressed:NO
 											chunkSize:16];
 }
 
-- (void)testCreatingZipEntriesWithUncompressedStreamInLargeChunks
+- (void)testCreatingFileZipEntriesWithUncompressedStreamInLargeChunks
 {
+	[self createEmptyFileZip];
 	[self checkCreatingZipEntriesWithStreamCompressed:NO
 											chunkSize:1024];
 }
 
-- (void)testCreatingZipEntriesWithCompressedImage
+- (void)testCreatingFileZipEntriesWithCompressedImage
 {
+	[self createEmptyFileZip];
 	[self checkCreatingZipEntriesWithImageCompressed:YES];
 }
 
-- (void)testCreatingZipEntriesWithUncompressedImage
+- (void)testCreatingFileZipEntriesWithUncompressedImage
 {
+	[self createEmptyFileZip];
 	[self checkCreatingZipEntriesWithImageCompressed:NO];
 }
 
-- (void)testCreatingZipEntriesWithCompressedBadData
+- (void)testCreatingFileZipEntriesWithCompressedBadData
 {
+	[self createEmptyFileZip];
 	[self checkCreatingZipEntriesWithBadEntry:[ZZArchiveEntry archiveEntryWithFileName:@"bad"
 																			  compress:YES
 																			 dataBlock:^ { return (NSData*)nil; }]];
 }
 
-- (void)testCreatingZipEntriesWithUncompressedBadData
+- (void)testCreatingFileZipEntriesWithUncompressedBadData
 {
+	[self createEmptyFileZip];
 	[self checkCreatingZipEntriesWithBadEntry:[ZZArchiveEntry archiveEntryWithFileName:@"bad"
 																			  compress:YES
 																			 dataBlock:^ { return (NSData*)nil; }]];
 }
 
-- (void)testCreatingZipEntriesWithCompressedBadStreamWriteNone
+- (void)testCreatingFileZipEntriesWithCompressedBadStreamWriteNone
 {
+	[self createEmptyFileZip];
 	[self checkCreatingZipEntriesWithBadEntry:[ZZArchiveEntry archiveEntryWithFileName:@"bad"
 																			  compress:YES
 																		   streamBlock:^(NSOutputStream* stream)
@@ -394,8 +454,9 @@
 											   }]];
 }
 
-- (void)testCreatingZipEntriesWithUncompressedBadStreamWriteNone
+- (void)testCreatingFileZipEntriesWithUncompressedBadStreamWriteNone
 {
+	[self createEmptyFileZip];
 	[self checkCreatingZipEntriesWithBadEntry:[ZZArchiveEntry archiveEntryWithFileName:@"bad"
 																			  compress:NO
 																		   streamBlock:^(NSOutputStream* stream)
@@ -404,8 +465,9 @@
 											   }]];
 }
 
-- (void)testCreatingZipEntriesWithCompressedBadStreamWriteSome
+- (void)testCreatingFileZipEntriesWithCompressedBadStreamWriteSome
 {
+	[self createEmptyFileZip];
 	[self checkCreatingZipEntriesWithBadEntry:[ZZArchiveEntry archiveEntryWithFileName:@"bad"
 																			  compress:YES
 																		   streamBlock:^(NSOutputStream* stream)
@@ -416,8 +478,9 @@
 											   }]];
 }
 
-- (void)testCreatingZipEntriesWithUncompressedBadStreamWriteSome
+- (void)testCreatingFileZipEntriesWithUncompressedBadStreamWriteSome
 {
+	[self createEmptyFileZip];
 	[self checkCreatingZipEntriesWithBadEntry:[ZZArchiveEntry archiveEntryWithFileName:@"bad"
 																			  compress:NO
 																		   streamBlock:^(NSOutputStream* stream)
@@ -428,8 +491,9 @@
 											   }]];
 }
 
-- (void)testCreatingZipEntriesWithCompressedBadDataConsumerWriteNone
+- (void)testCreatingFileZipEntriesWithCompressedBadDataConsumerWriteNone
 {
+	[self createEmptyFileZip];
 	[self checkCreatingZipEntriesWithBadEntry:[ZZArchiveEntry archiveEntryWithFileName:@"bad"
 																			  compress:YES
 																	 dataConsumerBlock:^(CGDataConsumerRef dataConsumer)
@@ -438,8 +502,9 @@
 											   }]];
 }
 
-- (void)testCreatingZipEntriesWithUncompressedBadDataConsumerWriteNone
+- (void)testCreatingFileZipEntriesWithUncompressedBadDataConsumerWriteNone
 {
+	[self createEmptyFileZip];
 	[self checkCreatingZipEntriesWithBadEntry:[ZZArchiveEntry archiveEntryWithFileName:@"bad"
 																			  compress:NO
 																	 dataConsumerBlock:^(CGDataConsumerRef dataConsumer)
@@ -449,56 +514,279 @@
 }
 
 
-- (void)testInsertingZipEntryAtFront
+- (void)testInsertingFileZipEntryAtFront
 {
+	[self createFullFileZip];
 	[self checkUpdatingZipEntriesWithFile:_extraFilePath
 						   operationBlock:^(NSMutableArray* entries, id entry) { [entries insertObject:entry atIndex:0]; }];
 }
 
-- (void)testInsertingZipEntryAtBack
+- (void)testInsertingFileZipEntryAtBack
 {
+	[self createFullFileZip];
 	[self checkUpdatingZipEntriesWithFile:_extraFilePath
 						   operationBlock:^(NSMutableArray* entries, id entry) { [entries addObject:entry]; }];
 }
 
-- (void)testInsertingZipEntryAtMiddle
+- (void)testInsertingFileZipEntryAtMiddle
 {
+	[self createFullFileZip];
 	[self checkUpdatingZipEntriesWithFile:_extraFilePath
 						   operationBlock:^(NSMutableArray* entries, id entry) { [entries insertObject:entry atIndex:entries.count / 2]; }];
 }
 
-- (void)testReplacingZipEntryAtFront
+- (void)testReplacingFileZipEntryAtFront
 {
+	[self createFullFileZip];
 	[self checkUpdatingZipEntriesWithFile:_extraFilePath
 						   operationBlock:^(NSMutableArray* entries, id entry) { [entries replaceObjectAtIndex:0 withObject:entry]; }];
 }
 
-- (void)testReplacingZipEntryAtBack
+- (void)testReplacingFileZipEntryAtBack
 {
+	[self createFullFileZip];
 	[self checkUpdatingZipEntriesWithFile:_extraFilePath
 						   operationBlock:^(NSMutableArray* entries, id entry) { [entries replaceObjectAtIndex:entries.count - 1 withObject:entry]; }];
 }
 
-- (void)testReplacingZipEntryAtMiddle
+- (void)testReplacingFileZipEntryAtMiddle
 {
+	[self createFullFileZip];
 	[self checkUpdatingZipEntriesWithFile:_extraFilePath
 						   operationBlock:^(NSMutableArray* entries, id entry) { [entries replaceObjectAtIndex:entries.count / 2 withObject:entry]; }];
 }
 
-- (void)testRemovingZipEntryAtFront
+- (void)testRemovingFileZipEntryAtFront
 {
+	[self createFullFileZip];
 	[self checkUpdatingZipEntriesWithFile:nil
 						   operationBlock:^(NSMutableArray* entries, id entry) { [entries removeObjectAtIndex:0]; }];
 }
 
-- (void)testRemovingZipEntryAtBack
+- (void)testRemovingFileZipEntryAtBack
 {
+	[self createFullFileZip];
 	[self checkUpdatingZipEntriesWithFile:nil
 						   operationBlock:^(NSMutableArray* entries, id entry) { [entries removeObjectAtIndex:entries.count - 1]; }];
 }
 
-- (void)testRemovingZipEntryAtMiddle
+- (void)testRemovingFileZipEntryAtMiddle
 {
+	[self createFullFileZip];
+	[self checkUpdatingZipEntriesWithFile:nil
+						   operationBlock:^(NSMutableArray* entries, id entry) { [entries removeObjectAtIndex:entries.count / 2]; }];
+}
+
+- (void)testCreatingDataZipWithNoEntries
+{
+	[self createEmptyDataZip];
+	[self checkCreatingZipEntriesWithNoCheckEntries:@[]];
+}
+
+- (void)testCreatingDataZipEntriesWithDirectory
+{
+	[self createEmptyDataZip];
+	[self checkCreatingZipEntriesWithNoCheckEntries:@[[ZZArchiveEntry archiveEntryWithDirectoryName:@"directory"]]];
+}
+
+- (void)testCreatingDataZipEntriesWithCompressedData
+{
+	[self createEmptyDataZip];
+	[self checkCreatingZipEntriesWithDataCompressed:YES];
+}
+
+- (void)testCreatingDataZipEntriesWithUncompressedData
+{
+	[self createEmptyDataZip];
+	[self checkCreatingZipEntriesWithDataCompressed:NO];
+}
+
+- (void)testCreatingDataZipEntriesWithCompressedStreamInSmallChunks
+{
+	[self createEmptyDataZip];
+	[self checkCreatingZipEntriesWithStreamCompressed:YES
+											chunkSize:16];
+}
+
+- (void)testCreatingDataZipEntriesWithCompressedStreamInLargeChunks
+{
+	[self createEmptyDataZip];
+	[self checkCreatingZipEntriesWithStreamCompressed:YES
+											chunkSize:1024];
+}
+
+- (void)testCreatingDataZipEntriesWithUncompressedStreamInSmallChunks
+{
+	[self createEmptyDataZip];
+	[self checkCreatingZipEntriesWithStreamCompressed:NO
+											chunkSize:16];
+}
+
+- (void)testCreatingDataZipEntriesWithUncompressedStreamInLargeChunks
+{
+	[self createEmptyDataZip];
+	[self checkCreatingZipEntriesWithStreamCompressed:NO
+											chunkSize:1024];
+}
+
+- (void)testCreatingDataZipEntriesWithCompressedImage
+{
+	[self createEmptyDataZip];
+	[self checkCreatingZipEntriesWithImageCompressed:YES];
+}
+
+- (void)testCreatingDataZipEntriesWithUncompressedImage
+{
+	[self createEmptyDataZip];
+	[self checkCreatingZipEntriesWithImageCompressed:NO];
+}
+
+- (void)testCreatingDataZipEntriesWithCompressedBadData
+{
+	[self createEmptyDataZip];
+	[self checkCreatingZipEntriesWithBadEntry:[ZZArchiveEntry archiveEntryWithFileName:@"bad"
+																			  compress:YES
+																			 dataBlock:^ { return (NSData*)nil; }]];
+}
+
+- (void)testCreatingDataZipEntriesWithUncompressedBadData
+{
+	[self createEmptyDataZip];
+	[self checkCreatingZipEntriesWithBadEntry:[ZZArchiveEntry archiveEntryWithFileName:@"bad"
+																			  compress:YES
+																			 dataBlock:^ { return (NSData*)nil; }]];
+}
+
+- (void)testCreatingDataZipEntriesWithCompressedBadStreamWriteNone
+{
+	[self createEmptyDataZip];
+	[self checkCreatingZipEntriesWithBadEntry:[ZZArchiveEntry archiveEntryWithFileName:@"bad"
+																			  compress:YES
+																		   streamBlock:^(NSOutputStream* stream)
+											   {
+												   return NO;
+											   }]];
+}
+
+- (void)testCreatingDataZipEntriesWithUncompressedBadStreamWriteNone
+{
+	[self createEmptyDataZip];
+	[self checkCreatingZipEntriesWithBadEntry:[ZZArchiveEntry archiveEntryWithFileName:@"bad"
+																			  compress:NO
+																		   streamBlock:^(NSOutputStream* stream)
+											   {
+												   return NO;
+											   }]];
+}
+
+- (void)testCreatingDataZipEntriesWithCompressedBadStreamWriteSome
+{
+	[self createEmptyDataZip];
+	[self checkCreatingZipEntriesWithBadEntry:[ZZArchiveEntry archiveEntryWithFileName:@"bad"
+																			  compress:YES
+																		   streamBlock:^(NSOutputStream* stream)
+											   {
+												   uint8_t buffer[1024];
+												   [stream write:buffer maxLength:sizeof(buffer)];
+												   return NO;
+											   }]];
+}
+
+- (void)testCreatingDataZipEntriesWithUncompressedBadStreamWriteSome
+{
+	[self createEmptyDataZip];
+	[self checkCreatingZipEntriesWithBadEntry:[ZZArchiveEntry archiveEntryWithFileName:@"bad"
+																			  compress:NO
+																		   streamBlock:^(NSOutputStream* stream)
+											   {
+												   uint8_t buffer[1024];
+												   [stream write:buffer maxLength:sizeof(buffer)];
+												   return NO;
+											   }]];
+}
+
+- (void)testCreatingDataZipEntriesWithCompressedBadDataConsumerWriteNone
+{
+	[self createEmptyDataZip];
+	[self checkCreatingZipEntriesWithBadEntry:[ZZArchiveEntry archiveEntryWithFileName:@"bad"
+																			  compress:YES
+																	 dataConsumerBlock:^(CGDataConsumerRef dataConsumer)
+											   {
+												   return NO;
+											   }]];
+}
+
+- (void)testCreatingDataZipEntriesWithUncompressedBadDataConsumerWriteNone
+{
+	[self createEmptyDataZip];
+	[self checkCreatingZipEntriesWithBadEntry:[ZZArchiveEntry archiveEntryWithFileName:@"bad"
+																			  compress:NO
+																	 dataConsumerBlock:^(CGDataConsumerRef dataConsumer)
+											   {
+												   return NO;
+											   }]];
+}
+
+
+- (void)testInsertingDataZipEntryAtFront
+{
+	[self createFullDataZip];
+	[self checkUpdatingZipEntriesWithFile:_extraFilePath
+						   operationBlock:^(NSMutableArray* entries, id entry) { [entries insertObject:entry atIndex:0]; }];
+}
+
+- (void)testInsertingDataZipEntryAtBack
+{
+	[self createFullDataZip];
+	[self checkUpdatingZipEntriesWithFile:_extraFilePath
+						   operationBlock:^(NSMutableArray* entries, id entry) { [entries addObject:entry]; }];
+}
+
+- (void)testInsertingDataZipEntryAtMiddle
+{
+	[self createFullDataZip];
+	[self checkUpdatingZipEntriesWithFile:_extraFilePath
+						   operationBlock:^(NSMutableArray* entries, id entry) { [entries insertObject:entry atIndex:entries.count / 2]; }];
+}
+
+- (void)testReplacingDataZipEntryAtFront
+{
+	[self createFullDataZip];
+	[self checkUpdatingZipEntriesWithFile:_extraFilePath
+						   operationBlock:^(NSMutableArray* entries, id entry) { [entries replaceObjectAtIndex:0 withObject:entry]; }];
+}
+
+- (void)testReplacingDataZipEntryAtBack
+{
+	[self createFullDataZip];
+	[self checkUpdatingZipEntriesWithFile:_extraFilePath
+						   operationBlock:^(NSMutableArray* entries, id entry) { [entries replaceObjectAtIndex:entries.count - 1 withObject:entry]; }];
+}
+
+- (void)testReplacingDataZipEntryAtMiddle
+{
+	[self createFullDataZip];
+	[self checkUpdatingZipEntriesWithFile:_extraFilePath
+						   operationBlock:^(NSMutableArray* entries, id entry) { [entries replaceObjectAtIndex:entries.count / 2 withObject:entry]; }];
+}
+
+- (void)testRemovingDataZipEntryAtFront
+{
+	[self createFullDataZip];
+	[self checkUpdatingZipEntriesWithFile:nil
+						   operationBlock:^(NSMutableArray* entries, id entry) { [entries removeObjectAtIndex:0]; }];
+}
+
+- (void)testRemovingDataZipEntryAtBack
+{
+	[self createFullDataZip];
+	[self checkUpdatingZipEntriesWithFile:nil
+						   operationBlock:^(NSMutableArray* entries, id entry) { [entries removeObjectAtIndex:entries.count - 1]; }];
+}
+
+- (void)testRemovingDataZipEntryAtMiddle
+{
+	[self createFullDataZip];
 	[self checkUpdatingZipEntriesWithFile:nil
 						   operationBlock:^(NSMutableArray* entries, id entry) { [entries removeObjectAtIndex:entries.count / 2]; }];
 }
