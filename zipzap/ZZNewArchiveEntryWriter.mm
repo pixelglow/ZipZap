@@ -8,6 +8,7 @@
 
 #include <zlib.h>
 
+#import "ZZChannelOutput.h"
 #import "ZZDeflateOutputStream.h"
 #import "ZZNewArchiveEntryWriter.h"
 #import "ZZStoreOutputStream.h"
@@ -165,7 +166,7 @@ namespace ZZDataConsumer
 	return (ZZLocalFileHeader*)_localFileHeader.mutableBytes;
 }
 
-- (BOOL)writeLocalFileToFileHandle:(NSFileHandle*)fileHandle
+- (BOOL)writeLocalFileToChannelOutput:(id<ZZChannelOutput>)channelOutput
 {
 	// free any temp objects created while writing, especially via the callbacks which we don't control
 	@autoreleasepool
@@ -174,8 +175,8 @@ namespace ZZDataConsumer
 		ZZCentralFileHeader* centralFileHeader = [self centralFileHeader];
 		
 		// save current offset, then write out all of local file to the file handle
-		centralFileHeader->relativeOffsetOfLocalHeader = (uint32_t)[fileHandle offsetInFile];
-		[fileHandle writeData:_localFileHeader];
+		centralFileHeader->relativeOffsetOfLocalHeader = channelOutput.offset;
+		[channelOutput write:_localFileHeader];
 		
 		ZZDataDescriptor dataDescriptor;
 		dataDescriptor.signature = ZZDataDescriptor::sign;
@@ -183,8 +184,8 @@ namespace ZZDataConsumer
 		if (_compressionLevel)
 		{
 			// use of one the blocks to write to a stream that deflates directly to the output file handle
-			ZZDeflateOutputStream* outputStream = [[ZZDeflateOutputStream alloc] initWithFileHandle:fileHandle
-																				   compressionLevel:_compressionLevel];
+			ZZDeflateOutputStream* outputStream = [[ZZDeflateOutputStream alloc] initWithChannelOutput:channelOutput
+																					  compressionLevel:_compressionLevel];
 			[outputStream open];
 			if (_dataBlock)
 			{
@@ -228,7 +229,7 @@ namespace ZZDataConsumer
 				goodData = data != nil;
 				
 				if (data)
-					[fileHandle writeData:data];
+					[channelOutput write:data];
 				
 				dataDescriptor.compressedSize = dataDescriptor.uncompressedSize = (uint32_t)data.length;
 				dataDescriptor.crc32 = (uint32_t)crc32(0, (const Bytef*)data.bytes, dataDescriptor.uncompressedSize);
@@ -236,7 +237,7 @@ namespace ZZDataConsumer
 			else
 			{
 				// if stream block, data consumer block or no block, use to write to a stream that just outputs to the output file handle
-				ZZStoreOutputStream* outputStream = [[ZZStoreOutputStream alloc] initWithFileHandle:fileHandle];
+				ZZStoreOutputStream* outputStream = [[ZZStoreOutputStream alloc] initWithChannelOutput:channelOutput];
 				[outputStream open];
 				
 				if (_streamBlock)
@@ -263,23 +264,23 @@ namespace ZZDataConsumer
 			centralFileHeader->crc32 = dataDescriptor.crc32;
 			centralFileHeader->compressedSize = dataDescriptor.compressedSize;
 			centralFileHeader->uncompressedSize = dataDescriptor.uncompressedSize;
-			[fileHandle writeData:[NSData dataWithBytesNoCopy:&dataDescriptor
-													   length:sizeof(dataDescriptor)
-												 freeWhenDone:NO]];
+			[channelOutput write:[NSData dataWithBytesNoCopy:&dataDescriptor
+													  length:sizeof(dataDescriptor)
+												freeWhenDone:NO]];
 			return YES;
 		}
 		else
 		{
 			// callback had erred: rewind the file handle
-			[fileHandle seekToFileOffset:centralFileHeader->relativeOffsetOfLocalHeader];
+			channelOutput.offset = centralFileHeader->relativeOffsetOfLocalHeader;
 			return NO;
 		}
 	}
 }
 
-- (void)writeCentralFileHeaderToFileHandle:(NSFileHandle*)fileHandle
+- (void)writeCentralFileHeaderToChannelOutput:(id<ZZChannelOutput>)channelOutput
 {
-	[fileHandle writeData:_centralFileHeader];
+	[channelOutput write:_centralFileHeader];
 }
 
 @end

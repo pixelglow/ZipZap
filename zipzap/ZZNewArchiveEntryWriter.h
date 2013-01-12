@@ -20,8 +20,8 @@
 		   streamBlock:(BOOL(^)(NSOutputStream* stream))streamBlock
 	 dataConsumerBlock:(BOOL(^)(CGDataConsumerRef dataConsumer))dataConsumerBlock;
 
-- (BOOL)writeLocalFileToFileHandle:(NSFileHandle*)fileHandle;
-- (void)writeCentralFileHeaderToFileHandle:(NSFileHandle*)fileHandle;
+- (BOOL)writeLocalFileToChannelOutput:(id<ZZChannelOutput>)channelOutput;
+- (void)writeCentralFileHeaderToChannelOutput:(id<ZZChannelOutput>)channelOutput;
 
 @end
 

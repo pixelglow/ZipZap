@@ -8,13 +8,14 @@
 
 #include <zlib.h>
 
+#import "ZZChannelOutput.h"
 #import "ZZDeflateOutputStream.h"
 
 static const uInt _flushLength = 1024;
 
 @implementation ZZDeflateOutputStream
 {
-	NSFileHandle* _fileHandle;
+	id<ZZChannelOutput> _channelOutput;
 	NSUInteger _compressionLevel;
 	uint32_t _crc32;
 	z_stream _stream;
@@ -22,11 +23,11 @@ static const uInt _flushLength = 1024;
 
 @synthesize crc32 = _crc32;
 
-- (id)initWithFileHandle:(NSFileHandle*)fileHandle compressionLevel:(NSUInteger)compressionLevel
+- (id)initWithChannelOutput:(id<ZZChannelOutput>)channelOutput compressionLevel:(NSUInteger)compressionLevel
 {
 	if ((self = [super init]))
 	{
-		_fileHandle = fileHandle;
+		_channelOutput = channelOutput;
 		_compressionLevel = compressionLevel;
 		_crc32 = 0;
 		
@@ -75,9 +76,9 @@ static const uInt _flushLength = 1024;
 		flushing = deflate(&_stream, Z_FINISH) == Z_OK;
 				
 		if (_stream.avail_out < _flushLength)
-			[_fileHandle writeData:[NSData dataWithBytesNoCopy:flushBuffer
-														length:_flushLength - _stream.avail_out
-												  freeWhenDone:NO]];
+			[_channelOutput write:[NSData dataWithBytesNoCopy:flushBuffer
+													   length:_flushLength - _stream.avail_out
+												 freeWhenDone:NO]];
 	}
 	
 	deflateEnd(&_stream);
@@ -100,7 +101,7 @@ static const uInt _flushLength = 1024;
 	// write out deflated output if any
 	outputBuffer.length = maxLength - _stream.avail_out;
 	if (outputBuffer.length > 0)
-		[_fileHandle writeData:outputBuffer];
+		[_channelOutput write:outputBuffer];
 
 	// accumulate checksum only on bytes that were deflated
 	NSUInteger bytesWritten = length - _stream.avail_in;

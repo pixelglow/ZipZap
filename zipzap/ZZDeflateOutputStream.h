@@ -8,14 +8,16 @@
 
 #import <Foundation/Foundation.h>
 
+@protocol ZZChannelOutput;
+
 @interface ZZDeflateOutputStream : NSOutputStream
 
 @property (readonly, nonatomic) uint32_t crc32;
 @property (readonly, nonatomic) uint32_t compressedSize;
 @property (readonly, nonatomic) uint32_t uncompressedSize;
 
-- (id)initWithFileHandle:(NSFileHandle*)fileHandle
-		compressionLevel:(NSUInteger)compressionLevel;
+- (id)initWithChannelOutput:(id<ZZChannelOutput>)channelOutput
+		   compressionLevel:(NSUInteger)compressionLevel;
 
 - (void)open;
 - (void)close;

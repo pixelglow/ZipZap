@@ -6,6 +6,7 @@
 //  Copyright (c) 2012, Pixelglow Software. All rights reserved.
 //
 
+#import "ZZChannelOutput.h"
 #import "ZZOldArchiveEntryWriter.h"
 #import "ZZHeaders.h"
 
@@ -35,25 +36,25 @@
 	return self;
 }
 
-- (BOOL)writeLocalFileToFileHandle:(NSFileHandle*)fileHandle
+- (BOOL)writeLocalFileToChannelOutput:(id<ZZChannelOutput>)channelOutput
 {
 	ZZCentralFileHeader* centralFileHeader = (ZZCentralFileHeader*)_centralFileHeader.mutableBytes;
 	if (_localFile)
 	{
 		// can't skip: save the offset, then write out the local file bytes
-		centralFileHeader->relativeOffsetOfLocalHeader = (uint32_t)[fileHandle offsetInFile];
-		[fileHandle writeData:_localFile];
+		centralFileHeader->relativeOffsetOfLocalHeader = channelOutput.offset;
+		[channelOutput write:_localFile];
 	}
 	else
 		// can skip: seek to after where the local file ends
-		[fileHandle seekToFileOffset:centralFileHeader->relativeOffsetOfLocalHeader + _localFileLength];
+		channelOutput.offset = centralFileHeader->relativeOffsetOfLocalHeader + _localFileLength;
 	
 	return YES;
 }
 
-- (void)writeCentralFileHeaderToFileHandle:(NSFileHandle*)fileHandle
+- (void)writeCentralFileHeaderToChannelOutput:(id<ZZChannelOutput>)channelOutput
 {
-	[fileHandle writeData:_centralFileHeader];
+	[channelOutput write:_centralFileHeader];
 }
 
 @end

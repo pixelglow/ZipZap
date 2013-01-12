@@ -9,15 +9,18 @@
 #include <algorithm>
 #include <fcntl.h>
 
-#import "ZZOldArchiveEntry.h"
+#import "ZZChannelOutput.h"
+#import "ZZDataChannel.h"
+#import "ZZFileChannel.h"
 #import "ZZArchiveEntryWriter.h"
 #import "ZZArchive.h"
 #import "ZZHeaders.h"
+#import "ZZOldArchiveEntry.h"
 
 @interface ZZArchive ()
 {
 @protected
-	NSURL* _URL;
+	id<ZZChannel> _channel;
 	NSStringEncoding _encoding;
 	NSData* _contents;
 	NSMutableArray* _entries;
@@ -27,7 +30,6 @@
 
 @implementation ZZArchive
 
-@synthesize URL = _URL;
 @synthesize entries = _entries;
 
 + (id)archiveWithContentsOfURL:(NSURL*)URL
@@ -47,7 +49,7 @@
 {
 	if ((self = [super init]))
 	{
-		_URL = URL;
+		_channel = [[ZZFileChannel alloc] initWithURL:URL];
 		_encoding = encoding;
 		_entries = [NSMutableArray array];
 		_contents = nil;
@@ -57,39 +59,33 @@
 	return self;
 }
 
-- (id) initWithData:(NSData*)data
-		   encoding:(NSStringEncoding)encoding
+- (id)initWithData:(NSData*)data
+		  encoding:(NSStringEncoding)encoding
 {
 	if ((self = [super init]))
 	{
-		_URL = nil;
+		_channel = [[ZZDataChannel alloc] initWithData:data];
 		_encoding = encoding;
 		_entries = [NSMutableArray array];
 		_contents = data;
 
-		[self reloadInternal];
+		[self reload];
 	}
 	return self;
 }
 
+- (NSURL*)URL
+{
+	return _channel.URL;
+}
 
 - (void)reload
 {
 	// memory-map the contents from the zip file
 	[_entries removeAllObjects];
 	
-	if (_URL != nil)
-	{
-		_contents = [NSData dataWithContentsOfURL:_URL
-										  options:NSDataReadingMappedAlways
-											error:nil];
-	}
+	_contents = [_channel openInput];
 
-	[self reloadInternal];
-}
-
-- (void) reloadInternal
-{	
 	if (_contents)
 	{
 		const uint8_t* beginContent = (const uint8_t*)_contents.bytes;
@@ -160,15 +156,12 @@
 	_contents = nil;
 	
 	// open or create the file
-	NSFileHandle* fileHandle = [[NSFileHandle alloc] initWithFileDescriptor:open(_URL.path.fileSystemRepresentation,
-																				 O_WRONLY | O_CREAT,
-																				 S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH)
-															 closeOnDealloc:YES];
+	id<ZZChannelOutput> channelOutput = [_channel openOutput];
 	
 	// write out all local files, recording which are valid
 	NSMutableIndexSet* goodEntries = [NSMutableIndexSet indexSet];
 	for (NSUInteger index = 0, count = newEntryWriters.count; index < count; ++index)
-		if ([[newEntryWriters objectAtIndex:index] writeLocalFileToFileHandle:fileHandle])
+		if ([[newEntryWriters objectAtIndex:index] writeLocalFileToChannelOutput:channelOutput])
 			[ goodEntries addIndex:index];
 	
 	ZZEndOfCentralDirectory endOfCentralDirectory;
@@ -179,26 +172,25 @@
 	endOfCentralDirectory.totalNumberOfEntriesInTheCentralDirectoryOnThisDisk
 		= endOfCentralDirectory.totalNumberOfEntriesInTheCentralDirectory
 		=  goodEntries.count;
-	endOfCentralDirectory.offsetOfStartOfCentralDirectoryWithRespectToTheStartingDiskNumber = (uint32_t)[fileHandle offsetInFile];
+	endOfCentralDirectory.offsetOfStartOfCentralDirectoryWithRespectToTheStartingDiskNumber = channelOutput.offset;
 	
 	// write out central file headers for good entries only
 	[goodEntries enumerateIndexesUsingBlock:^(NSUInteger index, BOOL* stop)
 	 {
-		 [[newEntryWriters objectAtIndex:index] writeCentralFileHeaderToFileHandle:fileHandle];
+		 [[newEntryWriters objectAtIndex:index] writeCentralFileHeaderToChannelOutput:channelOutput];
 	 }];
 	
-	endOfCentralDirectory.sizeOfTheCentralDirectory = (uint32_t)[fileHandle offsetInFile]
+	endOfCentralDirectory.sizeOfTheCentralDirectory = channelOutput.offset
 		- endOfCentralDirectory.offsetOfStartOfCentralDirectoryWithRespectToTheStartingDiskNumber;
 	endOfCentralDirectory.zipFileCommentLength = 0;
 	
 	// write out the end of central directory
-	[fileHandle writeData:[NSData dataWithBytesNoCopy:&endOfCentralDirectory
-													 length:sizeof(endOfCentralDirectory)
-											   freeWhenDone:NO]];
+	[channelOutput write:[NSData dataWithBytesNoCopy:&endOfCentralDirectory
+											  length:sizeof(endOfCentralDirectory)
+										freeWhenDone:NO]];
 	
 	// clean up + reload
-	[fileHandle truncateFileAtOffset:[fileHandle offsetInFile]];
-	[fileHandle closeFile];
+	[channelOutput close];
 	[self reload];
 }
 

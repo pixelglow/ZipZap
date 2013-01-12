@@ -8,12 +8,14 @@
 
 #import <Foundation/Foundation.h>
 
+@protocol ZZChannelOutput;
+
 @interface ZZStoreOutputStream : NSOutputStream
 
 @property (readonly, nonatomic) uint32_t crc32;
 @property (readonly, nonatomic) uint32_t size;
 
-- (id)initWithFileHandle:(NSFileHandle*)fileHandle;
+- (id)initWithChannelOutput:(id<ZZChannelOutput>)channelOutput;
 
 - (void)open;
 - (void)close;
