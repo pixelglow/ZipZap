@@ -188,10 +188,10 @@
 
 }
 
-- (void) testZipFromDataConsistentWithZipFromURL
+- (void)testZipFromDataConsistentWithZipFromURL
 {
-	NSData * rawData = [NSData dataWithContentsOfURL:_zipFileURL];
-	ZZArchive * zipFileFromData = [[ZZArchive alloc] initWithData:rawData encoding:NSUTF8StringEncoding];
+	NSData* rawData = [NSData dataWithContentsOfURL:_zipFileURL];
+	ZZArchive* zipFileFromData = [[ZZArchive alloc] initWithData:rawData encoding:NSUTF8StringEncoding];
     
 	STAssertEquals(_zipFile.entries.count,
 				   zipFileFromData.entries.count,

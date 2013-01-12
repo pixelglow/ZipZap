@@ -20,17 +20,17 @@ namespace ZZDataProvider
 		return [(__bridge ZZInflateInputStream*)info read:(uint8_t*)buffer maxLength:count];
 	}
 
-	static off_t skipForwardBytes (void *info, off_t count)
+	static off_t skipForwardBytes (void* info, off_t count)
 	{
 		return [(__bridge ZZInflateInputStream*)info skipForward:count];
 	}
 
-	static void rewind (void *info)
+	static void rewind (void* info)
 	{
 		[(__bridge ZZInflateInputStream*)info rewind];
 	}
 
-	static void releaseInfo (void *info)
+	static void releaseInfo (void* info)
 	{
 		[(__bridge ZZInflateInputStream*)info close];
 		CFRelease(info);
