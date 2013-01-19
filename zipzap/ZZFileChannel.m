@@ -35,11 +35,7 @@
 
 - (id<ZZChannelOutput>)openOutput
 {
-	NSFileHandle* fileHandle = [[NSFileHandle alloc] initWithFileDescriptor:open(_URL.path.fileSystemRepresentation,
-																				 O_WRONLY | O_CREAT,
-																				 S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH)
-															 closeOnDealloc:YES];
-	return [[ZZFileChannelOutput alloc] initWithFileHandle:fileHandle];
+	return [[ZZFileChannelOutput alloc] initWithURL:_URL];
 }
 
 @end

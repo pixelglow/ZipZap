@@ -14,7 +14,7 @@
 
 @property (nonatomic) uint32_t offset;
 
-- (id)initWithFileHandle:(NSFileHandle*)fileHandle;
+- (id)initWithURL:(NSURL*)URL;
 - (void)write:(NSData*)data;
 - (void)close;
 
