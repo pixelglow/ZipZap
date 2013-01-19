@@ -30,9 +30,6 @@
 
 @implementation ZZArchive
 
-@synthesize entries = _entries;
-@synthesize contents = _contents;
-
 + (id)archiveWithContentsOfURL:(NSURL*)URL
 {
 	return [[self alloc] initWithContentsOfURL:URL
@@ -68,7 +65,7 @@
 		_channel = [[ZZDataChannel alloc] initWithData:data];
 		_encoding = encoding;
 		_entries = [NSMutableArray array];
-		_contents = data;
+		_contents = nil;
 
 		[self reload];
 	}
@@ -80,13 +77,30 @@
 	return _channel.URL;
 }
 
+- (NSData*)contents
+{
+	// lazily load in contents + refresh entries
+	if (!_contents)
+		[self reload];
+	
+	return _contents;
+}
+
+- (NSArray*)entries
+{
+	// lazily load in contents + refresh entries	
+	if (!_contents)
+		[self reload];
+	
+	return _entries;
+}
+
 - (void)reload
 {
 	// memory-map the contents from the zip file
+	_contents = [_channel openInput];
 	[_entries removeAllObjects];
 	
-	_contents = [_channel openInput];
-
 	if (_contents)
 	{
 		const uint8_t* beginContent = (const uint8_t*)_contents.bytes;
@@ -135,6 +149,11 @@
 
 - (void)setEntries:(NSArray*)newEntries
 {
+	// NOTE: we want to avoid loading at all when entries are being overwritten, even in the face of lazy loading:
+	// consider that nil _contents implies that no valid entries have been loaded, and newEntries cannot possibly contain any of our old entries
+	// therefore, if _contents are nil, we don't need to lazily load them in since these newEntries are meant to totally overwrite the archive
+	// or, if _contents are non-nil, the contents have already been loaded and we also don't need to lazily load them in
+
 	// get an entry writer for each new entry, and allow it to skip writing out its local file if the initial old and new entries match
 	NSMutableArray* newEntryWriters = [NSMutableArray array];
 	NSUInteger oldEntriesCount = _entries.count;
@@ -153,9 +172,9 @@
 	}
 	
 	// clear entries + content
-	[_entries removeAllObjects];
 	_contents = nil;
-	
+	[_entries removeAllObjects];
+
 	// open or create the file
 	id<ZZChannelOutput> channelOutput = [_channel openOutput];
 	
@@ -190,9 +209,8 @@
 											  length:sizeof(endOfCentralDirectory)
 										freeWhenDone:NO]];
 	
-	// clean up + reload
+	// clean up
 	[channelOutput close];
-	[self reload];
 }
 
 @end

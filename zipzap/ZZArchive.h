@@ -93,7 +93,7 @@
 		  encoding:(NSStringEncoding)encoding;
 
 /**
- * Reloads the entries from the URL.
+ * Reloads the entries from the URL. Any old entries will then be considered invalid.
  */
 - (void)reload;
 
