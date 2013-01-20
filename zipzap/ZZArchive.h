@@ -60,7 +60,7 @@
  * @param URL The file URL of the zip file.
  * @return The initialized archive. If the zip file does not exist, this will have no entries.
  */
-+ (id)archiveWithContentsOfURL:(NSURL*)URL;
++ (instancetype)archiveWithContentsOfURL:(NSURL*)URL;
 
 /**
  * Creates a new archive with the raw zip file data given.
@@ -70,7 +70,7 @@
  * @param data The raw data of the zip file
  * @return The initialized archive.
  */
-+ (id)archiveWithData:(NSData*)data;
++ (instancetype)archiveWithData:(NSData*)data;
 
 /**
  * Initializes a new archive with the zip file at the given file URL.
