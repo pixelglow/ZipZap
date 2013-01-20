@@ -49,6 +49,17 @@ Writing a new zip file:
 										compress:YES
 									   dataBlock:^{ return [@"hello, world" dataUsingEncoding:NSUTF8StringEncoding]; }]
 	];
+
+Writing a new zip file containing a directory:
+
+	ZZMutableArchive* newArchive = [ZZMutableArchive archiveWithContentsOfURL:[NSURL fileURLWithPath:@"/tmp/new.zip"]];
+	newArchive.entries =
+	@[
+		[ZZArchiveEntry archiveEntryWithDirectoryName:@"folder/"],
+		[ZZArchiveEntry archiveEntryWithFileName:@"folder/first.text"
+										compress:YES
+									   dataBlock:^{ return [@"hello, world" dataUsingEncoding:NSUTF8StringEncoding]; }]
+	];
 	
 Updating an existing zip file:
 
