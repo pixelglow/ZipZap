@@ -88,9 +88,9 @@
  * @param streamBlock The callback to write the entry's data to the stream. Returns whether the write was considered successful.
  * @return The created entry.
  */
-+ (id)archiveEntryWithFileName:(NSString*)fileName
-					  compress:(BOOL)compress
-				   streamBlock:(BOOL(^)(NSOutputStream* stream))streamBlock;
++ (ZZArchiveEntry *)archiveEntryWithFileName:(NSString*)fileName
+                                    compress:(BOOL)compress
+                                 streamBlock:(BOOL(^)(NSOutputStream* stream))streamBlock;
 
 /**
  * Creates a new file entry from a data callback.
@@ -100,9 +100,9 @@
  * @param dataBlock The callback to return the entry's data. Returns *nil* if the write was considered unsuccessful.
  * @return The created entry.
  */
-+ (id)archiveEntryWithFileName:(NSString*)fileName
-					  compress:(BOOL)compress
-					 dataBlock:(NSData*(^)())dataBlock;
++ (ZZArchiveEntry *)archiveEntryWithFileName:(NSString*)fileName
+                                    compress:(BOOL)compress
+                                   dataBlock:(NSData*(^)())dataBlock;
 
 /**
  * Creates a new file entry from a data-consuming callback.
@@ -112,9 +112,9 @@
  * @param dataConsumerBlock The callback to put the entry's data into the data consumer. Returns whether the write was considered successful.
  * @return The created entry.
  */
-+ (id)archiveEntryWithFileName:(NSString*)fileName
-					  compress:(BOOL)compress
-			 dataConsumerBlock:(BOOL(^)(CGDataConsumerRef dataConsumer))dataConsumerBlock;
++ (ZZArchiveEntry *)archiveEntryWithFileName:(NSString*)fileName
+                                    compress:(BOOL)compress
+                           dataConsumerBlock:(BOOL(^)(CGDataConsumerRef dataConsumer))dataConsumerBlock;
 
 /**
  * Creates a new directory entry.
@@ -122,7 +122,7 @@
  * @param directoryName The directory name for the entry.
  * @return The created entry.
  */
-+ (id)archiveEntryWithDirectoryName:(NSString*)directoryName;
++ (ZZArchiveEntry *)archiveEntryWithDirectoryName:(NSString*)directoryName;
 
 /**
  * Creates a new entry.
@@ -138,13 +138,13 @@
  * @param dataConsumerBlock The callback that writes the entry file to the data consumer. Returns whether the write was considered successful.
  * @return The created entry.
  */
-+ (id)archiveEntryWithFileName:(NSString*)fileName
-					  fileMode:(mode_t)fileMode
-				  lastModified:(NSDate*)lastModified
-			  compressionLevel:(NSInteger)compressionLevel
-					 dataBlock:(NSData*(^)())dataBlock
-				   streamBlock:(BOOL(^)(NSOutputStream* stream))streamBlock
-			 dataConsumerBlock:(BOOL(^)(CGDataConsumerRef dataConsumer))dataConsumerBlock;
++ (ZZArchiveEntry *)archiveEntryWithFileName:(NSString*)fileName
+                                    fileMode:(mode_t)fileMode
+                                lastModified:(NSDate*)lastModified
+                            compressionLevel:(NSInteger)compressionLevel
+                                   dataBlock:(NSData*(^)())dataBlock
+                                 streamBlock:(BOOL(^)(NSOutputStream* stream))streamBlock
+                           dataConsumerBlock:(BOOL(^)(CGDataConsumerRef dataConsumer))dataConsumerBlock;
 
 /**
  * Creates a stream to represent the entry file.
