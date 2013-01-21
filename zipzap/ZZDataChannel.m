@@ -26,14 +26,30 @@
 	return nil;
 }
 
+- (id<ZZChannel>)temporaryChannel
+{
+	return [[ZZDataChannel alloc] initWithData:[NSMutableData data]];
+}
+
+- (BOOL)replaceWithChannel:(id<ZZChannel>)channel
+{
+	[(NSMutableData*)_allData setData:((ZZDataChannel*)channel)->_allData];
+	return YES;
+}
+
+- (void)removeTemporaries
+{
+}
+
 - (NSData*)openInput
 {
 	return _allData;
 }
 
-- (id<ZZChannelOutput>)openOutput
+- (id<ZZChannelOutput>)openOutputWithOffsetBias:(uint32_t)offsetBias
 {
-	return [[ZZDataChannelOutput alloc] initWithData:(NSMutableData*)_allData];
+	return [[ZZDataChannelOutput alloc] initWithData:(NSMutableData*)_allData
+										 offsetBias:offsetBias];
 }
 
 @end

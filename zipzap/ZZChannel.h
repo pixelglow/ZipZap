@@ -14,7 +14,11 @@
 
 @property (readonly, nonatomic) NSURL* URL;
 
+- (id<ZZChannel>)temporaryChannel;
+- (BOOL)replaceWithChannel:(id<ZZChannel>)channel;
+- (void)removeTemporaries;
+
 - (NSData*)openInput;
-- (id<ZZChannelOutput>)openOutput;
+- (id<ZZChannelOutput>)openOutputWithOffsetBias:(uint32_t)offsetBias;
 
 @end

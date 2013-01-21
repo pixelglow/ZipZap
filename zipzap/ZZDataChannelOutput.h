@@ -14,7 +14,8 @@
 
 @property (nonatomic) uint32_t offset;
 
-- (id)initWithData:(NSMutableData*)data;
+- (id)initWithData:(NSMutableData*)data
+		offsetBias:(uint32_t)offsetBias;
 - (void)write:(NSData*)data;
 - (void)close;
 

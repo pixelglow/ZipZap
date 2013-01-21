@@ -172,17 +172,19 @@
 	// clear entries + content
 	_contents = nil;
 	[_entries removeAllObjects];
-
-	// open or create the file
-	id<ZZChannelOutput> channelOutput = [_channel openOutput];
 	
 	// skip the initial matching entries
-	channelOutput.offset = skipIndex > 0 ? [[newEntryWriters objectAtIndex:skipIndex - 1] offsetToLocalFileEnd] : 0;
+	uint32_t initialSkip = skipIndex > 0 ? [[newEntryWriters objectAtIndex:skipIndex - 1] offsetToLocalFileEnd] : 0;
+
+	// create a temp channel for all output
+	id<ZZChannel> temporaryChannel = [_channel temporaryChannel];
+	id<ZZChannelOutput> temporaryChannelOutput = [temporaryChannel openOutputWithOffsetBias:initialSkip];
+	
 	
 	// write out local files, recording which are valid
 	NSMutableIndexSet* goodEntries = [NSMutableIndexSet indexSet];
 	for (NSUInteger index = skipIndex; index < newEntriesCount; ++index)
-		if ([[newEntryWriters objectAtIndex:index] writeLocalFileToChannelOutput:channelOutput])
+		if ([[newEntryWriters objectAtIndex:index] writeLocalFileToChannelOutput:temporaryChannelOutput])
 			[goodEntries addIndex:index];
 	
 	ZZEndOfCentralDirectory endOfCentralDirectory;
@@ -193,27 +195,39 @@
 	endOfCentralDirectory.totalNumberOfEntriesInTheCentralDirectoryOnThisDisk
 		= endOfCentralDirectory.totalNumberOfEntriesInTheCentralDirectory
 		= skipIndex + goodEntries.count;
-	endOfCentralDirectory.offsetOfStartOfCentralDirectoryWithRespectToTheStartingDiskNumber = channelOutput.offset;
+	endOfCentralDirectory.offsetOfStartOfCentralDirectoryWithRespectToTheStartingDiskNumber = temporaryChannelOutput.offset;
 	
 	// write out central file headers
 	for (NSUInteger index = 0; index < skipIndex; ++index)
-		[[newEntryWriters objectAtIndex:index] writeCentralFileHeaderToChannelOutput:channelOutput];
+		[[newEntryWriters objectAtIndex:index] writeCentralFileHeaderToChannelOutput:temporaryChannelOutput];
 	[goodEntries enumerateIndexesUsingBlock:^(NSUInteger index, BOOL* stop)
 	 {
-		 [[newEntryWriters objectAtIndex:index] writeCentralFileHeaderToChannelOutput:channelOutput];
+		 [[newEntryWriters objectAtIndex:index] writeCentralFileHeaderToChannelOutput:temporaryChannelOutput];
 	 }];
 	
-	endOfCentralDirectory.sizeOfTheCentralDirectory = channelOutput.offset
+	endOfCentralDirectory.sizeOfTheCentralDirectory = temporaryChannelOutput.offset
 		- endOfCentralDirectory.offsetOfStartOfCentralDirectoryWithRespectToTheStartingDiskNumber;
 	endOfCentralDirectory.zipFileCommentLength = 0;
 	
 	// write out the end of central directory
-	[channelOutput write:[NSData dataWithBytesNoCopy:&endOfCentralDirectory
+	[temporaryChannelOutput write:[NSData dataWithBytesNoCopy:&endOfCentralDirectory
 											  length:sizeof(endOfCentralDirectory)
 										freeWhenDone:NO]];
+	[temporaryChannelOutput close];
 	
-	// clean up
-	[channelOutput close];
+	if (initialSkip)
+	{
+		// something skipped, append the temporary channel contents at the skipped offset
+		id<ZZChannelOutput> channelOutput = [_channel openOutputWithOffsetBias:0];
+		channelOutput.offset = initialSkip;
+		[channelOutput write:[temporaryChannel openInput]];
+		[channelOutput close];
+	}
+	else
+		// nothing skipped, temporary channel is entire contents: simply replace the original
+		[_channel replaceWithChannel:temporaryChannel];
+	
+	[_channel removeTemporaries];
 }
 
 @end
