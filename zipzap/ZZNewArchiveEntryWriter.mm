@@ -166,6 +166,11 @@ namespace ZZDataConsumer
 	return (ZZLocalFileHeader*)_localFileHeader.mutableBytes;
 }
 
+- (uint32_t)offsetToLocalFileEnd
+{
+	return 0;
+}
+
 - (BOOL)writeLocalFileToChannelOutput:(id<ZZChannelOutput>)channelOutput
 {
 	// free any temp objects created while writing, especially via the callbacks which we don't control

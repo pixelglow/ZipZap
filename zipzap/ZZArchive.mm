@@ -154,22 +154,20 @@
 	// therefore, if _contents are nil, we don't need to lazily load them in since these newEntries are meant to totally overwrite the archive
 	// or, if _contents are non-nil, the contents have already been loaded and we also don't need to lazily load them in
 
-	// get an entry writer for each new entry, and allow it to skip writing out its local file if the initial old and new entries match
-	NSMutableArray* newEntryWriters = [NSMutableArray array];
+	// determine how many entries to skip, where initial old and new entries match
 	NSUInteger oldEntriesCount = _entries.count;
-	BOOL canSkipLocalFile = YES;
-	for (NSUInteger index = 0, count = newEntries.count; index < count; ++index)
-	{
-		ZZArchiveEntry* nextNewEntry = [newEntries objectAtIndex:index];
-		
-		if (canSkipLocalFile)
-		{
-			ZZArchiveEntry* nextOldEntry = index < oldEntriesCount ? [_entries objectAtIndex:index] : nil;
-			canSkipLocalFile = nextNewEntry == nextOldEntry;
-		}
-		
-		[newEntryWriters addObject:[nextNewEntry writerCanSkipLocalFile:canSkipLocalFile]];
-	}
+	NSUInteger newEntriesCount = newEntries.count;
+	NSUInteger skipIndex;
+	for (skipIndex = 0; skipIndex < std::min(oldEntriesCount, newEntriesCount); ++skipIndex)
+		if ([newEntries objectAtIndex:skipIndex] != [_entries objectAtIndex:skipIndex])
+			break;
+	
+	// get an entry writer for each new entry
+	NSMutableArray* newEntryWriters = [NSMutableArray array];
+	for (NSUInteger index = 0; index < skipIndex; ++index)
+		[newEntryWriters addObject:[[newEntries objectAtIndex:index] writerCanSkipLocalFile:YES]];
+	for (NSUInteger index = skipIndex; index < newEntriesCount; ++index)
+		[newEntryWriters addObject:[[newEntries objectAtIndex:index] writerCanSkipLocalFile:NO]];
 	
 	// clear entries + content
 	_contents = nil;
@@ -178,11 +176,14 @@
 	// open or create the file
 	id<ZZChannelOutput> channelOutput = [_channel openOutput];
 	
-	// write out all local files, recording which are valid
+	// skip the initial matching entries
+	channelOutput.offset = skipIndex > 0 ? [[newEntryWriters objectAtIndex:skipIndex - 1] offsetToLocalFileEnd] : 0;
+	
+	// write out local files, recording which are valid
 	NSMutableIndexSet* goodEntries = [NSMutableIndexSet indexSet];
-	for (NSUInteger index = 0, count = newEntryWriters.count; index < count; ++index)
+	for (NSUInteger index = skipIndex; index < newEntriesCount; ++index)
 		if ([[newEntryWriters objectAtIndex:index] writeLocalFileToChannelOutput:channelOutput])
-			[ goodEntries addIndex:index];
+			[goodEntries addIndex:index];
 	
 	ZZEndOfCentralDirectory endOfCentralDirectory;
 	endOfCentralDirectory.signature = ZZEndOfCentralDirectory::sign;
@@ -191,10 +192,12 @@
 		= 0;
 	endOfCentralDirectory.totalNumberOfEntriesInTheCentralDirectoryOnThisDisk
 		= endOfCentralDirectory.totalNumberOfEntriesInTheCentralDirectory
-		=  goodEntries.count;
+		= skipIndex + goodEntries.count;
 	endOfCentralDirectory.offsetOfStartOfCentralDirectoryWithRespectToTheStartingDiskNumber = channelOutput.offset;
 	
-	// write out central file headers for good entries only
+	// write out central file headers
+	for (NSUInteger index = 0; index < skipIndex; ++index)
+		[[newEntryWriters objectAtIndex:index] writeCentralFileHeaderToChannelOutput:channelOutput];
 	[goodEntries enumerateIndexesUsingBlock:^(NSUInteger index, BOOL* stop)
 	 {
 		 [[newEntryWriters objectAtIndex:index] writeCentralFileHeaderToChannelOutput:channelOutput];
