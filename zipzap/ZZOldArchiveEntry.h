@@ -27,9 +27,11 @@
 @property (readonly, nonatomic) mode_t fileMode;
 @property (readonly, nonatomic) NSString* fileName;
 
-- (id)initWithCentralFileHeader:(struct ZZCentralFileHeader*)centralFileHeader
-				localFileHeader:(struct ZZLocalFileHeader*)localFileHeader
-					   encoding:(NSStringEncoding)encoding;
+// The header structures are stored inside of the data
+- (id)initWithArchiveData:(NSData *)data
+        centralFileHeader:(struct ZZCentralFileHeader*)centralFileHeader
+          localFileHeader:(struct ZZLocalFileHeader*)localFileHeader
+                 encoding:(NSStringEncoding)encoding;
 
 - (NSInputStream*)stream;
 - (NSData*)data;
