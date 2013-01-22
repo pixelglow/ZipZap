@@ -23,7 +23,7 @@
 	id<ZZChannel> _channel;
 	NSStringEncoding _encoding;
 	NSData* _contents;
-	NSMutableArray* _entries;
+	NSArray* _entries;
 }
 
 @end
@@ -49,7 +49,6 @@
 	{
 		_channel = [[ZZFileChannel alloc] initWithURL:URL];
 		_encoding = encoding;
-		_entries = [NSMutableArray array];
 		
 		[self reload];
 	}
@@ -63,7 +62,6 @@
 	{
 		_channel = [[ZZDataChannel alloc] initWithData:data];
 		_encoding = encoding;
-		_entries = [NSMutableArray array];
 
 		[self reload];
 	}
@@ -97,7 +95,7 @@
 {
 	// memory-map the contents from the zip file
 	_contents = [_channel openInput];
-	[_entries removeAllObjects];
+    _entries = nil;
 	
 	if (_contents)
 	{
@@ -125,17 +123,21 @@
 				ZZCentralFileHeader* nextCentralFileHeader = (ZZCentralFileHeader*)(beginContent
 																					+ endOfCentralDirectoryRecord->offsetOfStartOfCentralDirectoryWithRespectToTheStartingDiskNumber);
 				
+                NSMutableArray *entries = [[NSMutableArray alloc] initWithCapacity:endOfCentralDirectoryRecord->totalNumberOfEntriesInTheCentralDirectory];
+                
 				// add an entry for each central header in the sequence
 				for (uint16_t entryIndex = 0; entryIndex < endOfCentralDirectoryRecord->totalNumberOfEntriesInTheCentralDirectory; ++entryIndex)
 				{
 					ZZLocalFileHeader* nextLocalFileHeader = (ZZLocalFileHeader*)(beginContent
 																				  + nextCentralFileHeader->relativeOffsetOfLocalHeader);
-					[_entries addObject:[[ZZOldArchiveEntry alloc] initWithCentralFileHeader:nextCentralFileHeader
+					[entries addObject:[[ZZOldArchiveEntry alloc] initWithCentralFileHeader:nextCentralFileHeader
 																		 localFileHeader:nextLocalFileHeader
 																					encoding:_encoding]];
 					
 					nextCentralFileHeader = nextCentralFileHeader->nextCentralFileHeader();
 				}
+                
+                _entries = entries;
 			}
 		}
 	}
@@ -169,7 +171,7 @@
 	
 	// clear entries + content
 	_contents = nil;
-	[_entries removeAllObjects];
+	_entries = nil;
 	
 	// skip the initial matching entries
 	uint32_t initialSkip = skipIndex > 0 ? [[newEntryWriters objectAtIndex:skipIndex - 1] offsetToLocalFileEnd] : 0;
