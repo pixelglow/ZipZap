@@ -98,7 +98,7 @@
 - (void)reload
 {
 	// memory-map the contents from the zip file
-	_contents = [_channel openInput];
+	_contents = [_channel openInput:NULL];
 	[_entries removeAllObjects];
 	
 	if (_contents)
@@ -220,7 +220,7 @@
 		// something skipped, append the temporary channel contents at the skipped offset
 		id<ZZChannelOutput> channelOutput = [_channel openOutputWithOffsetBias:0];
 		channelOutput.offset = initialSkip;
-		[channelOutput write:[temporaryChannel openInput]];
+		[channelOutput write:[temporaryChannel openInput:NULL]];
 		[channelOutput close];
 	}
 	else
