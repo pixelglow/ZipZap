@@ -187,6 +187,51 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2757532D16AEE58D00388503 /* Public */ = {
+			isa = PBXGroup;
+			children = (
+				D8B0FD611640A6B000727A70 /* zipzap.h */,
+				D899CFDA162C608300112F49 /* ZZArchive.h */,
+				D899CFDB162C608300112F49 /* ZZArchive.mm */,
+				D899CFD8162C608300112F49 /* ZZArchiveEntry.h */,
+				D899CFD9162C608300112F49 /* ZZArchiveEntry.m */,
+			);
+			name = Public;
+			sourceTree = "<group>";
+		};
+		2757532E16AEE59F00388503 /* Private */ = {
+			isa = PBXGroup;
+			children = (
+				D899CFE5162C608300112F49 /* ZZNewArchiveEntry.h */,
+				D899CFE6162C608300112F49 /* ZZNewArchiveEntry.mm */,
+				D88E8E05163816FD002207B3 /* ZZOldArchiveEntry.h */,
+				D88E8E06163816FD002207B3 /* ZZOldArchiveEntry.mm */,
+				D899CFE9162C608300112F49 /* ZZArchiveEntryWriter.h */,
+				D899CFE7162C608300112F49 /* ZZNewArchiveEntryWriter.h */,
+				D899CFE8162C608300112F49 /* ZZNewArchiveEntryWriter.mm */,
+				D899CFE2162C608300112F49 /* ZZOldArchiveEntryWriter.h */,
+				D899CFE3162C608300112F49 /* ZZOldArchiveEntryWriter.mm */,
+				D84A449E16A0D91B00CF00A9 /* ZZChannel.h */,
+				D84A44A116A0D99C00CF00A9 /* ZZChannelOutput.h */,
+				D84A44AD16A0E8D600CF00A9 /* ZZDataChannel.h */,
+				D84A44AE16A0E8D600CF00A9 /* ZZDataChannel.m */,
+				D84A44CD16A0F8B400CF00A9 /* ZZDataChannelOutput.h */,
+				D84A44CE16A0F8B400CF00A9 /* ZZDataChannelOutput.m */,
+				D899CFDE162C608300112F49 /* ZZDeflateOutputStream.h */,
+				D899CFDF162C608300112F49 /* ZZDeflateOutputStream.m */,
+				D84A44A316A0E2F300CF00A9 /* ZZFileChannel.h */,
+				D84A44A416A0E2F400CF00A9 /* ZZFileChannel.m */,
+				D84A44A816A0E30B00CF00A9 /* ZZFileChannelOutput.h */,
+				D84A44A916A0E30B00CF00A9 /* ZZFileChannelOutput.m */,
+				D899CFE4162C608300112F49 /* ZZHeaders.h */,
+				D899CFDC162C608300112F49 /* ZZInflateInputStream.h */,
+				D899CFDD162C608300112F49 /* ZZInflateInputStream.m */,
+				D899CFE0162C608300112F49 /* ZZStoreOutputStream.h */,
+				D899CFE1162C608300112F49 /* ZZStoreOutputStream.m */,
+			);
+			name = Private;
+			sourceTree = "<group>";
+		};
 		D899CF75162C5E8400112F49 = {
 			isa = PBXGroup;
 			children = (
@@ -224,37 +269,8 @@
 		D899CF8B162C5EC100112F49 /* zipzap */ = {
 			isa = PBXGroup;
 			children = (
-				D8B0FD611640A6B000727A70 /* zipzap.h */,
-				D899CFDA162C608300112F49 /* ZZArchive.h */,
-				D899CFDB162C608300112F49 /* ZZArchive.mm */,
-				D899CFD8162C608300112F49 /* ZZArchiveEntry.h */,
-				D899CFD9162C608300112F49 /* ZZArchiveEntry.m */,
-				D899CFE9162C608300112F49 /* ZZArchiveEntryWriter.h */,
-				D84A449E16A0D91B00CF00A9 /* ZZChannel.h */,
-				D84A44A116A0D99C00CF00A9 /* ZZChannelOutput.h */,
-				D84A44AD16A0E8D600CF00A9 /* ZZDataChannel.h */,
-				D84A44AE16A0E8D600CF00A9 /* ZZDataChannel.m */,
-				D84A44CD16A0F8B400CF00A9 /* ZZDataChannelOutput.h */,
-				D84A44CE16A0F8B400CF00A9 /* ZZDataChannelOutput.m */,
-				D899CFDE162C608300112F49 /* ZZDeflateOutputStream.h */,
-				D899CFDF162C608300112F49 /* ZZDeflateOutputStream.m */,
-				D84A44A316A0E2F300CF00A9 /* ZZFileChannel.h */,
-				D84A44A416A0E2F400CF00A9 /* ZZFileChannel.m */,
-				D84A44A816A0E30B00CF00A9 /* ZZFileChannelOutput.h */,
-				D84A44A916A0E30B00CF00A9 /* ZZFileChannelOutput.m */,
-				D899CFE4162C608300112F49 /* ZZHeaders.h */,
-				D899CFDC162C608300112F49 /* ZZInflateInputStream.h */,
-				D899CFDD162C608300112F49 /* ZZInflateInputStream.m */,
-				D899CFE5162C608300112F49 /* ZZNewArchiveEntry.h */,
-				D899CFE6162C608300112F49 /* ZZNewArchiveEntry.mm */,
-				D899CFE7162C608300112F49 /* ZZNewArchiveEntryWriter.h */,
-				D899CFE8162C608300112F49 /* ZZNewArchiveEntryWriter.mm */,
-				D88E8E05163816FD002207B3 /* ZZOldArchiveEntry.h */,
-				D88E8E06163816FD002207B3 /* ZZOldArchiveEntry.mm */,
-				D899CFE2162C608300112F49 /* ZZOldArchiveEntryWriter.h */,
-				D899CFE3162C608300112F49 /* ZZOldArchiveEntryWriter.mm */,
-				D899CFE0162C608300112F49 /* ZZStoreOutputStream.h */,
-				D899CFE1162C608300112F49 /* ZZStoreOutputStream.m */,
+				2757532D16AEE58D00388503 /* Public */,
+				2757532E16AEE59F00388503 /* Private */,
 				D899CF8C162C5EC100112F49 /* Supporting Files */,
 			);
 			path = zipzap;
