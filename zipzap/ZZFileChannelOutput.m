@@ -10,35 +10,42 @@
 
 @implementation ZZFileChannelOutput
 {
-	NSFileHandle* _fileHandle;
+	int _fileDescriptor;
+	uint32_t _offsetBias;
 }
 
-- (id)initWithFileHandle:(NSFileHandle*)fileHandle
+- (id)initWithURL:(NSURL*)URL
+	   offsetBias:(uint32_t)offsetBias
 {
 	if ((self = [super init]))
-		_fileHandle = fileHandle;
+	{
+		_fileDescriptor = open(URL.path.fileSystemRepresentation,
+							   O_WRONLY | O_CREAT,
+							   S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+		_offsetBias = offsetBias;
+	}
 	return self;
 }
 
 - (uint32_t)offset
 {
-	return (uint32_t)[_fileHandle offsetInFile];
+	return (uint32_t)lseek(_fileDescriptor, 0, SEEK_CUR) + _offsetBias;
 }
 
 - (void)setOffset:(uint32_t)offset
 {
-	[_fileHandle seekToFileOffset:offset];
+	lseek(_fileDescriptor, offset - _offsetBias, SEEK_SET);
 }
 
 - (void)write:(NSData*)data
 {
-	[_fileHandle writeData:data];
+	write(_fileDescriptor, data.bytes, data.length);
 }
 
 - (void)close
 {
-	[_fileHandle truncateFileAtOffset:[_fileHandle offsetInFile]];
-	[_fileHandle closeFile];
+	ftruncate(_fileDescriptor, lseek(_fileDescriptor, 0, SEEK_CUR));
+	close(_fileDescriptor);
 }
 
 @end

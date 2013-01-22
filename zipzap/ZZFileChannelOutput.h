@@ -14,7 +14,8 @@
 
 @property (nonatomic) uint32_t offset;
 
-- (id)initWithFileHandle:(NSFileHandle*)fileHandle;
+- (id)initWithURL:(NSURL*)URL
+	   offsetBias:(uint32_t)offsetBias;
 - (void)write:(NSData*)data;
 - (void)close;
 
