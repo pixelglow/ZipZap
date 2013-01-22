@@ -16,6 +16,7 @@
 
 - (id)initWithData:(NSData*)data
 {
+    NSParameterAssert(data);
 	if ((self = [super init]))
 		_allData = data;
 	return self;

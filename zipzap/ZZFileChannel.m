@@ -16,6 +16,7 @@
 
 - (id)initWithURL:(NSURL*)URL
 {
+    NSParameterAssert(URL);
 	if ((self = [super init]))
 		_URL = URL;
 	return self;
