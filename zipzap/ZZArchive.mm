@@ -50,7 +50,6 @@
 		_channel = [[ZZFileChannel alloc] initWithURL:URL];
 		_encoding = encoding;
 		_entries = [NSMutableArray array];
-		_contents = nil;
 		
 		[self reload];
 	}
@@ -65,7 +64,6 @@
 		_channel = [[ZZDataChannel alloc] initWithData:data];
 		_encoding = encoding;
 		_entries = [NSMutableArray array];
-		_contents = nil;
 
 		[self reload];
 	}
