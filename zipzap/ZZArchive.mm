@@ -164,10 +164,12 @@
 	
 	// get an entry writer for each new entry
 	NSMutableArray* newEntryWriters = [NSMutableArray array];
-	for (NSUInteger index = 0; index < skipIndex; ++index)
-		[newEntryWriters addObject:[[newEntries objectAtIndex:index] writerCanSkipLocalFile:YES]];
-	for (NSUInteger index = skipIndex; index < newEntriesCount; ++index)
-		[newEntryWriters addObject:[[newEntries objectAtIndex:index] writerCanSkipLocalFile:NO]];
+    
+    [newEntries enumerateObjectsUsingBlock:^(ZZArchiveEntry *anEntry, NSUInteger idx, BOOL *stop)
+     {
+         
+         [newEntryWriters addObject:[anEntry writerCanSkipLocalFile:(idx < skipIndex)]];
+     }];
 	
 	// clear entries + content
 	_contents = nil;
@@ -182,10 +184,13 @@
 	
 	
 	// write out local files, recording which are valid
-	NSMutableIndexSet* goodEntries = [NSMutableIndexSet indexSet];
-	for (NSUInteger index = skipIndex; index < newEntriesCount; ++index)
-		if ([[newEntryWriters objectAtIndex:index] writeLocalFileToChannelOutput:temporaryChannelOutput])
-			[goodEntries addIndex:index];
+	NSMutableIndexSet* goodEntries = [NSMutableIndexSet indexSetWithIndexesInRange:NSMakeRange(0, newEntries.count)];
+    
+    [newEntryWriters enumerateObjectsUsingBlock:^(id <ZZArchiveEntryWriter> entryWriter, NSUInteger idx, BOOL *stop)
+     {
+         if (idx >= skipIndex && ![entryWriter writeLocalFileToChannelOutput:temporaryChannelOutput])
+             [goodEntries removeIndex:idx];
+     }];
 	
 	ZZEndOfCentralDirectory endOfCentralDirectory;
 	endOfCentralDirectory.signature = ZZEndOfCentralDirectory::sign;
@@ -194,16 +199,14 @@
 		= 0;
 	endOfCentralDirectory.totalNumberOfEntriesInTheCentralDirectoryOnThisDisk
 		= endOfCentralDirectory.totalNumberOfEntriesInTheCentralDirectory
-		= skipIndex + goodEntries.count;
+		= goodEntries.count;
 	endOfCentralDirectory.offsetOfStartOfCentralDirectoryWithRespectToTheStartingDiskNumber = temporaryChannelOutput.offset;
 	
 	// write out central file headers
-	for (NSUInteger index = 0; index < skipIndex; ++index)
-		[[newEntryWriters objectAtIndex:index] writeCentralFileHeaderToChannelOutput:temporaryChannelOutput];
-	[goodEntries enumerateIndexesUsingBlock:^(NSUInteger index, BOOL* stop)
-	 {
-		 [[newEntryWriters objectAtIndex:index] writeCentralFileHeaderToChannelOutput:temporaryChannelOutput];
-	 }];
+	[newEntryWriters enumerateObjectsAtIndexes:goodEntries options:0 usingBlock:^(id <ZZArchiveEntryWriter> anEntryWriter, NSUInteger idx, BOOL *stop)
+     {
+         [anEntryWriter writeCentralFileHeaderToChannelOutput:temporaryChannelOutput];
+     }];
 	
 	endOfCentralDirectory.sizeOfTheCentralDirectory = temporaryChannelOutput.offset
 		- endOfCentralDirectory.offsetOfStartOfCentralDirectoryWithRespectToTheStartingDiskNumber;
