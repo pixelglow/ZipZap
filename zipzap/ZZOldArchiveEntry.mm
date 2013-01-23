@@ -56,17 +56,20 @@ namespace ZZDataProvider
 
 @implementation ZZOldArchiveEntry
 {
+    NSData *_archiveData;
 	ZZCentralFileHeader* _centralFileHeader;
 	ZZLocalFileHeader* _localFileHeader;
 	NSStringEncoding _encoding;
 }
 
-- (id)initWithCentralFileHeader:(struct ZZCentralFileHeader*)centralFileHeader
-				localFileHeader:(struct ZZLocalFileHeader*)localFileHeader
-					   encoding:(NSStringEncoding)encoding
+- (id)initWithArchiveData:(NSData *)data
+        centralFileHeader:(struct ZZCentralFileHeader*)centralFileHeader
+          localFileHeader:(struct ZZLocalFileHeader*)localFileHeader
+                 encoding:(NSStringEncoding)encoding;
 {
 	if ((self = [super init]))
 	{
+        _archiveData = data;  // hang onto the data so headers don't ever start pointing to invalid memory
 		_centralFileHeader = centralFileHeader;
 		_localFileHeader = localFileHeader;
 		_encoding = encoding;
