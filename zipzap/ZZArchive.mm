@@ -158,7 +158,7 @@
 	NSUInteger oldEntriesCount = _entries.count;
 	NSUInteger newEntriesCount = newEntries.count;
 	NSUInteger skipIndex;
-	for (skipIndex = 0; skipIndex < std::min(oldEntriesCount, newEntriesCount); ++skipIndex)
+	for (skipIndex = 0; skipIndex < MIN(oldEntriesCount, newEntriesCount); ++skipIndex)
 		if ([newEntries objectAtIndex:skipIndex] != [_entries objectAtIndex:skipIndex])
 			break;
 	
