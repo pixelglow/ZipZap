@@ -83,6 +83,18 @@
 				   encoding:(NSStringEncoding)encoding;
 
 /**
+ * Initializes a new archive with the zip file at the given file URL.
+ *
+ * @param URL The file URL of the zip file.
+ * @param encoding The encoding for reading entry file names and comments.
+ * @param error optional, filled in upon error
+ * @return The initialized archive. If the zip file cannot be accessed (e.g. doesn't exist), returns nil.
+ */
+- (id)initWithContentsOfURL:(NSURL*)URL
+				   encoding:(NSStringEncoding)encoding
+                      error:(NSError **)error;
+
+/**
  * Initializes a new archive with the raw zip file data given.
  *
  * @param data The raw data of the zip file

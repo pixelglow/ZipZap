@@ -16,6 +16,7 @@
 
 - (id)initWithURL:(NSURL*)URL
 {
+    NSParameterAssert(URL);
 	if ((self = [super init]))
 		_URL = URL;
 	return self;
@@ -60,11 +61,11 @@
 		[fileManager removeItemAtURL:temporaryDirectory error:nil];
 }
 
-- (NSData*)openInput
+- (NSData*)openInput:(NSError * __autoreleasing *)error;
 {
 	return [NSData dataWithContentsOfURL:_URL
 								 options:NSDataReadingMappedAlways
-								   error:nil];
+								   error:error];
 }
 
 - (id<ZZChannelOutput>)openOutputWithOffsetBias:(uint32_t)offsetBias

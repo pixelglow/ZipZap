@@ -57,6 +57,20 @@
 	return self;
 }
 
+- (id)initWithContentsOfURL:(NSURL*)URL
+				   encoding:(NSStringEncoding)encoding
+                      error:(NSError **)error;
+{
+    if (self = [self initWithContentsOfURL:URL encoding:encoding])
+    {
+        if (![self reloadAndReturnError:error])
+        {
+            self = nil;
+        }
+    }
+    return self;
+}
+
 - (id)initWithData:(NSData*)data
 		  encoding:(NSStringEncoding)encoding
 {
@@ -97,8 +111,21 @@
 
 - (void)reload
 {
+    if (![self reloadAndReturnError:NULL])
+    {
+        // Match existing behaviour
+        _contents = nil;
+        [_entries removeAllObjects];
+    }
+}
+
+- (BOOL)reloadAndReturnError:(NSError **)error;
+{
 	// memory-map the contents from the zip file
-	_contents = [_channel openInput];
+	NSData *data = [_channel openInput:error];
+    if (!data) return NO;
+    
+    _contents = data;
 	[_entries removeAllObjects];
 	
 	if (_contents)
@@ -141,6 +168,8 @@
 			}
 		}
 	}
+    
+    return YES;
 }
 
 @end
@@ -220,7 +249,7 @@
 		// something skipped, append the temporary channel contents at the skipped offset
 		id<ZZChannelOutput> channelOutput = [_channel openOutputWithOffsetBias:0];
 		channelOutput.offset = initialSkip;
-		[channelOutput write:[temporaryChannel openInput]];
+		[channelOutput write:[temporaryChannel openInput:NULL]];
 		[channelOutput close];
 	}
 	else

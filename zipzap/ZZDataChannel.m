@@ -16,6 +16,7 @@
 
 - (id)initWithData:(NSData*)data
 {
+    NSParameterAssert(data);
 	if ((self = [super init]))
 		_allData = data;
 	return self;
@@ -41,7 +42,7 @@
 {
 }
 
-- (NSData*)openInput
+- (NSData*)openInput:(NSError *__autoreleasing *)error;
 {
 	return _allData;
 }
