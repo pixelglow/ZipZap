@@ -50,8 +50,6 @@
 	{
 		_channel = [[ZZFileChannel alloc] initWithURL:URL];
 		_encoding = encoding;
-		
-		[self reload];
 	}
 	return self;
 }
@@ -63,8 +61,6 @@
 	{
 		_channel = [[ZZDataChannel alloc] initWithData:data];
 		_encoding = encoding;
-
-		[self reload];
 	}
 	return self;
 }
