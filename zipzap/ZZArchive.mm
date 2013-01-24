@@ -7,6 +7,7 @@
 //
 
 #include <algorithm>
+#include <vector>
 #include <fcntl.h>
 
 #import "ZZChannelOutput.h"
@@ -94,13 +95,12 @@
 - (void)reload
 {
 	// memory-map the contents from the zip file
-	_contents = [_channel openInput];
-    _entries = nil;
+	NSData* contents = [_channel openInput];
 	
-	if (_contents)
+	if (contents)
 	{
-		const uint8_t* beginContent = (const uint8_t*)_contents.bytes;
-		const uint8_t* endContent = beginContent + _contents.length;
+		const uint8_t* beginContent = (const uint8_t*)contents.bytes;
+		const uint8_t* endContent = beginContent + contents.length;
 		
 		// search for the end of directory signature in last 64K of file
 		const uint8_t* beginRangeEndOfCentralDirectory = std::max(beginContent, endContent - sizeof(ZZEndOfCentralDirectory) - 0xFFFF);
@@ -123,21 +123,23 @@
 				ZZCentralFileHeader* nextCentralFileHeader = (ZZCentralFileHeader*)(beginContent
 																					+ endOfCentralDirectoryRecord->offsetOfStartOfCentralDirectoryWithRespectToTheStartingDiskNumber);
 				
-                NSMutableArray *entries = [[NSMutableArray alloc] initWithCapacity:endOfCentralDirectoryRecord->totalNumberOfEntriesInTheCentralDirectory];
+				std::vector<ZZOldArchiveEntry*> entries(endOfCentralDirectoryRecord->totalNumberOfEntriesInTheCentralDirectory);
                 
 				// add an entry for each central header in the sequence
-				for (uint16_t entryIndex = 0; entryIndex < endOfCentralDirectoryRecord->totalNumberOfEntriesInTheCentralDirectory; ++entryIndex)
+				for (auto& entry : entries)
 				{
 					ZZLocalFileHeader* nextLocalFileHeader = (ZZLocalFileHeader*)(beginContent
 																				  + nextCentralFileHeader->relativeOffsetOfLocalHeader);
-					[entries addObject:[[ZZOldArchiveEntry alloc] initWithCentralFileHeader:nextCentralFileHeader
-																		 localFileHeader:nextLocalFileHeader
-																					encoding:_encoding]];
+					entry = [[ZZOldArchiveEntry alloc] initWithCentralFileHeader:nextCentralFileHeader
+																 localFileHeader:nextLocalFileHeader
+																		encoding:_encoding];
 					
 					nextCentralFileHeader = nextCentralFileHeader->nextCentralFileHeader();
 				}
                 
-                _entries = entries;
+				_contents = contents;
+                _entries = [NSArray arrayWithObjects:&entries[0]
+											   count:entries.size()];
 			}
 		}
 	}
