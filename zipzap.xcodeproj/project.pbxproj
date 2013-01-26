@@ -251,7 +251,9 @@
 				D8A32673163C2240008606AC /* LICENSE.text */,
 				D8A32627163BFF3D008606AC /* README.markdown */,
 			);
+			indentWidth = 4;
 			sourceTree = "<group>";
+			tabWidth = 4;
 			usesTabs = 1;
 		};
 		D899CF83162C5EC100112F49 /* Products */ = {
