@@ -41,7 +41,7 @@
 {
 }
 
-- (NSData*)openInput
+- (NSData*)openInput:(NSError**)error
 {
 	return _allData;
 }

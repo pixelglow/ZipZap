@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		D810EBCF164B19DA00200834 /* 拉链.txt in Resources */ = {isa = PBXBuildFile; fileRef = D810EBCE164B19DA00200834 /* 拉链.txt */; };
+		D8366ACE16B1F8B400BC012E /* ZZError.h in Headers */ = {isa = PBXBuildFile; fileRef = D8366ACC16B1F8B400BC012E /* ZZError.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D8366ACF16B1F8B400BC012E /* ZZError.m in Sources */ = {isa = PBXBuildFile; fileRef = D8366ACD16B1F8B400BC012E /* ZZError.m */; };
+		D8366AD016B1F8B400BC012E /* ZZError.m in Sources */ = {isa = PBXBuildFile; fileRef = D8366ACD16B1F8B400BC012E /* ZZError.m */; };
+		D8366ADF16B3625D00BC012E /* ZZError.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8366ACC16B1F8B400BC012E /* ZZError.h */; };
 		D84A449F16A0D91B00CF00A9 /* ZZChannel.h in Headers */ = {isa = PBXBuildFile; fileRef = D84A449E16A0D91B00CF00A9 /* ZZChannel.h */; };
 		D84A44A216A0D99C00CF00A9 /* ZZChannelOutput.h in Headers */ = {isa = PBXBuildFile; fileRef = D84A44A116A0D99C00CF00A9 /* ZZChannelOutput.h */; };
 		D84A44A516A0E2F400CF00A9 /* ZZFileChannel.h in Headers */ = {isa = PBXBuildFile; fileRef = D84A44A316A0E2F300CF00A9 /* ZZFileChannel.h */; };
@@ -89,6 +93,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				D8366ADF16B3625D00BC012E /* ZZError.h in CopyFiles */,
 				D8B0FD661640A77F00727A70 /* zipzap.h in CopyFiles */,
 				D8B0FD671640A77F00727A70 /* ZZArchive.h in CopyFiles */,
 				D8B0FD681640A77F00727A70 /* ZZArchiveEntry.h in CopyFiles */,
@@ -99,6 +104,8 @@
 
 /* Begin PBXFileReference section */
 		D810EBCE164B19DA00200834 /* 拉链.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "拉链.txt"; sourceTree = "<group>"; };
+		D8366ACC16B1F8B400BC012E /* ZZError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZZError.h; sourceTree = "<group>"; };
+		D8366ACD16B1F8B400BC012E /* ZZError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZZError.m; sourceTree = "<group>"; };
 		D84A449E16A0D91B00CF00A9 /* ZZChannel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZZChannel.h; sourceTree = "<group>"; };
 		D84A44A116A0D99C00CF00A9 /* ZZChannelOutput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZZChannelOutput.h; sourceTree = "<group>"; };
 		D84A44A316A0E2F300CF00A9 /* ZZFileChannel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZZFileChannel.h; sourceTree = "<group>"; };
@@ -195,6 +202,8 @@
 				D899CFDB162C608300112F49 /* ZZArchive.mm */,
 				D899CFD8162C608300112F49 /* ZZArchiveEntry.h */,
 				D899CFD9162C608300112F49 /* ZZArchiveEntry.m */,
+				D8366ACC16B1F8B400BC012E /* ZZError.h */,
+				D8366ACD16B1F8B400BC012E /* ZZError.m */,
 			);
 			name = Public;
 			sourceTree = "<group>";
@@ -324,6 +333,7 @@
 				D8B0FD621640A6B000727A70 /* zipzap.h in Headers */,
 				D899CFED162C608300112F49 /* ZZArchive.h in Headers */,
 				D899CFEA162C608300112F49 /* ZZArchiveEntry.h in Headers */,
+				D8366ACE16B1F8B400BC012E /* ZZError.h in Headers */,
 				D899D003162C608300112F49 /* ZZArchiveEntryWriter.h in Headers */,
 				D899CFF0162C608300112F49 /* ZZInflateInputStream.h in Headers */,
 				D899CFF3162C608300112F49 /* ZZDeflateOutputStream.h in Headers */,
@@ -476,6 +486,7 @@
 				D84A44AB16A0E30C00CF00A9 /* ZZFileChannelOutput.m in Sources */,
 				D84A44B016A0E8D600CF00A9 /* ZZDataChannel.m in Sources */,
 				D84A44D016A0F8B400CF00A9 /* ZZDataChannelOutput.m in Sources */,
+				D8366ACF16B1F8B400BC012E /* ZZError.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -506,6 +517,7 @@
 				D84A44AC16A0E30C00CF00A9 /* ZZFileChannelOutput.m in Sources */,
 				D84A44B116A0E8D600CF00A9 /* ZZDataChannel.m in Sources */,
 				D84A44D116A0F8B400CF00A9 /* ZZDataChannelOutput.m in Sources */,
+				D8366AD016B1F8B400BC012E /* ZZError.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

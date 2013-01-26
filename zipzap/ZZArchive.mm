@@ -7,11 +7,11 @@
 //
 
 #include <algorithm>
-#include <vector>
 #include <fcntl.h>
 
 #import "ZZChannelOutput.h"
 #import "ZZDataChannel.h"
+#import "ZZError.h"
 #import "ZZFileChannel.h"
 #import "ZZArchiveEntryWriter.h"
 #import "ZZArchive.h"
@@ -74,7 +74,7 @@
 {
 	// lazily load in contents + refresh entries
 	if (!_contents)
-		[self reload];
+		[self load:nil];
 	
 	return _contents;
 }
@@ -83,62 +83,81 @@
 {
 	// lazily load in contents + refresh entries	
 	if (!_contents)
-		[self reload];
+		[self load:nil];
 	
 	return _entries;
 }
 
-- (void)reload
+- (BOOL)load:(NSError**)error
 {
 	// memory-map the contents from the zip file
-	NSData* contents = [_channel openInput];
+	NSError* __autoreleasing readError;
+	NSData* contents = [_channel openInput:&readError];
+	if (!contents)
+		return ZZRaiseError(error, ZZReadErrorCode, @{NSUnderlyingErrorKey : readError});
 	
-	if (contents)
+	// search for the end of directory signature in last 64K of file
+	const uint8_t* beginContent = (const uint8_t*)contents.bytes;
+	const uint8_t* endContent = beginContent + contents.length;	
+	const uint8_t* beginRangeEndOfCentralDirectory = std::max(beginContent, endContent - sizeof(ZZEndOfCentralDirectory) - 0xFFFF);
+	const uint8_t* endRangeEndOfCentralDirectory = std::max(beginContent, endContent - sizeof(ZZEndOfCentralDirectory) + sizeof(ZZEndOfCentralDirectory::signature));
+	uint32_t sign = ZZEndOfCentralDirectory::sign;
+	const uint8_t* endOfCentralDirectory = std::find_end(beginRangeEndOfCentralDirectory,
+														 endRangeEndOfCentralDirectory,
+														 (const uint8_t*)&sign,
+														 (const uint8_t*)(&sign + 1));
+	const ZZEndOfCentralDirectory* endOfCentralDirectoryRecord = (const ZZEndOfCentralDirectory*)endOfCentralDirectory;
+	
+	// sanity check:
+	if (
+		// found the end of central directory signature
+		endOfCentralDirectory == endRangeEndOfCentralDirectory
+		// single disk zip
+		|| endOfCentralDirectoryRecord->numberOfThisDisk != 0
+		|| endOfCentralDirectoryRecord->numberOfTheDiskWithTheStartOfTheCentralDirectory != 0
+		|| endOfCentralDirectoryRecord->totalNumberOfEntriesInTheCentralDirectoryOnThisDisk
+			!= endOfCentralDirectoryRecord->totalNumberOfEntriesInTheCentralDirectory
+		// central directory occurs before end of central directory, and has enough minimal space for the given entries
+		|| beginContent
+			+ endOfCentralDirectoryRecord->offsetOfStartOfCentralDirectoryWithRespectToTheStartingDiskNumber
+			+ endOfCentralDirectoryRecord->totalNumberOfEntriesInTheCentralDirectory * sizeof(ZZCentralFileHeader)
+			> endOfCentralDirectory
+		// end of central directory occurs at actual end of the zip
+		|| endContent
+			!= endOfCentralDirectory + sizeof(ZZEndOfCentralDirectory) + endOfCentralDirectoryRecord->zipFileCommentLength)
+		return ZZRaiseError(error, ZZBadEndOfCentralDirectoryErrorCode, nil);
+			
+	// add an entry for each central header in the sequence
+	ZZCentralFileHeader* nextCentralFileHeader = (ZZCentralFileHeader*)(beginContent
+																		+ endOfCentralDirectoryRecord->offsetOfStartOfCentralDirectoryWithRespectToTheStartingDiskNumber);
+	NSMutableArray* entries = [NSMutableArray array];
+	for (NSUInteger index = 0; index < endOfCentralDirectoryRecord->totalNumberOfEntriesInTheCentralDirectory; ++index)
 	{
-		const uint8_t* beginContent = (const uint8_t*)contents.bytes;
-		const uint8_t* endContent = beginContent + contents.length;
+		// sanity check:
+		if (
+			// correct signature
+			nextCentralFileHeader->sign != ZZCentralFileHeader::sign
+			// single disk zip
+			|| nextCentralFileHeader->diskNumberStart != 0
+			// local file occurs before first central file header, and has enough minimal space for at least local file
+			|| nextCentralFileHeader->relativeOffsetOfLocalHeader + sizeof(ZZLocalFileHeader)
+				> endOfCentralDirectoryRecord->offsetOfStartOfCentralDirectoryWithRespectToTheStartingDiskNumber)
+			return ZZRaiseError(error, ZZBadCentralFileErrorCode, @{ZZEntryIndexKey : @(index)});
+								
+		ZZLocalFileHeader* nextLocalFileHeader = (ZZLocalFileHeader*)(beginContent
+																	  + nextCentralFileHeader->relativeOffsetOfLocalHeader);
+
+		[entries addObject:[[ZZOldArchiveEntry alloc] initWithCentralFileHeader:nextCentralFileHeader
+																localFileHeader:nextLocalFileHeader
+																	   encoding:_encoding]];
 		
-		// search for the end of directory signature in last 64K of file
-		const uint8_t* beginRangeEndOfCentralDirectory = std::max(beginContent, endContent - sizeof(ZZEndOfCentralDirectory) - 0xFFFF);
-		const uint8_t* endRangeEndOfCentralDirectory = std::max(beginContent, endContent - sizeof(ZZEndOfCentralDirectory) + sizeof(ZZEndOfCentralDirectory::signature));
-		uint32_t sign = ZZEndOfCentralDirectory::sign;
-		const uint8_t* endOfCentralDirectory = std::find_end(beginRangeEndOfCentralDirectory,
-															 endRangeEndOfCentralDirectory,
-															 (const uint8_t*)&sign,
-															 (const uint8_t*)(&sign + 1));
-		
-		if (endOfCentralDirectory != endRangeEndOfCentralDirectory)
-		{
-			// sanity check end of directory
-			const ZZEndOfCentralDirectory* endOfCentralDirectoryRecord = (const ZZEndOfCentralDirectory*)endOfCentralDirectory;
-			if (endOfCentralDirectoryRecord->numberOfThisDisk == 0
-				&& endOfCentralDirectoryRecord->numberOfTheDiskWithTheStartOfTheCentralDirectory == 0
-				&& endOfCentralDirectoryRecord->totalNumberOfEntriesInTheCentralDirectoryOnThisDisk == endOfCentralDirectoryRecord->totalNumberOfEntriesInTheCentralDirectory
-				&& endContent == endOfCentralDirectory + sizeof(ZZEndOfCentralDirectory) + endOfCentralDirectoryRecord->zipFileCommentLength)
-			{
-				ZZCentralFileHeader* nextCentralFileHeader = (ZZCentralFileHeader*)(beginContent
-																					+ endOfCentralDirectoryRecord->offsetOfStartOfCentralDirectoryWithRespectToTheStartingDiskNumber);
-				
-				std::vector<ZZOldArchiveEntry*> entries(endOfCentralDirectoryRecord->totalNumberOfEntriesInTheCentralDirectory);
-                
-				// add an entry for each central header in the sequence
-				for (auto& entry : entries)
-				{
-					ZZLocalFileHeader* nextLocalFileHeader = (ZZLocalFileHeader*)(beginContent
-																				  + nextCentralFileHeader->relativeOffsetOfLocalHeader);
-					entry = [[ZZOldArchiveEntry alloc] initWithCentralFileHeader:nextCentralFileHeader
-																 localFileHeader:nextLocalFileHeader
-																		encoding:_encoding];
-					
-					nextCentralFileHeader = nextCentralFileHeader->nextCentralFileHeader();
-				}
-                
-				_contents = contents;
-                _entries = [NSArray arrayWithObjects:&entries[0]
-											   count:entries.size()];
-			}
-		}
+		nextCentralFileHeader = nextCentralFileHeader->nextCentralFileHeader();
 	}
+	
+	// having successfully negotiated the new contents + entries, replace in one go
+	_contents = contents;
+	_entries = [NSArray arrayWithArray:entries];
+	return YES;
 }
 
 @end
@@ -221,7 +240,7 @@
 		// something skipped, append the temporary channel contents at the skipped offset
 		id<ZZChannelOutput> channelOutput = [_channel openOutputWithOffsetBias:0];
 		channelOutput.offset = initialSkip;
-		[channelOutput write:[temporaryChannel openInput]];
+		[channelOutput write:[temporaryChannel openInput:nil]];
 		[channelOutput close];
 	}
 	else

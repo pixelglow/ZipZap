@@ -60,11 +60,11 @@
 		[fileManager removeItemAtURL:temporaryDirectory error:nil];
 }
 
-- (NSData*)openInput
+- (NSData*)openInput:(NSError**)error
 {
 	return [NSData dataWithContentsOfURL:_URL
 								 options:NSDataReadingMappedAlways
-								   error:nil];
+								   error:error];
 }
 
 - (id<ZZChannelOutput>)openOutputWithOffsetBias:(uint32_t)offsetBias
