@@ -104,6 +104,8 @@
 		ZZArchiveEntry* nextEntry = _zipFile.entries[index];
 		NSArray* nextInfo = zipInfo[index];
 		
+		STAssertTrue([nextEntry check:nil], @"zipFile.entries[%d] should check correctly.", index);
+		
 		NSDateComponents* dateComponents = [[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar]
 											components: NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit
 											| NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit

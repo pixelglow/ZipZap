@@ -147,6 +147,17 @@
 					   dataConsumerBlock:(BOOL(^)(CGDataConsumerRef dataConsumer))dataConsumerBlock;
 
 /**
+ * Checks whether the entry file is consistent.
+ *
+ * @param The error information when an error occurs. Pass in *nil* if you do not want error information.
+ * @return Whether entry file is consistent or not.
+ *
+ * @remarks Checks whether the local file entry is consistent with the central file entry and also that
+ * the recorded and actual checksums of the data agree.
+ */
+- (BOOL)check:(NSError**)error;
+
+/**
  * Creates a stream to represent the entry file.
  *
  * @return The new stream: *nil* for new entries.

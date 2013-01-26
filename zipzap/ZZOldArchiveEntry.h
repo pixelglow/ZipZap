@@ -31,6 +31,8 @@
 				localFileHeader:(struct ZZLocalFileHeader*)localFileHeader
 					   encoding:(NSStringEncoding)encoding;
 
+- (BOOL)check:(NSError **)error;
+
 - (NSInputStream*)stream;
 - (NSData*)data;
 - (CGDataProviderRef)newDataProvider;

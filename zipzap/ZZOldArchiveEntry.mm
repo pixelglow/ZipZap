@@ -7,6 +7,9 @@
 //
 //
 
+#include <zlib.h>
+
+#import "ZZError.h"
 #import "ZZInflateInputStream.h"
 #import "ZZOldArchiveEntry.h"
 #import "ZZOldArchiveEntryWriter.h"
@@ -134,6 +137,56 @@ namespace ZZDataProvider
 {
 	return [self stringWithBytes:_centralFileHeader->fileName()
 						  length:_centralFileHeader->fileNameLength];
+}
+
+- (BOOL)check:(NSError**)error
+{
+	// descriptor fields either from local file header or data descriptor
+	uint32_t dataDescriptorSignature;
+	uint32_t localCrc32;
+	uint32_t localCompressedSize;
+	uint32_t localUncompressedSize;
+	if (_localFileHeader->generalPurposeBitFlag & 0x08)
+	{
+		const ZZDataDescriptor* dataDescriptor = _localFileHeader->dataDescriptor(_localFileHeader->compressedSize);
+		dataDescriptorSignature = dataDescriptor->signature;
+		localCrc32 = dataDescriptor->crc32;
+		localCompressedSize = dataDescriptor->compressedSize;
+		localUncompressedSize = dataDescriptor->uncompressedSize;
+	}
+	else
+	{
+		dataDescriptorSignature = ZZDataDescriptor::sign;
+		localCrc32 = _localFileHeader->crc32;
+		localCompressedSize = _localFileHeader->compressedSize;
+		localUncompressedSize = _localFileHeader->uncompressedSize;		
+	}
+	
+	// sanity check:
+	if (
+		// correct signature
+		_localFileHeader->signature != ZZLocalFileHeader::sign
+		// general fields in local and central headers match
+		|| _localFileHeader->versionNeededToExtract != _centralFileHeader->versionNeededToExtract
+		|| _localFileHeader->generalPurposeBitFlag != _centralFileHeader->generalPurposeBitFlag
+		|| _localFileHeader->compressionMethod != _centralFileHeader->compressionMethod
+		|| _localFileHeader->lastModFileTime != _centralFileHeader->lastModFileDate
+		|| _localFileHeader->fileNameLength != _centralFileHeader->fileNameLength
+		|| _localFileHeader->extraFieldLength != _centralFileHeader->extraFieldLength
+		// extra data in local and central headers match
+		|| memcmp(_localFileHeader->fileName(), _centralFileHeader->fileName(), _localFileHeader->fileNameLength) != 0
+		|| memcmp(_localFileHeader->extraField(), _centralFileHeader->extraField(), _localFileHeader->extraFieldLength) != 0
+		// descriptor fields in local and central headers match
+		|| dataDescriptorSignature != ZZDataDescriptor::sign
+		|| localCrc32 != _centralFileHeader->crc32
+		|| localCompressedSize != _centralFileHeader->compressedSize
+		|| localUncompressedSize != _centralFileHeader->uncompressedSize)
+		ZZRaiseError(error, ZZBadLocalFileErrorCode, nil);
+	
+	if (_localFileHeader->crc32 != (uint32_t)crc32(0, _localFileHeader->fileData(), (uInt)_localFileHeader->compressedSize))
+		ZZRaiseError(error, ZZBadChecksumErrorCode, nil);
+
+	return YES;
 }
 
 - (NSInputStream*)stream

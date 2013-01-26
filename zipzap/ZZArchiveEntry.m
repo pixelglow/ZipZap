@@ -120,6 +120,11 @@
 	return nil;
 }
 
+- (BOOL)check:(NSError **)error
+{
+	return YES;
+}
+
 - (NSData*)data
 {
 	return nil;

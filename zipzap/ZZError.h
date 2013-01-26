@@ -40,7 +40,9 @@ typedef enum
 {
 	ZZReadErrorCode,
 	ZZBadEndOfCentralDirectoryErrorCode,
-	ZZBadCentralFileErrorCode
+	ZZBadCentralFileErrorCode,
+	ZZBadLocalFileErrorCode,
+	ZZBadChecksumErrorCode
 } ZZErrorCode;
 
 static inline BOOL ZZRaiseError(NSError** error, ZZErrorCode errorCode, NSDictionary* userInfo)
