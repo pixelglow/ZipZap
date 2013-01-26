@@ -13,7 +13,7 @@
 
 @implementation ZZArchiveEntry
 
-+ (id)archiveEntryWithFileName:(NSString*)fileName
++ (instancetype)archiveEntryWithFileName:(NSString*)fileName
 				  compress:(BOOL)compress
 				 dataBlock:(NSData*(^)())dataBlock
 {
@@ -26,9 +26,9 @@
 						dataConsumerBlock:nil];
 }
 
-+ (id)archiveEntryWithFileName:(NSString*)fileName
-				  compress:(BOOL)compress
-			   streamBlock:(BOOL(^)(NSOutputStream* stream))streamBlock
++ (instancetype)archiveEntryWithFileName:(NSString*)fileName
+								compress:(BOOL)compress
+							 streamBlock:(BOOL(^)(NSOutputStream* stream))streamBlock
 {
 	return [self archiveEntryWithFileName:fileName
 								 fileMode:S_IFREG | S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH
@@ -39,9 +39,9 @@
 						dataConsumerBlock:nil];
 }
 
-+ (id)archiveEntryWithFileName:(NSString*)fileName
-				  compress:(BOOL)compress
-		 dataConsumerBlock:(BOOL(^)(CGDataConsumerRef dataConsumer))dataConsumerBlock
++ (instancetype)archiveEntryWithFileName:(NSString*)fileName
+								compress:(BOOL)compress
+					   dataConsumerBlock:(BOOL(^)(CGDataConsumerRef dataConsumer))dataConsumerBlock
 {
 	return [self archiveEntryWithFileName:fileName
 								 fileMode:S_IFREG | S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH
@@ -52,7 +52,7 @@
 						dataConsumerBlock:dataConsumerBlock];
 }
 
-+ (id)archiveEntryWithDirectoryName:(NSString*)directoryName
++ (instancetype)archiveEntryWithDirectoryName:(NSString*)directoryName
 {
 	return [self archiveEntryWithFileName:directoryName
 								 fileMode:S_IFDIR | S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH
@@ -63,13 +63,13 @@
 						dataConsumerBlock:nil];
 }
 
-+ (id)archiveEntryWithFileName:(NSString*)fileName
-					  fileMode:(mode_t)fileMode
-				  lastModified:(NSDate*)lastModified
-			  compressionLevel:(NSInteger)compressionLevel
-					 dataBlock:(NSData*(^)())dataBlock
-				   streamBlock:(BOOL(^)(NSOutputStream* stream))streamBlock
-			 dataConsumerBlock:(BOOL(^)(CGDataConsumerRef dataConsumer))dataConsumerBlock
++ (instancetype)archiveEntryWithFileName:(NSString*)fileName
+								fileMode:(mode_t)fileMode
+							lastModified:(NSDate*)lastModified
+						compressionLevel:(NSInteger)compressionLevel
+							   dataBlock:(NSData*(^)())dataBlock
+							 streamBlock:(BOOL(^)(NSOutputStream* stream))streamBlock
+					   dataConsumerBlock:(BOOL(^)(CGDataConsumerRef dataConsumer))dataConsumerBlock
 {
 	return [[ZZNewArchiveEntry alloc] initWithFileName:fileName
 										  fileMode:fileMode

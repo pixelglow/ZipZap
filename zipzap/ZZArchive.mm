@@ -31,13 +31,13 @@
 
 @implementation ZZArchive
 
-+ (id)archiveWithContentsOfURL:(NSURL*)URL
++ (instancetype)archiveWithContentsOfURL:(NSURL*)URL
 {
 	return [[self alloc] initWithContentsOfURL:URL
 									  encoding:NSUTF8StringEncoding];
 }
 
-+ (id)archiveWithData:(NSData*)data
++ (instancetype)archiveWithData:(NSData*)data
 {
 	return [[self alloc] initWithData:data
 							 encoding:NSUTF8StringEncoding];

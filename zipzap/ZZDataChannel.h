@@ -16,7 +16,7 @@
 
 - (id)initWithData:(NSData*)data;
 
-- (id<ZZChannel>)temporaryChannel;
+- (instancetype)temporaryChannel;
 - (BOOL)replaceWithChannel:(id<ZZChannel>)channel;
 - (void)removeTemporaries;
 

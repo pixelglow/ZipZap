@@ -16,7 +16,7 @@
 
 - (id)initWithURL:(NSURL*)URL;
 
-- (id<ZZChannel>)temporaryChannel;
+- (instancetype)temporaryChannel;
 - (BOOL)replaceWithChannel:(id<ZZChannel>)channel;
 - (void)removeTemporaries;
 

@@ -26,7 +26,7 @@
 	return nil;
 }
 
-- (id<ZZChannel>)temporaryChannel
+- (instancetype)temporaryChannel
 {
 	return [[ZZDataChannel alloc] initWithData:[NSMutableData data]];
 }

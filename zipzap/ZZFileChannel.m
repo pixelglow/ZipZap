@@ -26,7 +26,7 @@
 	return _URL;
 }
 
-- (id<ZZChannel>)temporaryChannel
+- (instancetype)temporaryChannel
 {
 	NSURL* temporaryDirectory = [[NSFileManager defaultManager] URLForDirectory:NSItemReplacementDirectory
 																	   inDomain:NSUserDomainMask
