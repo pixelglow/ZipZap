@@ -17,6 +17,7 @@ static const uInt _flushLength = 1024;
 {
 	id<ZZChannelOutput> _channelOutput;
 	NSUInteger _compressionLevel;
+	NSStreamStatus _status;
 	NSError* _error;
 	uint32_t _crc32;
 	z_stream _stream;
@@ -31,6 +32,7 @@ static const uInt _flushLength = 1024;
 		_channelOutput = channelOutput;
 		_compressionLevel = compressionLevel;
 		
+		_status = NSStreamStatusNotOpen;
 		_error = nil;
 		_crc32 = 0;
 		_stream.zalloc = Z_NULL;
@@ -52,6 +54,11 @@ static const uInt _flushLength = 1024;
 	return (uint32_t)_stream.total_in;
 }
 
+- (NSStreamStatus)streamStatus
+{
+	return _status;
+}
+
 - (NSError*)streamError
 {
 	return _error;
@@ -65,6 +72,7 @@ static const uInt _flushLength = 1024;
 				 -15,
 				 8,
 				 Z_DEFAULT_STRATEGY);
+	_status = NSStreamStatusOpen;
 }
 
 - (void)close
@@ -89,11 +97,15 @@ static const uInt _flushLength = 1024;
 																length:_flushLength - _stream.avail_out
 														  freeWhenDone:NO]
 									 error:&flushError])
+			{
+				_status = NSStreamStatusError;
 				_error = flushError;
+			}
 		}
 	}
 	
 	deflateEnd(&_stream);
+	_status = NSStreamStatusClosed;
 }
 
 - (NSInteger)write:(const uint8_t*)buffer maxLength:(NSUInteger)length
@@ -118,6 +130,7 @@ static const uInt _flushLength = 1024;
 		if (![_channelOutput writeData:outputBuffer
 								 error:&writeError])
 		{
+			_status = NSStreamStatusError;
 			_error = writeError;
 			return -1;
 		}

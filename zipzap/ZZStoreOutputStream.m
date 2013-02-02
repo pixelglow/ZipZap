@@ -14,6 +14,7 @@
 @implementation ZZStoreOutputStream
 {
 	id<ZZChannelOutput> _channelOutput;
+	NSStreamStatus _status;
 	NSError* _error;
 	uint32_t _crc32;
 	uint32_t _size;
@@ -28,11 +29,17 @@
 	{
 		_channelOutput = channelOutput;
 		
+		_status = NSStreamStatusNotOpen;
 		_error = nil;
 		_crc32 = 0;
 		_size = 0;
 	}
 	return self;
+}
+
+- (NSStreamStatus)streamStatus
+{
+	return _status;
 }
 
 - (NSError*)streamError
@@ -42,10 +49,12 @@
 
 - (void)open
 {
+	_status = NSStreamStatusOpen;
 }
 
 - (void)close
 {
+	_status = NSStreamStatusClosed;
 }
 
 - (NSInteger)write:(const uint8_t*)buffer maxLength:(NSUInteger)length
@@ -56,6 +65,7 @@
 												  freeWhenDone:NO]
 							 error:&writeError])
 	{
+		_status = NSStreamStatusError;
 		_error = writeError;
 		return -1;
 	}
