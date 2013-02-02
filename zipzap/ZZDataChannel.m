@@ -38,8 +38,9 @@
 	return YES;
 }
 
-- (void)removeTemporaries
+- (void)removeAsTemporary
 {
+	_allData = nil;
 }
 
 - (NSData*)openInput:(NSError**)error

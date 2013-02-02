@@ -283,7 +283,7 @@
 	}
 	@finally
 	{
-		[_channel removeTemporaries];
+		[temporaryChannel removeAsTemporary];
 	}
 	
 	return YES;

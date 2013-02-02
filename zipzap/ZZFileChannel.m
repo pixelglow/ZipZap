@@ -50,16 +50,10 @@
 													  error:error];
 }
 
-- (void)removeTemporaries
+- (void)removeAsTemporary
 {
-	NSFileManager* fileManager = [NSFileManager defaultManager];
-	NSURL* temporaryDirectory = [fileManager URLForDirectory:NSItemReplacementDirectory
-													inDomain:NSUserDomainMask
-										   appropriateForURL:_URL
-													  create:NO
-													   error:nil];
-	if (temporaryDirectory)
-		[fileManager removeItemAtURL:temporaryDirectory error:nil];
+	[[NSFileManager defaultManager] removeItemAtURL:[_URL URLByDeletingLastPathComponent]
+											  error:nil];
 }
 
 - (NSData*)openInput:(NSError**)error

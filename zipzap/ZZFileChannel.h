@@ -19,7 +19,7 @@
 - (instancetype)temporaryChannel:(NSError**)error;
 - (BOOL)replaceWithChannel:(id<ZZChannel>)channel
 					 error:(NSError**)error;
-- (void)removeTemporaries;
+- (void)removeAsTemporary;
 
 - (NSData*)openInput:(NSError**)error;
 - (id<ZZChannelOutput>)openOutputWithOffsetBias:(uint32_t)offsetBias
