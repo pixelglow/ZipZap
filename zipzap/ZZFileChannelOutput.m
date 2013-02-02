@@ -14,14 +14,12 @@
 	uint32_t _offsetBias;
 }
 
-- (id)initWithURL:(NSURL*)URL
-	   offsetBias:(uint32_t)offsetBias
+- (id)initWithFileDescriptor:(int)fileDescriptor
+				  offsetBias:(uint32_t)offsetBias
 {
 	if ((self = [super init]))
 	{
-		_fileDescriptor = open(URL.path.fileSystemRepresentation,
-							   O_WRONLY | O_CREAT,
-							   S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+		_fileDescriptor = fileDescriptor;
 		_offsetBias = offsetBias;
 	}
 	return self;
@@ -32,19 +30,48 @@
 	return (uint32_t)lseek(_fileDescriptor, 0, SEEK_CUR) + _offsetBias;
 }
 
-- (void)setOffset:(uint32_t)offset
+- (BOOL)seekToOffset:(uint32_t)offset
+			   error:(NSError**)error
 {
-	lseek(_fileDescriptor, offset - _offsetBias, SEEK_SET);
+	if (lseek(_fileDescriptor, offset - _offsetBias, SEEK_SET) == -1)
+	{
+		if (error)
+			*error = [NSError errorWithDomain:NSPOSIXErrorDomain code:errno userInfo:nil];
+		return NO;
+	}
+	else
+		return YES;
 }
 
-- (void)write:(NSData*)data
+- (BOOL)writeData:(NSData*)data
+			error:(NSError**)error
 {
-	write(_fileDescriptor, data.bytes, data.length);
+	if (write(_fileDescriptor, data.bytes, data.length) == -1)
+	{
+		if (error)
+			*error = [NSError errorWithDomain:NSPOSIXErrorDomain code:errno userInfo:nil];
+		return NO;
+	}
+	else
+		return YES;
+		
+}
+
+- (BOOL)truncateAtOffset:(uint32_t)offset
+				   error:(NSError**)error
+{
+	if (ftruncate(_fileDescriptor, offset) == -1)
+	{
+		if (error)
+			*error = [NSError errorWithDomain:NSPOSIXErrorDomain code:errno userInfo:nil];
+		return NO;		
+	}
+	else
+		return YES;
 }
 
 - (void)close
 {
-	ftruncate(_fileDescriptor, lseek(_fileDescriptor, 0, SEEK_CUR));
 	close(_fileDescriptor);
 }
 

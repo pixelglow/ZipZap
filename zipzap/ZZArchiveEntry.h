@@ -90,7 +90,7 @@
  */
 + (instancetype)archiveEntryWithFileName:(NSString*)fileName
 								compress:(BOOL)compress
-							 streamBlock:(BOOL(^)(NSOutputStream* stream))streamBlock;
+							 streamBlock:(BOOL(^)(NSOutputStream* stream, NSError** error))streamBlock;
 
 /**
  * Creates a new file entry from a data callback.
@@ -102,7 +102,7 @@
  */
 + (instancetype)archiveEntryWithFileName:(NSString*)fileName
 								compress:(BOOL)compress
-							   dataBlock:(NSData*(^)())dataBlock;
+							   dataBlock:(NSData*(^)(NSError** error))dataBlock;
 
 /**
  * Creates a new file entry from a data-consuming callback.
@@ -114,7 +114,7 @@
  */
 + (instancetype)archiveEntryWithFileName:(NSString*)fileName
 								compress:(BOOL)compress
-					   dataConsumerBlock:(BOOL(^)(CGDataConsumerRef dataConsumer))dataConsumerBlock;
+					   dataConsumerBlock:(BOOL(^)(CGDataConsumerRef dataConsumer, NSError** error))dataConsumerBlock;
 
 /**
  * Creates a new directory entry.
@@ -142,9 +142,9 @@
 								fileMode:(mode_t)fileMode
 							lastModified:(NSDate*)lastModified
 						compressionLevel:(NSInteger)compressionLevel
-							   dataBlock:(NSData*(^)())dataBlock
-							 streamBlock:(BOOL(^)(NSOutputStream* stream))streamBlock
-					   dataConsumerBlock:(BOOL(^)(CGDataConsumerRef dataConsumer))dataConsumerBlock;
+							   dataBlock:(NSData*(^)(NSError** error))dataBlock
+							 streamBlock:(BOOL(^)(NSOutputStream* stream, NSError** error))streamBlock
+					   dataConsumerBlock:(BOOL(^)(CGDataConsumerRef dataConsumer, NSError** error))dataConsumerBlock;
 
 /**
  * Checks whether the entry file is consistent.

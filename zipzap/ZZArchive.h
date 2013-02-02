@@ -50,7 +50,7 @@
 /**
  * The array of <ZZArchiveEntry> entries within this archive.
  */
-@property (readonly, copy, nonatomic) NSArray* entries;
+@property (readonly, nonatomic) NSArray* entries;
 
 /**
  * Creates a new archive with the zip file at the given file URL.
@@ -111,10 +111,15 @@
 @interface ZZMutableArchive : ZZArchive
 
 /**
- * The array of <ZZArchiveEntry> entries within this archive.
- * To write new entries in the zip file, set this property to a different array of <ZZArchiveEntry> entries.
- * When you set this property, any old entries should be considered invalid.
+ * Updates the entries and writes them to the source.
+ *
+ * @param newEntries The entries to update to, may contain some or all existing entries.
+ * @param error The error information when an error occurs. Pass in *nil* if you do not want error information.
+ * @return Whether the update was successful or not.
+ *
+ * @remarks If the write fails and the entries are completely new, the existing zip file will be untouched. Instead, if the write fails and the entries contain some or all existing entries, the zip file may be corrupted. In this case, the error information will report the ZZReplaceWriteErrorCode error code.
  */
-@property (copy, nonatomic) NSArray* entries;
+- (BOOL)updateEntries:(NSArray*)newEntries
+				error:(NSError**)error;
 
 @end

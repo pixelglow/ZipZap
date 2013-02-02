@@ -13,7 +13,8 @@
 @protocol ZZArchiveEntryWriter
 
 - (uint32_t)offsetToLocalFileEnd;
-- (BOOL)writeLocalFileToChannelOutput:(id<ZZChannelOutput>)channelOutput;
-- (void)writeCentralFileHeaderToChannelOutput:(id<ZZChannelOutput>)channelOutput;
-
+- (BOOL)writeLocalFileToChannelOutput:(id<ZZChannelOutput>)channelOutput
+								error:(NSError**)error;
+- (BOOL)writeCentralFileHeaderToChannelOutput:(id<ZZChannelOutput>)channelOutput
+										error:(NSError**)error;
 @end

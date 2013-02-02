@@ -17,6 +17,7 @@ static const uInt _flushLength = 1024;
 {
 	id<ZZChannelOutput> _channelOutput;
 	NSUInteger _compressionLevel;
+	NSError* _error;
 	uint32_t _crc32;
 	z_stream _stream;
 }
@@ -29,8 +30,9 @@ static const uInt _flushLength = 1024;
 	{
 		_channelOutput = channelOutput;
 		_compressionLevel = compressionLevel;
-		_crc32 = 0;
 		
+		_error = nil;
+		_crc32 = 0;
 		_stream.zalloc = Z_NULL;
 		_stream.zfree = Z_NULL;
 		_stream.opaque = Z_NULL;
@@ -48,6 +50,11 @@ static const uInt _flushLength = 1024;
 - (uint32_t)uncompressedSize
 {
 	return (uint32_t)_stream.total_in;
+}
+
+- (NSError*)streamError
+{
+	return _error;
 }
 
 - (void)open
@@ -76,9 +83,14 @@ static const uInt _flushLength = 1024;
 		flushing = deflate(&_stream, Z_FINISH) == Z_OK;
 				
 		if (_stream.avail_out < _flushLength)
-			[_channelOutput write:[NSData dataWithBytesNoCopy:flushBuffer
-													   length:_flushLength - _stream.avail_out
-												 freeWhenDone:NO]];
+		{
+			NSError* __autoreleasing flushError;
+			if (![_channelOutput writeData:[NSData dataWithBytesNoCopy:flushBuffer
+																length:_flushLength - _stream.avail_out
+														  freeWhenDone:NO]
+									 error:&flushError])
+				_error = flushError;
+		}
 	}
 	
 	deflateEnd(&_stream);
@@ -101,7 +113,15 @@ static const uInt _flushLength = 1024;
 	// write out deflated output if any
 	outputBuffer.length = maxLength - _stream.avail_out;
 	if (outputBuffer.length > 0)
-		[_channelOutput write:outputBuffer];
+	{
+		NSError* __autoreleasing writeError;
+		if (![_channelOutput writeData:outputBuffer
+								 error:&writeError])
+		{
+			_error = writeError;
+			return -1;
+		}
+	}
 
 	// accumulate checksum only on bytes that were deflated
 	NSUInteger bytesWritten = length - _stream.avail_in;

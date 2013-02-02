@@ -56,20 +56,24 @@
 }
 
 - (BOOL)writeLocalFileToChannelOutput:(id<ZZChannelOutput>)channelOutput
+								error:(NSError**)error
 {
 	if (_localFile)
 	{
 		// can't skip: save the offset, then write out the local file bytes
-		[self centralFileHeader]->relativeOffsetOfLocalHeader = channelOutput.offset;
-		[channelOutput write:_localFile];
+		[self centralFileHeader]->relativeOffsetOfLocalHeader = [channelOutput offset];
+		return [channelOutput writeData:_localFile
+								  error:error];
 	}
-	
-	return YES;
+	else
+		return YES;
 }
 
-- (void)writeCentralFileHeaderToChannelOutput:(id<ZZChannelOutput>)channelOutput
+- (BOOL)writeCentralFileHeaderToChannelOutput:(id<ZZChannelOutput>)channelOutput
+										error:(NSError**)error
 {
-	[channelOutput write:_centralFileHeader];
+	return [channelOutput writeData:_centralFileHeader
+							  error:error];
 }
 
 @end

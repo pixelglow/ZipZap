@@ -38,11 +38,15 @@ extern NSString* const ZZEntryIndexKey;
 
 typedef enum
 {
-	ZZReadErrorCode,
-	ZZBadEndOfCentralDirectoryErrorCode,
-	ZZBadCentralFileErrorCode,
-	ZZBadLocalFileErrorCode,
-	ZZBadChecksumErrorCode
+	ZZOpenReadErrorCode,
+	ZZEndOfCentralDirectoryReadErrorCode,
+	ZZCentralFileHeaderReadErrorCode,
+	ZZLocalFileReadErrorCode,
+	ZZOpenWriteErrorCode,
+	ZZLocalFileWriteErrorCode,
+	ZZCentralFileHeaderWriteErrorCode,
+	ZZEndOfCentralDirectoryWriteErrorCode,
+	ZZReplaceWriteErrorCode
 } ZZErrorCode;
 
 static inline BOOL ZZRaiseError(NSError** error, ZZErrorCode errorCode, NSDictionary* userInfo)

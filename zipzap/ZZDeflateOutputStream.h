@@ -19,6 +19,8 @@
 - (id)initWithChannelOutput:(id<ZZChannelOutput>)channelOutput
 		   compressionLevel:(NSUInteger)compressionLevel;
 
+- (NSError*)streamError;
+
 - (void)open;
 - (void)close;
 

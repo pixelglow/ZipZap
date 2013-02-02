@@ -20,6 +20,8 @@
 - (void)open;
 - (void)close;
 
+- (NSError*)streamError;
+
 - (NSInteger)write:(const uint8_t*)buffer maxLength:(NSUInteger)length;
 - (BOOL)hasSpaceAvailable;
 

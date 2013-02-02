@@ -10,9 +10,14 @@
 
 @protocol ZZChannelOutput
 
-@property (nonatomic) uint32_t offset;
+- (uint32_t)offset;
+- (BOOL)seekToOffset:(uint32_t)offset
+			   error:(NSError**)error;
 
-- (void)write:(NSData*)data;
+- (BOOL)writeData:(NSData*)data
+			error:(NSError**)error;
+- (BOOL)truncateAtOffset:(uint32_t)offset
+				   error:(NSError**)error;
 - (void)close;
 
 @end

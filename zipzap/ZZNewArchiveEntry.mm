@@ -15,18 +15,18 @@
 	mode_t _fileMode;
 	NSDate* _lastModified;
 	NSInteger _compressionLevel;
-	NSData* (^_dataBlock)();
-	BOOL (^_streamBlock)(NSOutputStream* stream);
-	BOOL (^_dataConsumerBlock)(CGDataConsumerRef dataConsumer);
+	NSData* (^_dataBlock)(NSError** error);
+	BOOL (^_streamBlock)(NSOutputStream* stream, NSError** error);
+	BOOL (^_dataConsumerBlock)(CGDataConsumerRef dataConsumer, NSError** error);
 }
 
 - (id)initWithFileName:(NSString*)fileName
 			  fileMode:(mode_t)fileMode
 		  lastModified:(NSDate*)lastModified
 	  compressionLevel:(NSInteger)compressionLevel
-			 dataBlock:(NSData*(^)())dataBlock
-		   streamBlock:(BOOL(^)(NSOutputStream* stream))streamBlock
-	 dataConsumerBlock:(BOOL(^)(CGDataConsumerRef dataConsumer))dataConsumerBlock;
+			 dataBlock:(NSData*(^)(NSError** error))dataBlock
+		   streamBlock:(BOOL(^)(NSOutputStream* stream, NSError** error))streamBlock
+	 dataConsumerBlock:(BOOL(^)(CGDataConsumerRef dataConsumer, NSError** error))dataConsumerBlock;
 {
 	if ((self = [super init]))
 	{

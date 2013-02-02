@@ -26,12 +26,13 @@
 	return nil;
 }
 
-- (instancetype)temporaryChannel
+- (instancetype)temporaryChannel:(NSError**)error
 {
 	return [[ZZDataChannel alloc] initWithData:[NSMutableData data]];
 }
 
 - (BOOL)replaceWithChannel:(id<ZZChannel>)channel
+					 error:(NSError**)error
 {
 	[(NSMutableData*)_allData setData:((ZZDataChannel*)channel)->_allData];
 	return YES;
@@ -47,6 +48,7 @@
 }
 
 - (id<ZZChannelOutput>)openOutputWithOffsetBias:(uint32_t)offsetBias
+										  error:(NSError**)error
 {
 	return [[ZZDataChannelOutput alloc] initWithData:(NSMutableData*)_allData
 										 offsetBias:offsetBias];

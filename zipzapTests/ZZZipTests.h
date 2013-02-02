@@ -44,6 +44,15 @@
 - (void)testRemovingFileZipEntryAtBack;
 - (void)testRemovingFileZipEntryAtMiddle;
 
+- (void)testInsertingFileZipEntryWithCompressedBadData;
+- (void)testInsertingFileZipEntryWithUncompressedBadData;
+- (void)testInsertingFileZipEntryWithCompressedBadStreamWriteNone;
+- (void)testInsertingFileZipEntryWithUncompressedBadStreamWriteNone;
+- (void)testInsertingFileZipEntryWithCompressedBadStreamWriteSome;
+- (void)testInsertingFileZipEntryWithUncompressedBadStreamWriteSome;
+- (void)testInsertingFileZipEntryWithCompressedBadDataConsumerWriteNone;
+- (void)testInsertingFileZipEntryWithUncompressedBadDataConsumerWriteNone;
+
 - (void)testCreatingDataZipWithNoEntries;
 - (void)testCreatingDataZipEntriesWithDirectory;
 
@@ -74,5 +83,14 @@
 - (void)testRemovingDataZipEntryAtFront;
 - (void)testRemovingDataZipEntryAtBack;
 - (void)testRemovingDataZipEntryAtMiddle;
+
+- (void)testInsertingDataZipEntryWithCompressedBadData;
+- (void)testInsertingDataZipEntryWithUncompressedBadData;
+- (void)testInsertingDataZipEntryWithCompressedBadStreamWriteNone;
+- (void)testInsertingDataZipEntryWithUncompressedBadStreamWriteNone;
+- (void)testInsertingDataZipEntryWithCompressedBadStreamWriteSome;
+- (void)testInsertingDataZipEntryWithUncompressedBadStreamWriteSome;
+- (void)testInsertingDataZipEntryWithCompressedBadDataConsumerWriteNone;
+- (void)testInsertingDataZipEntryWithUncompressedBadDataConsumerWriteNone;
 
 @end

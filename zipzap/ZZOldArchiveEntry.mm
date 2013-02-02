@@ -180,11 +180,9 @@ namespace ZZDataProvider
 		|| dataDescriptorSignature != ZZDataDescriptor::sign
 		|| localCrc32 != _centralFileHeader->crc32
 		|| localCompressedSize != _centralFileHeader->compressedSize
-		|| localUncompressedSize != _centralFileHeader->uncompressedSize)
-		ZZRaiseError(error, ZZBadLocalFileErrorCode, nil);
-	
-	if (_localFileHeader->crc32 != (uint32_t)crc32(0, _localFileHeader->fileData(), (uInt)_localFileHeader->compressedSize))
-		ZZRaiseError(error, ZZBadChecksumErrorCode, nil);
+		|| localUncompressedSize != _centralFileHeader->uncompressedSize
+		|| _localFileHeader->crc32 != (uint32_t)crc32(0, _localFileHeader->fileData(), (uInt)_localFileHeader->compressedSize))
+		ZZRaiseError(error, ZZLocalFileReadErrorCode, nil);
 
 	return YES;
 }

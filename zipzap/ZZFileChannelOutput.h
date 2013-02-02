@@ -14,9 +14,18 @@
 
 @property (nonatomic) uint32_t offset;
 
-- (id)initWithURL:(NSURL*)URL
-	   offsetBias:(uint32_t)offsetBias;
-- (void)write:(NSData*)data;
+- (id)initWithFileDescriptor:(int)fileDescriptor
+				  offsetBias:(uint32_t)offsetBias;
+
+- (uint32_t)offset;
+- (BOOL)seekToOffset:(uint32_t)offset
+			   error:(NSError**)error;
+
+- (BOOL)writeData:(NSData*)data
+			error:(NSError**)error;
+- (BOOL)truncateAtOffset:(uint32_t)offset
+				   error:(NSError**)error;
+
 - (void)close;
 
 @end

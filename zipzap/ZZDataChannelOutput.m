@@ -15,8 +15,6 @@
 	uint32_t _offset;
 }
 
-@synthesize offset = _offset;
-
 - (id)initWithData:(NSMutableData*)data
 		offsetBias:(uint32_t)offsetBias
 {
@@ -34,12 +32,15 @@
 	return _offset + _offsetBias;
 }
 
-- (void)setOffset:(uint32_t)offset
+- (BOOL)seekToOffset:(uint32_t)offset
+			   error:(NSError**)error
 {
 	_offset = offset - _offsetBias;
+	return YES;
 }
 
-- (void)write:(NSData*)data
+- (BOOL)writeData:(NSData*)data
+			error:(NSError**)error
 {
 	NSUInteger allDataLength = _allData.length;
 	NSUInteger dataLength = data.length;
@@ -57,11 +58,18 @@
 	}
 	
 	_offset = newOffset;
+	return YES;
+}
+
+- (BOOL)truncateAtOffset:(uint32_t)offset
+				   error:(NSError**)error
+{
+	_allData.length = offset;
+	return YES;
 }
 
 - (void)close
 {
-	_allData.length = _offset;
 }
 
 @end

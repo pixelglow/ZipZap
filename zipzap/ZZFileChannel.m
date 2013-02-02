@@ -6,6 +6,7 @@
 //
 //
 
+#import "ZZError.h"
 #import "ZZFileChannel.h"
 #import "ZZFileChannelOutput.h"
 
@@ -26,17 +27,19 @@
 	return _URL;
 }
 
-- (instancetype)temporaryChannel
+- (instancetype)temporaryChannel:(NSError**)error
 {
 	NSURL* temporaryDirectory = [[NSFileManager defaultManager] URLForDirectory:NSItemReplacementDirectory
 																	   inDomain:NSUserDomainMask
 															  appropriateForURL:_URL
-																		 create:YES
-																		  error:nil];
+																		 create:NO
+																		  error:error];
+	
 	return temporaryDirectory ? [[ZZFileChannel alloc] initWithURL:[temporaryDirectory URLByAppendingPathComponent:_URL.lastPathComponent]] : nil;
 }
 
 - (BOOL)replaceWithChannel:(id<ZZChannel>)channel
+					 error:(NSError**)error
 {
 	NSURL* __autoreleasing resultingURL;
 	return [[NSFileManager defaultManager] replaceItemAtURL:_URL
@@ -44,8 +47,7 @@
 											 backupItemName:nil
 													options:0
 										   resultingItemURL:&resultingURL
-													  error:nil]
-		&& [_URL isEqual:resultingURL];
+													  error:error];
 }
 
 - (void)removeTemporaries
@@ -68,9 +70,22 @@
 }
 
 - (id<ZZChannelOutput>)openOutputWithOffsetBias:(uint32_t)offsetBias
+										  error:(NSError**)error
 {
-	return [[ZZFileChannelOutput alloc] initWithURL:_URL
-										offsetBias:offsetBias];
+	int fileDescriptor =  open(_URL.path.fileSystemRepresentation,
+							   O_WRONLY | O_CREAT,
+							   S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+	if (fileDescriptor == -1)
+	{
+		if (error)
+			*error = [NSError errorWithDomain:NSPOSIXErrorDomain
+										 code:errno
+									 userInfo:nil];
+		return nil;
+	}
+	else
+		return [[ZZFileChannelOutput alloc] initWithFileDescriptor:fileDescriptor
+														offsetBias:offsetBias];
 }
 
 @end

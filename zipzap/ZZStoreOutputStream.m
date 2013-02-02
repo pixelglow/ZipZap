@@ -14,6 +14,7 @@
 @implementation ZZStoreOutputStream
 {
 	id<ZZChannelOutput> _channelOutput;
+	NSError* _error;
 	uint32_t _crc32;
 	uint32_t _size;
 }
@@ -26,10 +27,17 @@
 	if ((self = [super init]))
 	{
 		_channelOutput = channelOutput;
+		
+		_error = nil;
 		_crc32 = 0;
 		_size = 0;
 	}
 	return self;
+}
+
+- (NSError*)streamError
+{
+	return _error;
 }
 
 - (void)open
@@ -42,9 +50,15 @@
 
 - (NSInteger)write:(const uint8_t*)buffer maxLength:(NSUInteger)length
 {
-	[_channelOutput write:[NSData dataWithBytesNoCopy:(void*)buffer
-											   length:length
-										 freeWhenDone:NO]];
+	NSError* __autoreleasing writeError;
+	if (![_channelOutput writeData:[NSData dataWithBytesNoCopy:(void*)buffer
+														length:length
+												  freeWhenDone:NO]
+							 error:&writeError])
+	{
+		_error = writeError;
+		return -1;
+	}
 	
 	// accumulate checksum and size from written bytes
 	_crc32 = (uint32_t)crc32(_crc32, buffer, (uInt)length);
