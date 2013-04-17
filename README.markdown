@@ -82,6 +82,23 @@ Updating an existing zip file:
 										   }]]
 						error:nil];
 
+Unzip an existing zip file:
+
+	NSString *file_path = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:@"/temp.zip"];
+	NSFileManager *file_manager = [NSFileManager defaultManager];
+	ZZArchive *archive = [ZZArchive archiveWithContentsOfURL:[NSURL fileURLWithPath:file_path]];
+	
+	for (NSUInteger i=0, count=archive.entries.count; i<count; i++) {
+	    ZZArchiveEntry* archiveEntry = archive.entries[i];
+	    NSString *unzip_target_path = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:archiveEntry.fileName];
+	    
+	    if (archiveEntry.fileMode & S_IFDIR) {  // check if directory bit is set
+	        [file_manager createDirectoryAtPath:unzip_target_path withIntermediateDirectories:NO attributes:nil error:nil];
+	    } else {
+	        [archiveEntry.data writeToFile:unzip_target_path atomically:YES];
+	    }
+	}
+
 Require
 -------
 
