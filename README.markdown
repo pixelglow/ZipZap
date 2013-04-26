@@ -84,30 +84,30 @@ Updating an existing zip file:
 
 Unzip an existing zip file:
 
-        NSFileManager *fileManager = [NSFileManager defaultManager];
-        NSString *fileName = @"Tutorials.zip";
-        NSURL *path = [NSURL fileURLWithPath:[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0]];
-        NSURL *zipURL = [path URLByAppendingPathComponent:fileName];
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSString *fileName = @"Tutorials.zip";
+    NSURL *path = [NSURL fileURLWithPath:[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0]];
+    NSURL *zipURL = [path URLByAppendingPathComponent:fileName];
+    
+    
+    ZZArchive *archive = [ZZArchive archiveWithContentsOfURL:zipURL];
+    for (ZZArchiveEntry *entry in archive.entries) {
+        NSURL *targetPath = [path URLByAppendingPathComponent:entry.fileName];
         
-        
-        ZZArchive *archive = [ZZArchive archiveWithContentsOfURL:zipURL];
-        for (ZZArchiveEntry *entry in archive.entries) {
-            NSURL *targetPath = [path URLByAppendingPathComponent:entry.fileName];
-            
-            if (entry.fileMode & S_IFDIR) { // check if directory bit is set
-                [fileManager createDirectoryAtURL:targetPath withIntermediateDirectories:NO attributes:nil error:nil];
-            } else {
-                // Some archives don't have a seperate entry for each directory and just
-                // include the directory's name in the filename. Make sure that directory exists
-                // before writing a file into it.
-                NSURL *targetFolder = [targetPath URLByDeletingLastPathComponent];
-                if (![targetFolder checkResourceIsReachableAndReturnError:nil] == NO) {
-                    [fileManager createDirectoryAtURL:targetFolder withIntermediateDirectories:YES attributes:nil error:nil];
-                }
-                
-                [entry.data writeToURL:targetPath atomically:NO];
+        if (entry.fileMode & S_IFDIR) { // check if directory bit is set
+            [fileManager createDirectoryAtURL:targetPath withIntermediateDirectories:NO attributes:nil error:nil];
+        } else {
+            // Some archives don't have a seperate entry for each directory and just
+            // include the directory's name in the filename. Make sure that directory exists
+            // before writing a file into it.
+            NSURL *targetFolder = [targetPath URLByDeletingLastPathComponent];
+            if (![targetFolder checkResourceIsReachableAndReturnError:nil] == NO) {
+                [fileManager createDirectoryAtURL:targetFolder withIntermediateDirectories:YES attributes:nil error:nil];
             }
+            
+            [entry.data writeToURL:targetPath atomically:NO];
         }
+    }
 
 Require
 -------
