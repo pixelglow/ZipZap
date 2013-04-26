@@ -84,20 +84,30 @@ Updating an existing zip file:
 
 Unzip an existing zip file:
 
-	NSString *file_path = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:@"/temp.zip"];
-	NSFileManager *file_manager = [NSFileManager defaultManager];
-	ZZArchive *archive = [ZZArchive archiveWithContentsOfURL:[NSURL fileURLWithPath:file_path]];
-	
-	for (NSUInteger i=0, count=archive.entries.count; i<count; i++) {
-	    ZZArchiveEntry* archiveEntry = archive.entries[i];
-	    NSString *unzip_target_path = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:archiveEntry.fileName];
-	    
-	    if (archiveEntry.fileMode & S_IFDIR) {  // check if directory bit is set
-	        [file_manager createDirectoryAtPath:unzip_target_path withIntermediateDirectories:NO attributes:nil error:nil];
-	    } else {
-	        [archiveEntry.data writeToFile:unzip_target_path atomically:YES];
-	    }
-	}
+        NSFileManager *fileManager = [NSFileManager defaultManager];
+        NSString *fileName = @"Tutorials.zip";
+        NSURL *path = [NSURL fileURLWithPath:[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0]];
+        NSURL *zipURL = [path URLByAppendingPathComponent:fileName];
+        
+        
+        ZZArchive *archive = [ZZArchive archiveWithContentsOfURL:zipURL];
+        for (ZZArchiveEntry *entry in archive.entries) {
+            NSURL *targetPath = [path URLByAppendingPathComponent:entry.fileName];
+            
+            if (entry.fileMode & S_IFDIR) { // check if directory bit is set
+                [fileManager createDirectoryAtURL:targetPath withIntermediateDirectories:NO attributes:nil error:nil];
+            } else {
+                // Some archives don't have a seperate entry for each directory and just
+                // include the directory's name in the filename. Make sure that directory exists
+                // before writing a file into it.
+                NSURL *targetFolder = [targetPath URLByDeletingLastPathComponent];
+                if (![targetFolder checkResourceIsReachableAndReturnError:nil] == NO) {
+                    [fileManager createDirectoryAtURL:targetFolder withIntermediateDirectories:YES attributes:nil error:nil];
+                }
+                
+                [entry.data writeToURL:targetPath atomically:NO];
+            }
+        }
 
 Require
 -------
