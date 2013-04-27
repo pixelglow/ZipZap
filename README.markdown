@@ -101,7 +101,7 @@ Unzip an existing zip file:
             // include the directory's name in the filename. Make sure that directory exists
             // before writing a file into it.
             NSURL *targetFolder = [targetPath URLByDeletingLastPathComponent];
-            if (![targetFolder checkResourceIsReachableAndReturnError:nil] == NO) {
+            if ([targetFolder checkResourceIsReachableAndReturnError:nil] == NO) {
                 [fileManager createDirectoryAtURL:targetFolder withIntermediateDirectories:YES attributes:nil error:nil];
             }
             
