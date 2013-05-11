@@ -54,21 +54,6 @@ Writing a new zip file:
 						 ]
 					    error:nil];
 
-Writing a new zip file containing a directory:
-
-	ZZMutableArchive* newArchive = [ZZMutableArchive archiveWithContentsOfURL:[NSURL fileURLWithPath:@"/tmp/new.zip"]];
-	[newArchive updateEntries:
-						 @[
-						 [ZZArchiveEntry archiveEntryWithDirectoryName:@"folder/"],
-						 [ZZArchiveEntry archiveEntryWithFileName:@"folder/first.text"
-														 compress:YES
-														dataBlock:^(NSError** error)
-															  {
-																  return [@"hello, world" dataUsingEncoding:NSUTF8StringEncoding];
-															  }]
-						 ]
-						error:nil];
-
 Updating an existing zip file:
 
 	ZZMutableArchive* oldArchive = [ZZMutableArchive archiveWithContentsOfURL:[NSURL fileURLWithPath:@"/tmp/old.zip"]];
@@ -81,6 +66,8 @@ Updating an existing zip file:
 											   return [@"bye, world" dataUsingEncoding:NSUTF8StringEncoding];
 										   }]]
 						error:nil];
+
+Advanced uses can be found at [Recipes](https://github.com/pixelglow/zipzap/wiki/Recipes).
 
 Require
 -------
