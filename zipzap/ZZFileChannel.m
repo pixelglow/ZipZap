@@ -59,7 +59,7 @@
 - (NSData*)openInput:(NSError**)error
 {
 	return [NSData dataWithContentsOfURL:_URL
-								 options:NSDataReadingMappedAlways
+								 options:NSDataReadingMappedIfSafe
 								   error:error];
 }
 
