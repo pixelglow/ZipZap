@@ -104,6 +104,8 @@
 		ZZArchiveEntry* nextEntry = _zipFile.entries[index];
 		NSArray* nextInfo = zipInfo[index];
 		
+		STAssertTrue([nextEntry check:nil], @"zipFile.entries[%d] should check correctly.", index);
+		
 		NSDateComponents* dateComponents = [[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar]
 											components: NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit
 											| NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit
@@ -188,10 +190,10 @@
 
 }
 
-- (void) testZipFromDataConsistentWithZipFromURL
+- (void)testZipFromDataConsistentWithZipFromURL
 {
-	NSData * rawData = [NSData dataWithContentsOfURL:_zipFileURL];
-	ZZArchive * zipFileFromData = [[ZZArchive alloc] initWithData:rawData encoding:NSUTF8StringEncoding];
+	NSData* rawData = [NSData dataWithContentsOfURL:_zipFileURL];
+	ZZArchive* zipFileFromData = [[ZZArchive alloc] initWithData:rawData encoding:NSUTF8StringEncoding];
     
 	STAssertEquals(_zipFile.entries.count,
 				   zipFileFromData.entries.count,

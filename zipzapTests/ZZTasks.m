@@ -10,7 +10,6 @@
 
 @implementation ZZTasks
 
-
 + (void)zipFiles:(NSArray*)filePaths toPath:(NSString*)zipPath
 {
 	NSBundle* bundle = [NSBundle bundleForClass:self.class];
@@ -41,7 +40,7 @@
 	return testStatus == 0 || testStatus == 1;
 }
 
-+ (NSData*)unzipFile:(NSString *)filePath fromPath:(NSString *)zipPath
++ (NSData*)unzipFile:(NSString*)filePath fromPath:(NSString*)zipPath
 {
 	NSTask* unzipTask = [[NSTask alloc] init];
 	unzipTask.arguments = @[@"-p", zipPath, filePath];

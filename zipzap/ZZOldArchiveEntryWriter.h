@@ -16,7 +16,11 @@
 				localFileHeader:(struct ZZLocalFileHeader*)localFileHeader
 			shouldSkipLocalFile:(BOOL)shouldSkipLocalFile;
 
-- (BOOL)writeLocalFileToFileHandle:(NSFileHandle*)fileHandle;
-- (void)writeCentralFileHeaderToFileHandle:(NSFileHandle*)fileHandle;
+- (uint32_t)offsetToLocalFileEnd;
+- (BOOL)writeLocalFileToChannelOutput:(id<ZZChannelOutput>)channelOutput
+								error:(NSError**)error;
+- (BOOL)writeCentralFileHeaderToChannelOutput:(id<ZZChannelOutput>)channelOutput
+										error:(NSError**)error;
+
 
 @end

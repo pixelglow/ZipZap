@@ -15,6 +15,7 @@
 
 - (void)testZipEntryMetadata;
 - (void)testZipEntryConsistentWithOriginalFile;
+- (void)testZipFromDataConsistentWithZipFromURL;
 
 - (void)testExtractingZipEntryData;
 - (void)testExtractingZipEntryStreamInSmallChunks;

@@ -8,9 +8,13 @@
 
 #import <Foundation/Foundation.h>
 
+@protocol ZZChannelOutput;
+
 @protocol ZZArchiveEntryWriter
 
-- (BOOL)writeLocalFileToFileHandle:(NSFileHandle*)fileHandle;
-- (void)writeCentralFileHeaderToFileHandle:(NSFileHandle*)fileHandle;
-
+- (uint32_t)offsetToLocalFileEnd;
+- (BOOL)writeLocalFileToChannelOutput:(id<ZZChannelOutput>)channelOutput
+								error:(NSError**)error;
+- (BOOL)writeCentralFileHeaderToChannelOutput:(id<ZZChannelOutput>)channelOutput
+										error:(NSError**)error;
 @end

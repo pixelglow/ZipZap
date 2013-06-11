@@ -1,9 +1,9 @@
 //
-//  zipzap.h
+//  ZZError.h
 //  zipzap
 //
-//  Created by Glen Low on 31/10/12.
-//  Copyright (c) 2012, Pixelglow Software. All rights reserved.
+//  Created by Glen Low on 25/01/13.
+//  Copyright (c) 2013, Pixelglow Software. All rights reserved.
 //
 
 //
@@ -30,6 +30,30 @@
 //  THE POSSIBILITY OF SUCH DAMAGE.
 //
 
-#import <zipzap/ZZArchive.h>
-#import <zipzap/ZZArchiveEntry.h>
-#import <zipzap/ZZError.h>
+#import <Foundation/Foundation.h>
+
+extern NSString* const ZZErrorDomain;
+
+extern NSString* const ZZEntryIndexKey;
+
+typedef enum
+{
+	ZZOpenReadErrorCode,
+	ZZEndOfCentralDirectoryReadErrorCode,
+	ZZCentralFileHeaderReadErrorCode,
+	ZZLocalFileReadErrorCode,
+	ZZOpenWriteErrorCode,
+	ZZLocalFileWriteErrorCode,
+	ZZCentralFileHeaderWriteErrorCode,
+	ZZEndOfCentralDirectoryWriteErrorCode,
+	ZZReplaceWriteErrorCode
+} ZZErrorCode;
+
+static inline BOOL ZZRaiseError(NSError** error, ZZErrorCode errorCode, NSDictionary* userInfo)
+{
+	if (error)
+		*error = [NSError errorWithDomain:ZZErrorDomain
+									 code:errorCode
+								 userInfo:userInfo];
+	return NO;
+}

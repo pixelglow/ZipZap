@@ -8,6 +8,24 @@
 
 /* Begin PBXBuildFile section */
 		D810EBCF164B19DA00200834 /* 拉链.txt in Resources */ = {isa = PBXBuildFile; fileRef = D810EBCE164B19DA00200834 /* 拉链.txt */; };
+		D8366ACE16B1F8B400BC012E /* ZZError.h in Headers */ = {isa = PBXBuildFile; fileRef = D8366ACC16B1F8B400BC012E /* ZZError.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D8366ACF16B1F8B400BC012E /* ZZError.m in Sources */ = {isa = PBXBuildFile; fileRef = D8366ACD16B1F8B400BC012E /* ZZError.m */; };
+		D8366AD016B1F8B400BC012E /* ZZError.m in Sources */ = {isa = PBXBuildFile; fileRef = D8366ACD16B1F8B400BC012E /* ZZError.m */; };
+		D8366ADF16B3625D00BC012E /* ZZError.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8366ACC16B1F8B400BC012E /* ZZError.h */; };
+		D84A449F16A0D91B00CF00A9 /* ZZChannel.h in Headers */ = {isa = PBXBuildFile; fileRef = D84A449E16A0D91B00CF00A9 /* ZZChannel.h */; };
+		D84A44A216A0D99C00CF00A9 /* ZZChannelOutput.h in Headers */ = {isa = PBXBuildFile; fileRef = D84A44A116A0D99C00CF00A9 /* ZZChannelOutput.h */; };
+		D84A44A516A0E2F400CF00A9 /* ZZFileChannel.h in Headers */ = {isa = PBXBuildFile; fileRef = D84A44A316A0E2F300CF00A9 /* ZZFileChannel.h */; };
+		D84A44A616A0E2F400CF00A9 /* ZZFileChannel.m in Sources */ = {isa = PBXBuildFile; fileRef = D84A44A416A0E2F400CF00A9 /* ZZFileChannel.m */; };
+		D84A44A716A0E2F400CF00A9 /* ZZFileChannel.m in Sources */ = {isa = PBXBuildFile; fileRef = D84A44A416A0E2F400CF00A9 /* ZZFileChannel.m */; };
+		D84A44AA16A0E30C00CF00A9 /* ZZFileChannelOutput.h in Headers */ = {isa = PBXBuildFile; fileRef = D84A44A816A0E30B00CF00A9 /* ZZFileChannelOutput.h */; };
+		D84A44AB16A0E30C00CF00A9 /* ZZFileChannelOutput.m in Sources */ = {isa = PBXBuildFile; fileRef = D84A44A916A0E30B00CF00A9 /* ZZFileChannelOutput.m */; };
+		D84A44AC16A0E30C00CF00A9 /* ZZFileChannelOutput.m in Sources */ = {isa = PBXBuildFile; fileRef = D84A44A916A0E30B00CF00A9 /* ZZFileChannelOutput.m */; };
+		D84A44AF16A0E8D600CF00A9 /* ZZDataChannel.h in Headers */ = {isa = PBXBuildFile; fileRef = D84A44AD16A0E8D600CF00A9 /* ZZDataChannel.h */; };
+		D84A44B016A0E8D600CF00A9 /* ZZDataChannel.m in Sources */ = {isa = PBXBuildFile; fileRef = D84A44AE16A0E8D600CF00A9 /* ZZDataChannel.m */; };
+		D84A44B116A0E8D600CF00A9 /* ZZDataChannel.m in Sources */ = {isa = PBXBuildFile; fileRef = D84A44AE16A0E8D600CF00A9 /* ZZDataChannel.m */; };
+		D84A44CF16A0F8B400CF00A9 /* ZZDataChannelOutput.h in Headers */ = {isa = PBXBuildFile; fileRef = D84A44CD16A0F8B400CF00A9 /* ZZDataChannelOutput.h */; };
+		D84A44D016A0F8B400CF00A9 /* ZZDataChannelOutput.m in Sources */ = {isa = PBXBuildFile; fileRef = D84A44CE16A0F8B400CF00A9 /* ZZDataChannelOutput.m */; };
+		D84A44D116A0F8B400CF00A9 /* ZZDataChannelOutput.m in Sources */ = {isa = PBXBuildFile; fileRef = D84A44CE16A0F8B400CF00A9 /* ZZDataChannelOutput.m */; };
 		D88E8DFF16375C66002207B3 /* dog.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D88E8DFD16375C66002207B3 /* dog.jpg */; };
 		D88E8E0016375C66002207B3 /* dog.png in Resources */ = {isa = PBXBuildFile; fileRef = D88E8DFE16375C66002207B3 /* dog.png */; };
 		D88E8E07163816FD002207B3 /* ZZOldArchiveEntry.h in Headers */ = {isa = PBXBuildFile; fileRef = D88E8E05163816FD002207B3 /* ZZOldArchiveEntry.h */; };
@@ -75,6 +93,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				D8366ADF16B3625D00BC012E /* ZZError.h in CopyFiles */,
 				D8B0FD661640A77F00727A70 /* zipzap.h in CopyFiles */,
 				D8B0FD671640A77F00727A70 /* ZZArchive.h in CopyFiles */,
 				D8B0FD681640A77F00727A70 /* ZZArchiveEntry.h in CopyFiles */,
@@ -85,6 +104,18 @@
 
 /* Begin PBXFileReference section */
 		D810EBCE164B19DA00200834 /* 拉链.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "拉链.txt"; sourceTree = "<group>"; };
+		D8366ACC16B1F8B400BC012E /* ZZError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZZError.h; sourceTree = "<group>"; };
+		D8366ACD16B1F8B400BC012E /* ZZError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZZError.m; sourceTree = "<group>"; };
+		D84A449E16A0D91B00CF00A9 /* ZZChannel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZZChannel.h; sourceTree = "<group>"; };
+		D84A44A116A0D99C00CF00A9 /* ZZChannelOutput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZZChannelOutput.h; sourceTree = "<group>"; };
+		D84A44A316A0E2F300CF00A9 /* ZZFileChannel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZZFileChannel.h; sourceTree = "<group>"; };
+		D84A44A416A0E2F400CF00A9 /* ZZFileChannel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZZFileChannel.m; sourceTree = "<group>"; };
+		D84A44A816A0E30B00CF00A9 /* ZZFileChannelOutput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZZFileChannelOutput.h; sourceTree = "<group>"; };
+		D84A44A916A0E30B00CF00A9 /* ZZFileChannelOutput.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZZFileChannelOutput.m; sourceTree = "<group>"; };
+		D84A44AD16A0E8D600CF00A9 /* ZZDataChannel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZZDataChannel.h; sourceTree = "<group>"; };
+		D84A44AE16A0E8D600CF00A9 /* ZZDataChannel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZZDataChannel.m; sourceTree = "<group>"; };
+		D84A44CD16A0F8B400CF00A9 /* ZZDataChannelOutput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZZDataChannelOutput.h; sourceTree = "<group>"; };
+		D84A44CE16A0F8B400CF00A9 /* ZZDataChannelOutput.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZZDataChannelOutput.m; sourceTree = "<group>"; };
 		D88E8DFD16375C66002207B3 /* dog.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = dog.jpg; sourceTree = "<group>"; };
 		D88E8DFE16375C66002207B3 /* dog.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dog.png; sourceTree = "<group>"; };
 		D88E8E05163816FD002207B3 /* ZZOldArchiveEntry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZZOldArchiveEntry.h; sourceTree = "<group>"; };
@@ -163,6 +194,53 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2757532D16AEE58D00388503 /* Public */ = {
+			isa = PBXGroup;
+			children = (
+				D8B0FD611640A6B000727A70 /* zipzap.h */,
+				D899CFDA162C608300112F49 /* ZZArchive.h */,
+				D899CFDB162C608300112F49 /* ZZArchive.mm */,
+				D899CFD8162C608300112F49 /* ZZArchiveEntry.h */,
+				D899CFD9162C608300112F49 /* ZZArchiveEntry.m */,
+				D8366ACC16B1F8B400BC012E /* ZZError.h */,
+				D8366ACD16B1F8B400BC012E /* ZZError.m */,
+			);
+			name = Public;
+			sourceTree = "<group>";
+		};
+		2757532E16AEE59F00388503 /* Private */ = {
+			isa = PBXGroup;
+			children = (
+				D899CFE5162C608300112F49 /* ZZNewArchiveEntry.h */,
+				D899CFE6162C608300112F49 /* ZZNewArchiveEntry.mm */,
+				D88E8E05163816FD002207B3 /* ZZOldArchiveEntry.h */,
+				D88E8E06163816FD002207B3 /* ZZOldArchiveEntry.mm */,
+				D899CFE9162C608300112F49 /* ZZArchiveEntryWriter.h */,
+				D899CFE7162C608300112F49 /* ZZNewArchiveEntryWriter.h */,
+				D899CFE8162C608300112F49 /* ZZNewArchiveEntryWriter.mm */,
+				D899CFE2162C608300112F49 /* ZZOldArchiveEntryWriter.h */,
+				D899CFE3162C608300112F49 /* ZZOldArchiveEntryWriter.mm */,
+				D84A449E16A0D91B00CF00A9 /* ZZChannel.h */,
+				D84A44A116A0D99C00CF00A9 /* ZZChannelOutput.h */,
+				D84A44AD16A0E8D600CF00A9 /* ZZDataChannel.h */,
+				D84A44AE16A0E8D600CF00A9 /* ZZDataChannel.m */,
+				D84A44CD16A0F8B400CF00A9 /* ZZDataChannelOutput.h */,
+				D84A44CE16A0F8B400CF00A9 /* ZZDataChannelOutput.m */,
+				D899CFDE162C608300112F49 /* ZZDeflateOutputStream.h */,
+				D899CFDF162C608300112F49 /* ZZDeflateOutputStream.m */,
+				D84A44A316A0E2F300CF00A9 /* ZZFileChannel.h */,
+				D84A44A416A0E2F400CF00A9 /* ZZFileChannel.m */,
+				D84A44A816A0E30B00CF00A9 /* ZZFileChannelOutput.h */,
+				D84A44A916A0E30B00CF00A9 /* ZZFileChannelOutput.m */,
+				D899CFE4162C608300112F49 /* ZZHeaders.h */,
+				D899CFDC162C608300112F49 /* ZZInflateInputStream.h */,
+				D899CFDD162C608300112F49 /* ZZInflateInputStream.m */,
+				D899CFE0162C608300112F49 /* ZZStoreOutputStream.h */,
+				D899CFE1162C608300112F49 /* ZZStoreOutputStream.m */,
+			);
+			name = Private;
+			sourceTree = "<group>";
+		};
 		D899CF75162C5E8400112F49 = {
 			isa = PBXGroup;
 			children = (
@@ -173,7 +251,10 @@
 				D8A32673163C2240008606AC /* LICENSE.text */,
 				D8A32627163BFF3D008606AC /* README.markdown */,
 			);
+			indentWidth = 4;
 			sourceTree = "<group>";
+			tabWidth = 4;
+			usesTabs = 1;
 		};
 		D899CF83162C5EC100112F49 /* Products */ = {
 			isa = PBXGroup;
@@ -200,27 +281,8 @@
 		D899CF8B162C5EC100112F49 /* zipzap */ = {
 			isa = PBXGroup;
 			children = (
-				D8B0FD611640A6B000727A70 /* zipzap.h */,
-				D899CFDA162C608300112F49 /* ZZArchive.h */,
-				D899CFDB162C608300112F49 /* ZZArchive.mm */,
-				D899CFD8162C608300112F49 /* ZZArchiveEntry.h */,
-				D899CFD9162C608300112F49 /* ZZArchiveEntry.m */,
-				D899CFE9162C608300112F49 /* ZZArchiveEntryWriter.h */,
-				D899CFDE162C608300112F49 /* ZZDeflateOutputStream.h */,
-				D899CFDF162C608300112F49 /* ZZDeflateOutputStream.m */,
-				D899CFE4162C608300112F49 /* ZZHeaders.h */,
-				D899CFDC162C608300112F49 /* ZZInflateInputStream.h */,
-				D899CFDD162C608300112F49 /* ZZInflateInputStream.m */,
-				D899CFE5162C608300112F49 /* ZZNewArchiveEntry.h */,
-				D899CFE6162C608300112F49 /* ZZNewArchiveEntry.mm */,
-				D899CFE7162C608300112F49 /* ZZNewArchiveEntryWriter.h */,
-				D899CFE8162C608300112F49 /* ZZNewArchiveEntryWriter.mm */,
-				D88E8E05163816FD002207B3 /* ZZOldArchiveEntry.h */,
-				D88E8E06163816FD002207B3 /* ZZOldArchiveEntry.mm */,
-				D899CFE2162C608300112F49 /* ZZOldArchiveEntryWriter.h */,
-				D899CFE3162C608300112F49 /* ZZOldArchiveEntryWriter.mm */,
-				D899CFE0162C608300112F49 /* ZZStoreOutputStream.h */,
-				D899CFE1162C608300112F49 /* ZZStoreOutputStream.m */,
+				2757532D16AEE58D00388503 /* Public */,
+				2757532E16AEE59F00388503 /* Private */,
 				D899CF8C162C5EC100112F49 /* Supporting Files */,
 			);
 			path = zipzap;
@@ -273,6 +335,7 @@
 				D8B0FD621640A6B000727A70 /* zipzap.h in Headers */,
 				D899CFED162C608300112F49 /* ZZArchive.h in Headers */,
 				D899CFEA162C608300112F49 /* ZZArchiveEntry.h in Headers */,
+				D8366ACE16B1F8B400BC012E /* ZZError.h in Headers */,
 				D899D003162C608300112F49 /* ZZArchiveEntryWriter.h in Headers */,
 				D899CFF0162C608300112F49 /* ZZInflateInputStream.h in Headers */,
 				D899CFF3162C608300112F49 /* ZZDeflateOutputStream.h in Headers */,
@@ -282,6 +345,12 @@
 				D899CFF9162C608300112F49 /* ZZOldArchiveEntryWriter.h in Headers */,
 				D88E8E07163816FD002207B3 /* ZZOldArchiveEntry.h in Headers */,
 				D899CFF6162C608300112F49 /* ZZStoreOutputStream.h in Headers */,
+				D84A449F16A0D91B00CF00A9 /* ZZChannel.h in Headers */,
+				D84A44A216A0D99C00CF00A9 /* ZZChannelOutput.h in Headers */,
+				D84A44A516A0E2F400CF00A9 /* ZZFileChannel.h in Headers */,
+				D84A44AA16A0E30C00CF00A9 /* ZZFileChannelOutput.h in Headers */,
+				D84A44AF16A0E8D600CF00A9 /* ZZDataChannel.h in Headers */,
+				D84A44CF16A0F8B400CF00A9 /* ZZDataChannelOutput.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -415,6 +484,11 @@
 				D899CFFE162C608300112F49 /* ZZNewArchiveEntry.mm in Sources */,
 				D899D001162C608300112F49 /* ZZNewArchiveEntryWriter.mm in Sources */,
 				D88E8E08163816FD002207B3 /* ZZOldArchiveEntry.mm in Sources */,
+				D84A44A616A0E2F400CF00A9 /* ZZFileChannel.m in Sources */,
+				D84A44AB16A0E30C00CF00A9 /* ZZFileChannelOutput.m in Sources */,
+				D84A44B016A0E8D600CF00A9 /* ZZDataChannel.m in Sources */,
+				D84A44D016A0F8B400CF00A9 /* ZZDataChannelOutput.m in Sources */,
+				D8366ACF16B1F8B400BC012E /* ZZError.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -441,6 +515,11 @@
 				D899CFFF162C608300112F49 /* ZZNewArchiveEntry.mm in Sources */,
 				D899D002162C608300112F49 /* ZZNewArchiveEntryWriter.mm in Sources */,
 				D88E8E09163816FD002207B3 /* ZZOldArchiveEntry.mm in Sources */,
+				D84A44A716A0E2F400CF00A9 /* ZZFileChannel.m in Sources */,
+				D84A44AC16A0E30C00CF00A9 /* ZZFileChannelOutput.m in Sources */,
+				D84A44B116A0E8D600CF00A9 /* ZZDataChannel.m in Sources */,
+				D84A44D116A0F8B400CF00A9 /* ZZDataChannelOutput.m in Sources */,
+				D8366AD016B1F8B400BC012E /* ZZError.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -483,13 +562,13 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -516,14 +595,14 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "zipzap/zipzap-Prefix.pch";
@@ -542,14 +621,14 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = "\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"";
-				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -579,7 +658,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -587,7 +666,7 @@
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				FRAMEWORK_SEARCH_PATHS = "\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"";
-				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "zipzap/zipzap-Prefix.pch";
@@ -609,13 +688,13 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DSTROOT = /tmp/zipzap.dst;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -642,13 +721,13 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = YES;
 				DSTROOT = /tmp/zipzap.dst;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "zipzap/zipzap-Prefix.pch";
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;

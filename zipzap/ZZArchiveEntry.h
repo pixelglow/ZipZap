@@ -88,9 +88,9 @@
  * @param streamBlock The callback to write the entry's data to the stream. Returns whether the write was considered successful.
  * @return The created entry.
  */
-+ (id)archiveEntryWithFileName:(NSString*)fileName
-					  compress:(BOOL)compress
-				   streamBlock:(BOOL(^)(NSOutputStream* stream))streamBlock;
++ (instancetype)archiveEntryWithFileName:(NSString*)fileName
+								compress:(BOOL)compress
+							 streamBlock:(BOOL(^)(NSOutputStream* stream, NSError** error))streamBlock;
 
 /**
  * Creates a new file entry from a data callback.
@@ -100,9 +100,9 @@
  * @param dataBlock The callback to return the entry's data. Returns *nil* if the write was considered unsuccessful.
  * @return The created entry.
  */
-+ (id)archiveEntryWithFileName:(NSString*)fileName
-					  compress:(BOOL)compress
-					 dataBlock:(NSData*(^)())dataBlock;
++ (instancetype)archiveEntryWithFileName:(NSString*)fileName
+								compress:(BOOL)compress
+							   dataBlock:(NSData*(^)(NSError** error))dataBlock;
 
 /**
  * Creates a new file entry from a data-consuming callback.
@@ -112,9 +112,9 @@
  * @param dataConsumerBlock The callback to put the entry's data into the data consumer. Returns whether the write was considered successful.
  * @return The created entry.
  */
-+ (id)archiveEntryWithFileName:(NSString*)fileName
-					  compress:(BOOL)compress
-			 dataConsumerBlock:(BOOL(^)(CGDataConsumerRef dataConsumer))dataConsumerBlock;
++ (instancetype)archiveEntryWithFileName:(NSString*)fileName
+								compress:(BOOL)compress
+					   dataConsumerBlock:(BOOL(^)(CGDataConsumerRef dataConsumer, NSError** error))dataConsumerBlock;
 
 /**
  * Creates a new directory entry.
@@ -122,7 +122,7 @@
  * @param directoryName The directory name for the entry.
  * @return The created entry.
  */
-+ (id)archiveEntryWithDirectoryName:(NSString*)directoryName;
++ (instancetype)archiveEntryWithDirectoryName:(NSString*)directoryName;
 
 /**
  * Creates a new entry.
@@ -138,13 +138,24 @@
  * @param dataConsumerBlock The callback that writes the entry file to the data consumer. Returns whether the write was considered successful.
  * @return The created entry.
  */
-+ (id)archiveEntryWithFileName:(NSString*)fileName
-					  fileMode:(mode_t)fileMode
-				  lastModified:(NSDate*)lastModified
-			  compressionLevel:(NSInteger)compressionLevel
-					 dataBlock:(NSData*(^)())dataBlock
-				   streamBlock:(BOOL(^)(NSOutputStream* stream))streamBlock
-			 dataConsumerBlock:(BOOL(^)(CGDataConsumerRef dataConsumer))dataConsumerBlock;
++ (instancetype)archiveEntryWithFileName:(NSString*)fileName
+								fileMode:(mode_t)fileMode
+							lastModified:(NSDate*)lastModified
+						compressionLevel:(NSInteger)compressionLevel
+							   dataBlock:(NSData*(^)(NSError** error))dataBlock
+							 streamBlock:(BOOL(^)(NSOutputStream* stream, NSError** error))streamBlock
+					   dataConsumerBlock:(BOOL(^)(CGDataConsumerRef dataConsumer, NSError** error))dataConsumerBlock;
+
+/**
+ * Checks whether the entry file is consistent.
+ *
+ * @param The error information when an error occurs. Pass in *nil* if you do not want error information.
+ * @return Whether entry file is consistent or not.
+ *
+ * @remarks Checks whether the local file entry is consistent with the central file entry and also that
+ * the recorded and actual checksums of the data agree.
+ */
+- (BOOL)check:(NSError**)error;
 
 /**
  * Creates a stream to represent the entry file.

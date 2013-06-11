@@ -43,9 +43,14 @@
 @property (readonly, nonatomic) NSURL* URL;
 
 /**
+ * The uninterpreted contents of this archive.
+ */
+@property (readonly, nonatomic) NSData* contents;
+
+/**
  * The array of <ZZArchiveEntry> entries within this archive.
  */
-@property (readonly, copy, nonatomic) NSArray* entries;
+@property (readonly, nonatomic) NSArray* entries;
 
 /**
  * Creates a new archive with the zip file at the given file URL.
@@ -55,7 +60,7 @@
  * @param URL The file URL of the zip file.
  * @return The initialized archive. If the zip file does not exist, this will have no entries.
  */
-+ (id)archiveWithContentsOfURL:(NSURL*)URL;
++ (instancetype)archiveWithContentsOfURL:(NSURL*)URL;
 
 /**
  * Creates a new archive with the raw zip file data given.
@@ -65,7 +70,7 @@
  * @param data The raw data of the zip file
  * @return The initialized archive.
  */
-+ (id) archiveWithData:(NSData*)data;
++ (instancetype)archiveWithData:(NSData*)data;
 
 /**
  * Initializes a new archive with the zip file at the given file URL.
@@ -84,13 +89,19 @@
  * @param encoding The encoding for reading entry file names and comments.
  * @return The initialized archive.
  */
-- (id) initWithData:(NSData*)data
-		   encoding:(NSStringEncoding)encoding;
+- (id)initWithData:(NSData*)data
+		  encoding:(NSStringEncoding)encoding;
 
 /**
- * Reloads the entries from the URL.
+ * Loads the contents and entries from the source. Any old entries will then be considered invalid.
+ *
+ * @param error The error information when an error occurs. Pass in *nil* if you do not want error information.
+ * @return Whether the load was successful or not.
+ *
+ * @remarks If you access <entries> or <contents>, the receiver already automatically loads them if needed.
+ * You only need to call this method to force a reload from source, or to check for errors when loading.
  */
-- (void)reload;
+- (BOOL)load:(NSError**)error;
 
 @end
 
@@ -100,9 +111,15 @@
 @interface ZZMutableArchive : ZZArchive
 
 /**
- * The array of <ZZArchiveEntry> entries within this archive.
- * To write new entries in the zip file, set this property to a different array of <ZZArchiveEntry> entries.
+ * Updates the entries and writes them to the source.
+ *
+ * @param newEntries The entries to update to, may contain some or all existing entries.
+ * @param error The error information when an error occurs. Pass in *nil* if you do not want error information.
+ * @return Whether the update was successful or not.
+ *
+ * @remarks If the write fails and the entries are completely new, the existing zip file will be untouched. Instead, if the write fails and the entries contain some or all existing entries, the zip file may be corrupted. In this case, the error information will report the ZZReplaceWriteErrorCode error code.
  */
-@property (copy, nonatomic) NSArray* entries;
+- (BOOL)updateEntries:(NSArray*)newEntries
+				error:(NSError**)error;
 
 @end

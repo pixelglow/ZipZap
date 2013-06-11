@@ -8,28 +8,33 @@
 
 #include <zlib.h>
 
+#import "ZZChannelOutput.h"
 #import "ZZDeflateOutputStream.h"
 
 static const uInt _flushLength = 1024;
 
 @implementation ZZDeflateOutputStream
 {
-	NSFileHandle* _fileHandle;
+	id<ZZChannelOutput> _channelOutput;
 	NSUInteger _compressionLevel;
+	NSStreamStatus _status;
+	NSError* _error;
 	uint32_t _crc32;
 	z_stream _stream;
 }
 
 @synthesize crc32 = _crc32;
 
-- (id)initWithFileHandle:(NSFileHandle*)fileHandle compressionLevel:(NSUInteger)compressionLevel
+- (id)initWithChannelOutput:(id<ZZChannelOutput>)channelOutput compressionLevel:(NSUInteger)compressionLevel
 {
 	if ((self = [super init]))
 	{
-		_fileHandle = fileHandle;
+		_channelOutput = channelOutput;
 		_compressionLevel = compressionLevel;
-		_crc32 = 0;
 		
+		_status = NSStreamStatusNotOpen;
+		_error = nil;
+		_crc32 = 0;
 		_stream.zalloc = Z_NULL;
 		_stream.zfree = Z_NULL;
 		_stream.opaque = Z_NULL;
@@ -49,6 +54,16 @@ static const uInt _flushLength = 1024;
 	return (uint32_t)_stream.total_in;
 }
 
+- (NSStreamStatus)streamStatus
+{
+	return _status;
+}
+
+- (NSError*)streamError
+{
+	return _error;
+}
+
 - (void)open
 {
 	deflateInit2(&_stream,
@@ -57,6 +72,7 @@ static const uInt _flushLength = 1024;
 				 -15,
 				 8,
 				 Z_DEFAULT_STRATEGY);
+	_status = NSStreamStatusOpen;
 }
 
 - (void)close
@@ -75,12 +91,21 @@ static const uInt _flushLength = 1024;
 		flushing = deflate(&_stream, Z_FINISH) == Z_OK;
 				
 		if (_stream.avail_out < _flushLength)
-			[_fileHandle writeData:[NSData dataWithBytesNoCopy:flushBuffer
-														length:_flushLength - _stream.avail_out
-												  freeWhenDone:NO]];
+		{
+			NSError* __autoreleasing flushError;
+			if (![_channelOutput writeData:[NSData dataWithBytesNoCopy:flushBuffer
+																length:_flushLength - _stream.avail_out
+														  freeWhenDone:NO]
+									 error:&flushError])
+			{
+				_status = NSStreamStatusError;
+				_error = flushError;
+			}
+		}
 	}
 	
 	deflateEnd(&_stream);
+	_status = NSStreamStatusClosed;
 }
 
 - (NSInteger)write:(const uint8_t*)buffer maxLength:(NSUInteger)length
@@ -100,7 +125,16 @@ static const uInt _flushLength = 1024;
 	// write out deflated output if any
 	outputBuffer.length = maxLength - _stream.avail_out;
 	if (outputBuffer.length > 0)
-		[_fileHandle writeData:outputBuffer];
+	{
+		NSError* __autoreleasing writeError;
+		if (![_channelOutput writeData:outputBuffer
+								 error:&writeError])
+		{
+			_status = NSStreamStatusError;
+			_error = writeError;
+			return -1;
+		}
+	}
 
 	// accumulate checksum only on bytes that were deflated
 	NSUInteger bytesWritten = length - _stream.avail_in;

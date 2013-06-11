@@ -43,21 +43,31 @@ Reading an existing zip file:
 Writing a new zip file:
 
 	ZZMutableArchive* newArchive = [ZZMutableArchive archiveWithContentsOfURL:[NSURL fileURLWithPath:@"/tmp/new.zip"]];
-	newArchive.entries =
-	@[
-		[ZZArchiveEntry archiveEntryWithFileName:@"first.text"
-										compress:YES
-									   dataBlock:^{ return [@"hello, world" dataUsingEncoding:NSUTF8StringEncoding]; }]
-	];
-	
+	[newArchive updateEntries:
+						 @[
+						 [ZZArchiveEntry archiveEntryWithFileName:@"first.text"
+														 compress:YES
+														dataBlock:^(NSError** error)
+															  {
+																  return [@"hello, world" dataUsingEncoding:NSUTF8StringEncoding];
+															  }]
+						 ]
+					    error:nil];
+
 Updating an existing zip file:
 
 	ZZMutableArchive* oldArchive = [ZZMutableArchive archiveWithContentsOfURL:[NSURL fileURLWithPath:@"/tmp/old.zip"]];
-	oldArchive.entries = [oldArchive.entries arrayByAddingObject:
-		[ZZArchiveEntry archiveEntryWithFileName:@"second.text"
-										compress:YES
-									   dataBlock:^{ return [@"bye, world" dataUsingEncoding:NSUTF8StringEncoding]; }]
-	];
+	[oldArchive updateEntries:
+	 [oldArchive.entries arrayByAddingObject:
+	  [ZZArchiveEntry archiveEntryWithFileName:@"second.text"
+									  compress:YES
+									 dataBlock:^(NSError** error)
+										   {
+											   return [@"bye, world" dataUsingEncoding:NSUTF8StringEncoding];
+										   }]]
+						error:nil];
+
+Advanced uses can be found at [Recipes](https://github.com/pixelglow/zipzap/wiki/Recipes).
 
 Require
 -------
