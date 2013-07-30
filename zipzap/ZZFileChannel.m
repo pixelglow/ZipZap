@@ -63,8 +63,7 @@
 								   error:error];
 }
 
-- (id<ZZChannelOutput>)openOutputWithOffsetBias:(uint32_t)offsetBias
-										  error:(NSError**)error
+- (id<ZZChannelOutput>)openOutput:(NSError**)error
 {
 	int fileDescriptor =  open(_URL.path.fileSystemRepresentation,
 							   O_WRONLY | O_CREAT,
@@ -78,8 +77,7 @@
 		return nil;
 	}
 	else
-		return [[ZZFileChannelOutput alloc] initWithFileDescriptor:fileDescriptor
-														offsetBias:offsetBias];
+		return [[ZZFileChannelOutput alloc] initWithFileDescriptor:fileDescriptor];
 }
 
 @end

@@ -172,12 +172,13 @@ namespace ZZDataConsumer
 }
 
 - (BOOL)writeLocalFileToChannelOutput:(id<ZZChannelOutput>)channelOutput
+					  withInitialSkip:(uint32_t)initialSkip
 								error:(NSError**)error
 {
 	ZZCentralFileHeader* centralFileHeader = [self centralFileHeader];
 	
 	// save current offset, then write out all of local file to the file handle
-	centralFileHeader->relativeOffsetOfLocalHeader = [channelOutput offset];
+	centralFileHeader->relativeOffsetOfLocalHeader = [channelOutput offset] + initialSkip;
 	if (![channelOutput writeData:_localFileHeader
 							error:error])
 		return NO;

@@ -56,12 +56,13 @@
 }
 
 - (BOOL)writeLocalFileToChannelOutput:(id<ZZChannelOutput>)channelOutput
+					  withInitialSkip:(uint32_t)initialSkip
 								error:(NSError**)error
 {
 	if (_localFile)
 	{
 		// can't skip: save the offset, then write out the local file bytes
-		[self centralFileHeader]->relativeOffsetOfLocalHeader = [channelOutput offset];
+		[self centralFileHeader]->relativeOffsetOfLocalHeader = [channelOutput offset] + initialSkip;
 		return [channelOutput writeData:_localFile
 								  error:error];
 	}

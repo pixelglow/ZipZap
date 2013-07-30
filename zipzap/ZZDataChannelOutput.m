@@ -11,17 +11,14 @@
 @implementation ZZDataChannelOutput
 {
 	NSMutableData* _allData;
-	uint32_t _offsetBias;
 	uint32_t _offset;
 }
 
 - (id)initWithData:(NSMutableData*)data
-		offsetBias:(uint32_t)offsetBias
 {
 	if ((self = [super init]))
 	{
 		_allData = data;
-		_offsetBias = offsetBias;
 		_offset = 0U;
 	}
 	return self;
@@ -29,13 +26,13 @@
 
 - (uint32_t)offset
 {
-	return _offset + _offsetBias;
+	return _offset;
 }
 
 - (BOOL)seekToOffset:(uint32_t)offset
 			   error:(NSError**)error
 {
-	_offset = offset - _offsetBias;
+	_offset = offset;
 	return YES;
 }
 

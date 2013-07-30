@@ -48,11 +48,9 @@
 	return _allData;
 }
 
-- (id<ZZChannelOutput>)openOutputWithOffsetBias:(uint32_t)offsetBias
-										  error:(NSError**)error
+- (id<ZZChannelOutput>)openOutput:(NSError**)error
 {
-	return [[ZZDataChannelOutput alloc] initWithData:(NSMutableData*)_allData
-										 offsetBias:offsetBias];
+	return [[ZZDataChannelOutput alloc] initWithData:(NSMutableData*)_allData];
 }
 
 @end

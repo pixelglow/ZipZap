@@ -11,29 +11,24 @@
 @implementation ZZFileChannelOutput
 {
 	int _fileDescriptor;
-	uint32_t _offsetBias;
 }
 
 - (id)initWithFileDescriptor:(int)fileDescriptor
-				  offsetBias:(uint32_t)offsetBias
 {
 	if ((self = [super init]))
-	{
 		_fileDescriptor = fileDescriptor;
-		_offsetBias = offsetBias;
-	}
 	return self;
 }
 
 - (uint32_t)offset
 {
-	return (uint32_t)lseek(_fileDescriptor, 0, SEEK_CUR) + _offsetBias;
+	return (uint32_t)lseek(_fileDescriptor, 0, SEEK_CUR);
 }
 
 - (BOOL)seekToOffset:(uint32_t)offset
 			   error:(NSError**)error
 {
-	if (lseek(_fileDescriptor, offset - _offsetBias, SEEK_SET) == -1)
+	if (lseek(_fileDescriptor, offset, SEEK_SET) == -1)
 	{
 		if (error)
 			*error = [NSError errorWithDomain:NSPOSIXErrorDomain code:errno userInfo:nil];

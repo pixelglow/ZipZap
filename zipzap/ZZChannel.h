@@ -20,7 +20,6 @@
 - (void)removeAsTemporary;
 
 - (NSData*)openInput:(NSError**)error;
-- (id<ZZChannelOutput>)openOutputWithOffsetBias:(uint32_t)offsetBias
-										  error:(NSError**)error;
+- (id<ZZChannelOutput>)openOutput:(NSError**)error;
 
 @end

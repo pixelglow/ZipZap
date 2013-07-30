@@ -14,8 +14,7 @@
 
 @property (nonatomic) uint32_t offset;
 
-- (id)initWithFileDescriptor:(int)fileDescriptor
-				  offsetBias:(uint32_t)offsetBias;
+- (id)initWithFileDescriptor:(int)fileDescriptor;
 
 - (uint32_t)offset;
 - (BOOL)seekToOffset:(uint32_t)offset

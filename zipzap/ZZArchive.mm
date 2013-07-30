@@ -205,8 +205,7 @@
 	@try
 	{
 		// open the channel
-		id<ZZChannelOutput> temporaryChannelOutput = [temporaryChannel openOutputWithOffsetBias:initialSkip
-																						  error:&underlyingError];
+		id<ZZChannelOutput> temporaryChannelOutput = [temporaryChannel openOutput:&underlyingError];
 		if (!temporaryChannelOutput)
 			return ZZRaiseError(error, ZZOpenWriteErrorCode, @{NSUnderlyingErrorKey : underlyingError});
 		
@@ -215,6 +214,7 @@
 			// write out local files
 			for (NSUInteger index = skipIndex; index < newEntriesCount; ++index)
 				if (![[newEntryWriters objectAtIndex:index] writeLocalFileToChannelOutput:temporaryChannelOutput
+																		  withInitialSkip:initialSkip
 																					error:&underlyingError])
 					return ZZRaiseError(error, ZZLocalFileWriteErrorCode, @{NSUnderlyingErrorKey : underlyingError, ZZEntryIndexKey : @(index)});
 			
@@ -226,7 +226,7 @@
 			endOfCentralDirectory.totalNumberOfEntriesInTheCentralDirectoryOnThisDisk
 				= endOfCentralDirectory.totalNumberOfEntriesInTheCentralDirectory
 				= newEntriesCount;
-			endOfCentralDirectory.offsetOfStartOfCentralDirectoryWithRespectToTheStartingDiskNumber = [temporaryChannelOutput offset];
+			endOfCentralDirectory.offsetOfStartOfCentralDirectoryWithRespectToTheStartingDiskNumber = [temporaryChannelOutput offset] + initialSkip;
 			
 			// write out central file headers
 			for (NSUInteger index = 0; index < newEntriesCount; ++index)
@@ -234,7 +234,7 @@
 																							error:&underlyingError])
 					return ZZRaiseError(error, ZZCentralFileHeaderWriteErrorCode, @{NSUnderlyingErrorKey : underlyingError, ZZEntryIndexKey : @(index)});
 			
-			endOfCentralDirectory.sizeOfTheCentralDirectory = [temporaryChannelOutput offset]
+			endOfCentralDirectory.sizeOfTheCentralDirectory = [temporaryChannelOutput offset] + initialSkip
 				- endOfCentralDirectory.offsetOfStartOfCentralDirectoryWithRespectToTheStartingDiskNumber;
 			endOfCentralDirectory.zipFileCommentLength = 0;
 			
@@ -253,8 +253,7 @@
 		if (initialSkip)
 		{
 			// something skipped, append the temporary channel contents at the skipped offset
-			id<ZZChannelOutput> channelOutput = [_channel openOutputWithOffsetBias:0
-																			 error:&underlyingError];
+			id<ZZChannelOutput> channelOutput = [_channel openOutput:&underlyingError];
 			if (!channelOutput)
 				return ZZRaiseError(error, ZZReplaceWriteErrorCode, @{NSUnderlyingErrorKey : underlyingError});
 
