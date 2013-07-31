@@ -43,12 +43,12 @@
 	_allData = nil;
 }
 
-- (NSData*)openInput:(NSError**)error
+- (NSData*)newInput:(NSError**)error
 {
 	return _allData;
 }
 
-- (id<ZZChannelOutput>)openOutput:(NSError**)error
+- (id<ZZChannelOutput>)newOutput:(NSError**)error
 {
 	return [[ZZDataChannelOutput alloc] initWithData:(NSMutableData*)_allData];
 }

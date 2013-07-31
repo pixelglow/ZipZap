@@ -113,7 +113,7 @@ static const uInt _flushLength = 1024;
 	// allocate an output buffer large enough to fit deflated output
 	// NOTE: we ensure that we can deflate at least one byte, since write:maxLength: need not deflate all bytes
 	uLong maxLength = deflateBound(&_stream, length);
-	NSMutableData* outputBuffer = [NSMutableData dataWithLength:maxLength];
+	NSMutableData* outputBuffer = [[NSMutableData alloc] initWithLength:maxLength];
 	
 	// deflate buffer to output buffer
 	_stream.next_in = (Bytef*)buffer;

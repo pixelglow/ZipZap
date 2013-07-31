@@ -56,14 +56,14 @@
 											  error:nil];
 }
 
-- (NSData*)openInput:(NSError**)error
+- (NSData*)newInput:(NSError**)error
 {
-	return [NSData dataWithContentsOfURL:_URL
-								 options:NSDataReadingMappedAlways
-								   error:error];
+	return [[NSData alloc] initWithContentsOfURL:_URL
+										 options:NSDataReadingMappedAlways
+										   error:error];
 }
 
-- (id<ZZChannelOutput>)openOutput:(NSError**)error
+- (id<ZZChannelOutput>)newOutput:(NSError**)error
 {
 	int fileDescriptor =  open(_URL.path.fileSystemRepresentation,
 							   O_WRONLY | O_CREAT,

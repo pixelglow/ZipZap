@@ -92,7 +92,7 @@
 {
 	// memory-map the contents from the zip file
 	NSError* __autoreleasing readError;
-	NSData* contents = [_channel openInput:&readError];
+	NSData* contents = [_channel newInput:&readError];
 	if (!contents)
 		return ZZRaiseError(error, ZZOpenReadErrorCode, @{NSUnderlyingErrorKey : readError});
 	
@@ -185,7 +185,7 @@
     
     [newEntries enumerateObjectsUsingBlock:^(ZZArchiveEntry *anEntry, NSUInteger index, BOOL* stop)
      {
-         [newEntryWriters addObject:[anEntry writerCanSkipLocalFile:index < skipIndex]];
+         [newEntryWriters addObject:[anEntry newWriterCanSkipLocalFile:index < skipIndex]];
      }];
 	
 	// clear entries + content
@@ -205,7 +205,7 @@
 	@try
 	{
 		// open the channel
-		id<ZZChannelOutput> temporaryChannelOutput = [temporaryChannel openOutput:&underlyingError];
+		id<ZZChannelOutput> temporaryChannelOutput = [temporaryChannel newOutput:&underlyingError];
 		if (!temporaryChannelOutput)
 			return ZZRaiseError(error, ZZOpenWriteErrorCode, @{NSUnderlyingErrorKey : underlyingError});
 		
@@ -253,13 +253,13 @@
 		if (initialSkip)
 		{
 			// something skipped, append the temporary channel contents at the skipped offset
-			id<ZZChannelOutput> channelOutput = [_channel openOutput:&underlyingError];
+			id<ZZChannelOutput> channelOutput = [_channel newOutput:&underlyingError];
 			if (!channelOutput)
 				return ZZRaiseError(error, ZZReplaceWriteErrorCode, @{NSUnderlyingErrorKey : underlyingError});
 
 			@try
 			{
-				NSData* channelInput = [temporaryChannel openInput:&underlyingError];
+				NSData* channelInput = [temporaryChannel newInput:&underlyingError];
 				if (!channelInput
 					|| ![channelOutput seekToOffset:initialSkip
 											  error:&underlyingError]

@@ -178,6 +178,6 @@
  */
 - (CGDataProviderRef)newDataProvider;
 
-- (id<ZZArchiveEntryWriter>)writerCanSkipLocalFile:(BOOL)canSkipLocalFile;
+- (id<ZZArchiveEntryWriter>)newWriterCanSkipLocalFile:(BOOL)canSkipLocalFile;
 
 @end

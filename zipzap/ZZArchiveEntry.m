@@ -135,7 +135,7 @@
 	return NULL;
 }
 
-- (id<ZZArchiveEntryWriter>)writerCanSkipLocalFile:(BOOL)canSkipLocalFile
+- (id<ZZArchiveEntryWriter>)newWriterCanSkipLocalFile:(BOOL)canSkipLocalFile
 {
 	return nil;
 }

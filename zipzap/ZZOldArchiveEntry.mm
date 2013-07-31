@@ -248,7 +248,7 @@ namespace ZZDataProvider
 	}
 }
 
-- (id<ZZArchiveEntryWriter>)writerCanSkipLocalFile:(BOOL)canSkipLocalFile
+- (id<ZZArchiveEntryWriter>)newWriterCanSkipLocalFile:(BOOL)canSkipLocalFile
 {
 	return [[ZZOldArchiveEntryWriter alloc] initWithCentralFileHeader:_centralFileHeader
 												  localFileHeader:_localFileHeader

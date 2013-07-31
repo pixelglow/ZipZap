@@ -61,7 +61,7 @@
 	return _fileName;
 }
 
-- (id<ZZArchiveEntryWriter>)writerCanSkipLocalFile:(BOOL)canSkipLocalFile
+- (id<ZZArchiveEntryWriter>)newWriterCanSkipLocalFile:(BOOL)canSkipLocalFile
 {
 	return [[ZZNewArchiveEntryWriter alloc] initWithFileName:_fileName
 												fileMode:_fileMode

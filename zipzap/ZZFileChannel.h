@@ -21,7 +21,7 @@
 					 error:(NSError**)error;
 - (void)removeAsTemporary;
 
-- (NSData*)openInput:(NSError**)error;
-- (id<ZZChannelOutput>)openOutput:(NSError**)error;
+- (NSData*)newInput:(NSError**)error;
+- (id<ZZChannelOutput>)newOutput:(NSError**)error;
 
 @end

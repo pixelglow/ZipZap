@@ -57,8 +57,8 @@ namespace ZZDataConsumer
 	{
 		// allocate central, local file headers with enough space for file name
 		NSUInteger fileNameLength = [fileName lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
-		_centralFileHeader = [NSMutableData dataWithLength:sizeof(ZZCentralFileHeader) + fileNameLength];
-		_localFileHeader = [NSMutableData dataWithLength:sizeof(ZZLocalFileHeader) + fileNameLength];
+		_centralFileHeader = [[NSMutableData alloc] initWithLength:sizeof(ZZCentralFileHeader) + fileNameLength];
+		_localFileHeader = [[NSMutableData alloc] initWithLength:sizeof(ZZLocalFileHeader) + fileNameLength];
 		
 		ZZCentralFileHeader* centralFileHeader = [self centralFileHeader];
 		centralFileHeader->signature = ZZCentralFileHeader::sign;
@@ -196,17 +196,30 @@ namespace ZZDataConsumer
 		{
 			if (_dataBlock)
 			{
-				NSData* data = _dataBlock(error);
-				if (!data)
+				NSError* err = nil;
+				BOOL bad = YES;
+				@autoreleasepool
+				{
+					NSData* data = _dataBlock(&err);
+					if (data)
+					{
+						const uint8_t* bytes;
+						NSUInteger bytesToWrite;
+						NSUInteger bytesWritten;
+						for (bytes = (const uint8_t*)data.bytes, bytesToWrite = data.length;
+							 bytesToWrite > 0;
+							 bytes += bytesWritten, bytesToWrite -= bytesWritten)
+							bytesWritten = [outputStream write:bytes maxLength:bytesToWrite];
+						
+						bad = NO;
+					}
+				}
+				if (bad)
+				{
+					*error = err;
 					return NO;
-
-				const uint8_t* bytes;
-				NSUInteger bytesToWrite;
-				NSUInteger bytesWritten;
-				for (bytes = (const uint8_t*)data.bytes, bytesToWrite = data.length;
-					 bytesToWrite > 0;
-					 bytes += bytesWritten, bytesToWrite -= bytesWritten)
-					bytesWritten = [outputStream write:bytes maxLength:bytesToWrite];
+				}
+				
 			}
 			else if (_streamBlock)
 			{
@@ -240,14 +253,25 @@ namespace ZZDataConsumer
 	{
 		if (_dataBlock)
 		{
-			// if data block, write the data directly to output file handle
-			NSData* data = _dataBlock(error);
-			if (!data
-				|| ![channelOutput writeData:data error:error])
-				return NO;
+			NSError* err = nil;
+			BOOL bad = YES;
+			@autoreleasepool
+			{
+				// if data block, write the data directly to output file handle
+				NSData* data = _dataBlock(&err);
+				if (data && [channelOutput writeData:data error:&err])
+				{
+					dataDescriptor.compressedSize = dataDescriptor.uncompressedSize = (uint32_t)data.length;
+					dataDescriptor.crc32 = (uint32_t)crc32(0, (const Bytef*)data.bytes, dataDescriptor.uncompressedSize);
+					bad = NO;
+				}
+			}
 			
-			dataDescriptor.compressedSize = dataDescriptor.uncompressedSize = (uint32_t)data.length;
-			dataDescriptor.crc32 = (uint32_t)crc32(0, (const Bytef*)data.bytes, dataDescriptor.uncompressedSize);
+			if (bad)
+			{
+				*error = err;
+				return NO;
+			}
 		}
 		else
 		{
