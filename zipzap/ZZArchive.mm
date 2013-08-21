@@ -188,10 +188,6 @@
          [newEntryWriters addObject:[anEntry newWriterCanSkipLocalFile:index < skipIndex]];
      }];
 	
-	// clear entries + content
-	_contents = nil;
-	_entries = nil;
-	
 	// skip the initial matching entries
 	uint32_t initialSkip = skipIndex > 0 ? [[newEntryWriters objectAtIndex:skipIndex - 1] offsetToLocalFileEnd] : 0;
 
@@ -279,6 +275,10 @@
 			if (![_channel replaceWithChannel:temporaryChannel
 										error:&underlyingError])
 				return ZZRaiseError(error, ZZReplaceWriteErrorCode, @{NSUnderlyingErrorKey : underlyingError});
+		
+		// clear entries + content
+		_contents = nil;
+		_entries = nil;
 	}
 	@finally
 	{
