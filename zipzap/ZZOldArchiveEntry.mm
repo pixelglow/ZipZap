@@ -53,7 +53,6 @@ namespace ZZDataProvider
 
 - (NSData*)fileData;
 - (NSString*)stringWithBytes:(uint8_t*)bytes length:(NSUInteger)length;
-- (id<ZZArchiveEntryWriter>)writerCanSkipLocalFile:(BOOL)canSkipLocalFile;
 
 @end
 
