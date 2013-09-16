@@ -6,9 +6,9 @@
 //
 //
 
-#import <SenTestingKit/SenTestingKit.h>
+#import <XCTest/XCTest.h>
 
-@interface ZZZipTests : SenTestCase
+@interface ZZZipTests : XCTestCase
 
 - (void)setUp;
 - (void)tearDown;

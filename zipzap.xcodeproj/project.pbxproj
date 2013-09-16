@@ -33,7 +33,6 @@
 		D88E8E09163816FD002207B3 /* ZZOldArchiveEntry.mm in Sources */ = {isa = PBXBuildFile; fileRef = D88E8E06163816FD002207B3 /* ZZOldArchiveEntry.mm */; };
 		D88E8E0A16394A24002207B3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D899CF8A162C5EC100112F49 /* Foundation.framework */; };
 		D88E8E0C16394B49002207B3 /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D88E8E0B16394B49002207B3 /* ApplicationServices.framework */; };
-		D899CF98162C5EC100112F49 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D899CF97162C5EC100112F49 /* SenTestingKit.framework */; };
 		D899CF9C162C5EC100112F49 /* libzipzap.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D899CF82162C5EC100112F49 /* libzipzap.a */; };
 		D899CFA2162C5EC100112F49 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D899CFA0162C5EC100112F49 /* InfoPlist.strings */; };
 		D899CFEA162C608300112F49 /* ZZArchiveEntry.h in Headers */ = {isa = PBXBuildFile; fileRef = D899CFD8162C608300112F49 /* ZZArchiveEntry.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -74,6 +73,7 @@
 		D8B0FD661640A77F00727A70 /* zipzap.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8B0FD611640A6B000727A70 /* zipzap.h */; };
 		D8B0FD671640A77F00727A70 /* ZZArchive.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D899CFDA162C608300112F49 /* ZZArchive.h */; };
 		D8B0FD681640A77F00727A70 /* ZZArchiveEntry.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D899CFD8162C608300112F49 /* ZZArchiveEntry.h */; };
+		D8E3C26A17E6FF0E007D0020 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8E3C26917E6FF0E007D0020 /* XCTest.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -124,7 +124,7 @@
 		D899CF82162C5EC100112F49 /* libzipzap.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libzipzap.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		D899CF8A162C5EC100112F49 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		D899CF8D162C5EC100112F49 /* zipzap-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "zipzap-Prefix.pch"; sourceTree = "<group>"; };
-		D899CF96162C5EC100112F49 /* zipzapTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = zipzapTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		D899CF96162C5EC100112F49 /* zipzapTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = zipzapTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D899CF97162C5EC100112F49 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		D899CF9F162C5EC100112F49 /* zipzapTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "zipzapTests-Info.plist"; sourceTree = "<group>"; };
 		D899CFA1162C5EC100112F49 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -161,6 +161,7 @@
 		D8A32627163BFF3D008606AC /* README.markdown */ = {isa = PBXFileReference; lastKnownFileType = text; path = README.markdown; sourceTree = "<group>"; };
 		D8A32673163C2240008606AC /* LICENSE.text */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE.text; sourceTree = "<group>"; };
 		D8B0FD611640A6B000727A70 /* zipzap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zipzap.h; sourceTree = "<group>"; };
+		D8E3C26917E6FF0E007D0020 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -178,8 +179,8 @@
 				D899D01E162CD57700112F49 /* libc++.dylib in Frameworks */,
 				D899D01C162CD51A00112F49 /* libz.dylib in Frameworks */,
 				D88E8E0C16394B49002207B3 /* ApplicationServices.framework in Frameworks */,
-				D899CF98162C5EC100112F49 /* SenTestingKit.framework in Frameworks */,
 				D88E8E0A16394A24002207B3 /* Foundation.framework in Frameworks */,
+				D8E3C26A17E6FF0E007D0020 /* XCTest.framework in Frameworks */,
 				D899CF9C162C5EC100112F49 /* libzipzap.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -260,7 +261,7 @@
 			isa = PBXGroup;
 			children = (
 				D899CF82162C5EC100112F49 /* libzipzap.a */,
-				D899CF96162C5EC100112F49 /* zipzapTests.octest */,
+				D899CF96162C5EC100112F49 /* zipzapTests.xctest */,
 				D899CFB0162C5EEB00112F49 /* libzipzap.a */,
 			);
 			name = Products;
@@ -269,6 +270,7 @@
 		D899CF84162C5EC100112F49 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D8E3C26917E6FF0E007D0020 /* XCTest.framework */,
 				D899D01D162CD57700112F49 /* libc++.dylib */,
 				D899D01B162CD51A00112F49 /* libz.dylib */,
 				D88E8E0B16394B49002207B3 /* ApplicationServices.framework */,
@@ -390,7 +392,7 @@
 			);
 			name = zipzapTests;
 			productName = zipzapTests;
-			productReference = D899CF96162C5EC100112F49 /* zipzapTests.octest */;
+			productReference = D899CF96162C5EC100112F49 /* zipzapTests.xctest */;
 			productType = "com.apple.product-type.bundle";
 		};
 		D899CFAF162C5EEB00112F49 /* zipzap (iOS) */ = {
@@ -639,10 +641,17 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
-				FRAMEWORK_SEARCH_PATHS = "\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"";
+				FRAMEWORK_SEARCH_PATHS = "$(DEVELOPER_FRAMEWORKS_DIR)";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
@@ -655,8 +664,10 @@
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = ../zipzap;
 				INFOPLIST_FILE = "zipzapTests/zipzapTests-Info.plist";
@@ -664,7 +675,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = zipzapTests;
 				SDKROOT = macosx;
-				WRAPPER_EXTENSION = octest;
+				WRAPPER_EXTENSION = xctest;
 			};
 			name = Debug;
 		};
@@ -675,25 +686,35 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				FRAMEWORK_SEARCH_PATHS = "\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"";
+				ENABLE_NS_ASSERTIONS = NO;
+				FRAMEWORK_SEARCH_PATHS = "$(DEVELOPER_FRAMEWORKS_DIR)";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "zipzap/zipzap-Prefix.pch";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = ../zipzap;
 				INFOPLIST_FILE = "zipzapTests/zipzapTests-Info.plist";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = zipzapTests;
 				SDKROOT = macosx;
-				WRAPPER_EXTENSION = octest;
+				WRAPPER_EXTENSION = xctest;
 			};
 			name = Release;
 		};

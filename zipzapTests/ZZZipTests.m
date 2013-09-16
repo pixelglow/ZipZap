@@ -126,7 +126,7 @@
 	
 	NSArray* zipInfo = [ZZTasks zipInfoAtPath:_zipFileURL.path];
 	
-	STAssertEquals(zipInfo.count,
+	XCTAssertEqual(zipInfo.count,
 				   newEntryRecords.count,
 				   @"Zip entry count must match new entry count.");
 	
@@ -138,66 +138,66 @@
 		char nextModeString[12];
 		strmode([nextNewEntry[@"fileMode"] unsignedShortValue], nextModeString);
 		nextModeString[10] = '\0';	// only want the first 10 chars of the parsed mode
-		STAssertEqualObjects([NSString stringWithUTF8String:nextModeString],
+		XCTAssertEqualObjects([NSString stringWithUTF8String:nextModeString],
 							 nextZipInfo[0],
-							 @"Zip entry #%d file mode must match new entry file mode.",
-							 index);
+							 @"Zip entry #%lu file mode must match new entry file mode.",
+							 (unsigned long)index);
 
-		STAssertEqualObjects(nextZipInfo[1],
+		XCTAssertEqualObjects(nextZipInfo[1],
 							 @"3.0",
-							 @"Zip entry #%d version made by should be 3.0.",
-							 index);
-		STAssertEqualObjects(nextZipInfo[2],
+							 @"Zip entry #%lu version made by should be 3.0.",
+							 (unsigned long)index);
+		XCTAssertEqualObjects(nextZipInfo[2],
 							 @"unx",
-							 @"Zip entry #%d file attribute should be unix.",
-							 index);
+							 @"Zip entry #%lu file attribute should be unix.",
+							 (unsigned long)index);
 	
 		if (![nextNewEntry[@"compressed"] boolValue])
-			STAssertEqualObjects(nextZipInfo[3],
+			XCTAssertEqualObjects(nextZipInfo[3],
 								 nextZipInfo[5],
-								 @"Zip entry #%d compressed size must match uncompressed size if uncompressed.",
-								 index);
+								 @"Zip entry #%lu compressed size must match uncompressed size if uncompressed.",
+								 (unsigned long)index);
 
-		STAssertEqualObjects(nextZipInfo[6],
+		XCTAssertEqualObjects(nextZipInfo[6],
 							 [nextNewEntry[@"compressed"] boolValue]? @"defN" : @"stor",
-							 @"Zip entry #%d compression method must match new entry compressed.",
-							 index);
+							 @"Zip entry #%lu compression method must match new entry compressed.",
+							 (unsigned long)index);
 		
 		NSDateComponents* dateComponents = [[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar]
 											components: NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit
 											| NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit
 											fromDate:nextNewEntry[@"lastModified"]];
-		STAssertEquals(dateComponents.year,
+		XCTAssertEqual(dateComponents.year,
 					   [[nextZipInfo[7] substringWithRange:NSMakeRange(0, 4)] integerValue],
-					   @"Zip entry #%d last modified year must match the new entry last modified year.",
-					   index);
-		STAssertEquals(dateComponents.month,
+					   @"Zip entry #%lu last modified year must match the new entry last modified year.",
+					   (unsigned long)index);
+		XCTAssertEqual(dateComponents.month,
 					   [[nextZipInfo[7] substringWithRange:NSMakeRange(4, 2)] integerValue],
-					   @"Zip entry #%d last modified month must match the new entry last modified month.",
-					   index);
-		STAssertEquals(dateComponents.day,
+					   @"Zip entry #%lu last modified month must match the new entry last modified month.",
+					   (unsigned long)index);
+		XCTAssertEqual(dateComponents.day,
 					   [[nextZipInfo[7] substringWithRange:NSMakeRange(6, 2)] integerValue],
-					   @"Zip entry #%d last modified day must match the new entry last modified day.",
-					   index);
-		STAssertEquals(dateComponents.hour,
+					   @"Zip entry #%lu last modified day must match the new entry last modified day.",
+					   (unsigned long)index);
+		XCTAssertEqual(dateComponents.hour,
 					   [[nextZipInfo[7] substringWithRange:NSMakeRange(9, 2)] integerValue],
-					   @"Zip entry #%d last modified hour must match the new entry last modified hour.",
-					   index);
-		STAssertEquals(dateComponents.minute,
+					   @"Zip entry #%lu last modified hour must match the new entry last modified hour.",
+					   (unsigned long)index);
+		XCTAssertEqual(dateComponents.minute,
 					   [[nextZipInfo[7] substringWithRange:NSMakeRange(11, 2)] integerValue],
-					   @"Zip entry #%d last modified minute must match the new entry last modified minute.",
-					   index);
-		STAssertEqualsWithAccuracy(dateComponents.second,
+					   @"Zip entry #%lu last modified minute must match the new entry last modified minute.",
+					   (unsigned long)index);
+		XCTAssertEqualWithAccuracy(dateComponents.second,
 								   [[nextZipInfo[7] substringWithRange:NSMakeRange(13, 2)] integerValue],
 								   1,
-								   @"Zip entry #%d last modified second must match the new entry last modified second.",
-								   index);
+								   @"Zip entry #%lu last modified second must match the new entry last modified second.",
+								   (unsigned long)index);
 
 
-		STAssertEqualObjects(nextZipInfo[8],
+		XCTAssertEqualObjects(nextZipInfo[8],
 							 nextNewEntry[@"fileName"],
-							 @"Zip entry #%d file name must match new entry file name.",
-							 index);
+							 @"Zip entry #%lu file name must match new entry file name.",
+							 (unsigned long)index);
 		
 		
 		if (checkerBlock)
@@ -205,27 +205,27 @@
 			NSData* fileData = checkerBlock(nextNewEntry[@"fileName"]);
 			NSString* fileDataLength = [NSString stringWithFormat:@"%lu", fileData.length];
 			
-			STAssertEqualObjects(nextZipInfo[3],
+			XCTAssertEqualObjects(nextZipInfo[3],
 								 fileDataLength,
-								 @"Zip entry #%d uncompressed size must match original file length.",
-								 index);
+								 @"Zip entry #%lu uncompressed size must match original file length.",
+								 (unsigned long)index);
 			
 			NSData* zipData = [ZZTasks unzipFile:nextNewEntry[@"fileName"]
 										fromPath:_zipFileURL.path];
 			
-			STAssertEqualObjects(zipData,
+			XCTAssertEqualObjects(zipData,
 							 fileData,
-							 @"Zip entry #%d file data must match original file data.",
-							 index);
+							 @"Zip entry #%lu file data must match original file data.",
+							 (unsigned long)index);
 		}
 	}
 	
-	STAssertTrue([ZZTasks testZipAtPath:_zipFileURL.path], @"zipFile must pass unzip test.");
+	XCTAssertTrue([ZZTasks testZipAtPath:_zipFileURL.path], @"zipFile must pass unzip test.");
 }
 
 - (void)checkCreatingZipEntriesWithNoCheckEntries:(NSArray*)entries
 {
-	STAssertTrue([_zipFile updateEntries:entries error:nil], @"Updating entries should succeed.");
+	XCTAssertTrue([_zipFile updateEntries:entries error:nil], @"Updating entries should succeed.");
 	
 	[self checkZipEntryRecords:[self recordsForZipEntries:entries]
 				  checkerBlock:nil];
@@ -239,7 +239,7 @@
 															  compress:compressed
 															 dataBlock:^(NSError** error){ return [self dataAtFilePath:entryFilePath]; }]];
 	
-	STAssertTrue([_zipFile updateEntries:newEntries error:nil], @"Updating entries should succeed.");
+	XCTAssertTrue([_zipFile updateEntries:newEntries error:nil], @"Updating entries should succeed.");
 	[self checkZipEntryRecords:[self recordsForZipEntries:newEntries]
 				  checkerBlock:^(NSString* fileName){ return [self dataAtFilePath:fileName]; }];
 }
@@ -272,7 +272,7 @@
 								   return YES;
 							   }]];
 	
-	STAssertTrue([_zipFile updateEntries:newEntries error:nil], @"Updating entries should succeed.");
+	XCTAssertTrue([_zipFile updateEntries:newEntries error:nil], @"Updating entries should succeed.");
 	[self checkZipEntryRecords:[self recordsForZipEntries:newEntries]
 				  checkerBlock:^(NSString* fileName){ return [self dataAtFilePath:fileName]; }];
 }
@@ -339,7 +339,7 @@
 								   }]];
 	}
 	
-	STAssertTrue([_zipFile updateEntries:newEntries error:nil], @"Updating entries should succeed.");
+	XCTAssertTrue([_zipFile updateEntries:newEntries error:nil], @"Updating entries should succeed.");
 	[self checkZipEntryRecords:[self recordsForZipEntries:newEntries]
 				  checkerBlock:^(NSString* fileName){ return fileNameCheck[fileName]; }];
 }
@@ -355,7 +355,7 @@
 	
 	// since entries contains existing entries from the zip file, we need to take a record first before applying it
 	NSArray* records = [self recordsForZipEntries:entries];
-	STAssertTrue([_zipFile updateEntries:entries error:nil],  @"Updating entries should succeed.");
+	XCTAssertTrue([_zipFile updateEntries:entries error:nil],  @"Updating entries should succeed.");
 	[self checkZipEntryRecords:records
 				  checkerBlock:^(NSString* fileName){ return [self dataAtFilePath:fileName]; }];
 }
@@ -370,7 +370,7 @@
 	
 	if (update)
 	{
-		STAssertTrue([_zipFile updateEntries:newEntries error:nil],  @"Updating entries should succeed.");
+		XCTAssertTrue([_zipFile updateEntries:newEntries error:nil],  @"Updating entries should succeed.");
 		newEntries = [NSMutableArray arrayWithArray:_zipFile.entries];
 	}
 
@@ -378,20 +378,20 @@
 	[newEntries insertObject:badEntry atIndex:insertIndex];
 	
 	NSError* __autoreleasing error;
-	STAssertFalse([_zipFile updateEntries:newEntries error:&error],
+	XCTAssertFalse([_zipFile updateEntries:newEntries error:&error],
 				  @"Updating entries with bad entry should fail.");
-	STAssertNotNil(error,
+	XCTAssertNotNil(error,
 				   @"Error object should be set.");
-	STAssertEqualObjects(error.domain,
+	XCTAssertEqualObjects(error.domain,
 						 ZZErrorDomain,
 						 @"Error domain should be in zipzap.");
-	STAssertEquals((ZZErrorCode)error.code,
+	XCTAssertEqual((ZZErrorCode)error.code,
 				   ZZLocalFileWriteErrorCode,
 				   @"Error code should be bad local file write.");
-	STAssertEquals([error.userInfo[ZZEntryIndexKey] unsignedIntegerValue],
+	XCTAssertEqual([error.userInfo[ZZEntryIndexKey] unsignedIntegerValue],
 				   insertIndex,
 				   @"Error entry index should be bad entry index.");
-	STAssertEqualObjects(error.userInfo[NSUnderlyingErrorKey],
+	XCTAssertEqualObjects(error.userInfo[NSUnderlyingErrorKey],
 						 [self someError],
 						 @"Error underlying error should be same as passed-in error.");
 	
@@ -400,7 +400,7 @@
 		if (!_zipFile.URL)
 			// archive is a data archive, need to save it before we can check
 			[_zipFile.contents writeToURL:_zipFileURL atomically:YES];
-		STAssertTrue([ZZTasks testZipAtPath:_zipFileURL.path], @"zipFile must pass unzip test.");
+		XCTAssertTrue([ZZTasks testZipAtPath:_zipFileURL.path], @"zipFile must pass unzip test.");
 	}
 }
 
