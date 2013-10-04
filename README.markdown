@@ -78,7 +78,7 @@ Require
   * *Foundation.framework*
   * *libc++.dylib* if your project doesn't already use C++ or Objective-C++.
   * *libz.dylib*
-* **Run**: Mac OS X 10.7 (Lion) or iOS 4.0 and later.
+* **Run**: Mac OS X 10.7 (Lion) or iOS 5.0 and later.
 
 Support
 -------

@@ -177,7 +177,7 @@
 	NSUInteger newEntriesCount = newEntries.count;
 	NSUInteger skipIndex;
 	for (skipIndex = 0; skipIndex < std::min(oldEntriesCount, newEntriesCount); ++skipIndex)
-		if ([newEntries objectAtIndex:skipIndex] != [_entries objectAtIndex:skipIndex])
+		if (newEntries[skipIndex] != _entries[skipIndex])
 			break;
 	
 	// get an entry writer for each new entry
@@ -189,7 +189,7 @@
      }];
 	
 	// skip the initial matching entries
-	uint32_t initialSkip = skipIndex > 0 ? [[newEntryWriters objectAtIndex:skipIndex - 1] offsetToLocalFileEnd] : 0;
+	uint32_t initialSkip = skipIndex > 0 ? [newEntryWriters[skipIndex - 1] offsetToLocalFileEnd] : 0;
 
 	NSError* __autoreleasing underlyingError;
 
@@ -209,7 +209,7 @@
 		{
 			// write out local files
 			for (NSUInteger index = skipIndex; index < newEntriesCount; ++index)
-				if (![[newEntryWriters objectAtIndex:index] writeLocalFileToChannelOutput:temporaryChannelOutput
+				if (![newEntryWriters[index] writeLocalFileToChannelOutput:temporaryChannelOutput
 																		  withInitialSkip:initialSkip
 																					error:&underlyingError])
 					return ZZRaiseError(error, ZZLocalFileWriteErrorCode, @{NSUnderlyingErrorKey : underlyingError, ZZEntryIndexKey : @(index)});
@@ -226,7 +226,7 @@
 			
 			// write out central file headers
 			for (NSUInteger index = 0; index < newEntriesCount; ++index)
-				if (![[newEntryWriters objectAtIndex:index] writeCentralFileHeaderToChannelOutput:temporaryChannelOutput
+				if (![newEntryWriters[index] writeCentralFileHeaderToChannelOutput:temporaryChannelOutput
 																							error:&underlyingError])
 					return ZZRaiseError(error, ZZCentralFileHeaderWriteErrorCode, @{NSUnderlyingErrorKey : underlyingError, ZZEntryIndexKey : @(index)});
 			
