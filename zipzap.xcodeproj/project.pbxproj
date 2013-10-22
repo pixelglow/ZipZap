@@ -550,7 +550,6 @@
 		D899CF7C162C5E8400112F49 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ONLY_ACTIVE_ARCH = YES;
 			};
 			name = Debug;
 		};
@@ -594,7 +593,6 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
-				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = zipzap;
 				SDKROOT = macosx;
 			};
@@ -672,7 +670,6 @@
 				HEADER_SEARCH_PATHS = ../zipzap;
 				INFOPLIST_FILE = "zipzapTests/zipzapTests-Info.plist";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
-				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = zipzapTests;
 				SDKROOT = macosx;
 				WRAPPER_EXTENSION = xctest;
