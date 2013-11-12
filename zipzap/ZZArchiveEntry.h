@@ -162,14 +162,14 @@
  *
  * @return The new stream: *nil* for new entries.
  */
-- (NSInputStream*)stream;
+- (NSInputStream*)newStream;
 
 /**
  * Creates data to represent the entry file.
  *
  * @return The new data: *nil* for new entries.
  */
-- (NSData*)data;
+- (NSData*)newData;
 
 /**
  * Creates a data provider to represent the entry file.

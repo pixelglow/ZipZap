@@ -62,7 +62,7 @@
 		ZZArchiveEntry* nextEntry = _zipFile.entries[index];
 		NSString* nextEntryFilePath = _entryFilePaths[index];
 		
-		NSInputStream* stream = [nextEntry stream];
+		NSInputStream* stream = [nextEntry newStream];
 		
 		[stream open];
 		
@@ -210,7 +210,7 @@
 
 		XCTAssertEqual(zipEntry.crc32, zipFromDataEntry.crc32, @"zipFromDataEntry.entries[%lu].crc32 must match the reference entry.", (unsigned long)index);
 
-		XCTAssertEqualObjects(zipEntry.data, zipFromDataEntry.data, @"zipFromDataEntry.entries[%lu].data must match the reference entry.", (unsigned long)index);
+		XCTAssertEqualObjects([zipEntry newData], [zipFromDataEntry newData], @"zipFromDataEntry.entries[%lu].data must match the reference entry.", (unsigned long)index);
 
 		XCTAssertEqual(zipEntry.fileMode, zipFromDataEntry.fileMode, @"zipFromDataEntry.entries[%lu].fileMode must match the reference entry.", (unsigned long)index);
 
@@ -229,7 +229,7 @@
 		ZZArchiveEntry* nextEntry = _zipFile.entries[index];
 		NSString* nextEntryFilePath = _entryFilePaths[index];
 		
-		XCTAssertEqualObjects(nextEntry.data,
+		XCTAssertEqualObjects([nextEntry newData],
 							 [self dataAtFilePath:nextEntryFilePath],
 							 @"zipFile.entries[%lu].data must match the original file data.",
 							 (unsigned long)index);

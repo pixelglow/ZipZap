@@ -33,8 +33,8 @@
 
 - (BOOL)check:(NSError **)error;
 
-- (NSInputStream*)stream;
-- (NSData*)data;
+- (NSInputStream*)newStream;
+- (NSData*)newData;
 - (CGDataProviderRef)newDataProvider;
 
 @end

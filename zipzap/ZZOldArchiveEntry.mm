@@ -186,7 +186,7 @@ namespace ZZDataProvider
 	return YES;
 }
 
-- (NSInputStream*)stream
+- (NSInputStream*)newStream
 {
 	switch (_centralFileHeader->compressionMethod)
 	{
@@ -201,7 +201,7 @@ namespace ZZDataProvider
 	}
 }
 
-- (NSData*)data
+- (NSData*)newData
 {
 	switch (_centralFileHeader->compressionMethod)
 	{

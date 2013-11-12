@@ -115,7 +115,7 @@
 	return nil;
 }
 
-- (NSInputStream*)stream
+- (NSInputStream*)newStream
 {
 	return nil;
 }
@@ -125,7 +125,7 @@
 	return YES;
 }
 
-- (NSData*)data
+- (NSData*)newData
 {
 	return nil;
 }
