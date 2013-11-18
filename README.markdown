@@ -90,3 +90,8 @@ License
 -------
 
 *zipzap* is licensed with the BSD license.
+
+Donate
+------
+
+Bitcoin: 1HUFjghYhvrpCWKAYD4x1ihE3fM4VqNL5H
