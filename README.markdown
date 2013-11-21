@@ -38,7 +38,7 @@ Reading an existing zip file:
 	ZZArchive* oldArchive = [ZZArchive archiveWithContentsOfURL:[NSURL fileURLWithPath:@"/tmp/old.zip"]];
 	ZZArchiveEntry* firstArchiveEntry = oldArchive.entries[0];
 	NSLog(@"The first entry's uncompressed size is %lu bytes.", firstArchiveEntry.uncompressedSize);
-	NSLog(@"The first entry's data is: %@.", firstArchiveEntry.data);
+	NSLog(@"The first entry's data is: %@.", [firstArchiveEntry newData]);
 	
 Writing a new zip file:
 
@@ -67,7 +67,9 @@ Updating an existing zip file:
 										   }]]
 						error:nil];
 
-Advanced uses can be found at [Recipes](https://github.com/pixelglow/zipzap/wiki/Recipes).
+Advanced uses: [Recipes](https://github.com/pixelglow/zipzap/wiki/Recipes)
+
+API references: [References](http://pixelglow.github.io/zipzap/api/index.html)
 
 Require
 -------
