@@ -4,16 +4,15 @@
 		<meta http-equiv="Content-Type" content="html/html; charset=utf-8" />
 		<title>ZZMutableArchive Class Reference</title>
 		<meta id="xcode-display" name="xcode-display" content="render"/>
-		<meta name="viewport" content="width=550" />
 		<link rel="stylesheet" type="text/css" href="../css/styles.css" media="all" />
 		<link rel="stylesheet" type="text/css" media="print" href="../css/stylesPrint.css" />
-		<meta name="generator" content="appledoc 2.0.5 (build 737)" />
+		<meta name="generator" content="appledoc 2.2 (build 963)" />
 	</head>
 	<body>
 		<header id="top_header">
 			<div id="library" class="hideInXcode">
 				<h1><a id="libraryTitle" href="../index.html">zipzap </a></h1>
-				<a id="developerHome" href="../index.html">Pixelglow Sofware</a>
+				<a id="developerHome" href="../index.html">Pixelglow Software</a>
 			</div>
 			
 			<div id="title" role="banner">
@@ -38,13 +37,13 @@
 	
 	
 	
-	<option value="properties">Properties</option>
-	
-	<option value="//api/name/entries">&nbsp;&nbsp;&nbsp;&nbsp;entries</option>
 	
 	
 	
 	
+	<option value="instance_methods">Instance Methods</option>
+	
+	<option value="//api/name/updateEntries:error:">&nbsp;&nbsp;&nbsp;&nbsp;- updateEntries:error:</option>
 	
 	
 	
@@ -68,15 +67,15 @@
 
 
 
-<li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#properties">Properties</a></span><ul>
+
+
+
+
+<li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#instance_methods">Instance Methods</a></span><ul>
 	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/entries">entries</a></span></li>
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/updateEntries:error:">updateEntries:error:</a></span></li>
 	
 </ul></li>
-
-
-
-
 
 
 			</ul>
@@ -107,8 +106,8 @@
 </tr>
 						</tbody></table></div>
 					
-					
-					
+                    
+                    
 					
 					<div class="section section-overview">
 						<a title="Overview" name="overview"></a>
@@ -131,11 +130,9 @@
 						<ul class="task-list">
 							<li>
 	<span class="tooltip">
-		<code><a href="#//api/name/entries">&nbsp;&nbsp;entries</a></code>
-		<span class="tooltip"><p>The array of <a href="../Classes/ZZArchiveEntry.html">ZZArchiveEntry</a> entries within this archive.
-To write new entries in the zip file, set this property to a different array of <a href="../Classes/ZZArchiveEntry.html">ZZArchiveEntry</a> entries.</p></span>
+		<code><a href="#//api/name/updateEntries:error:">&ndash;&nbsp;updateEntries:error:</a></code>
 	</span>
-	<span class="task-item-suffix">property</span>
+	
 	
 </li>
 						</ul>
@@ -146,30 +143,63 @@ To write new entries in the zip file, set this property to a different array of 
 					
 					
 					
+					
+					
+					
+					
 					<div class="section section-methods">
-						<a title="Properties" name="properties"></a>
-						<h2 class="subtitle subtitle-methods">Properties</h2>
+						<a title="Instance Methods" name="instance_methods"></a>
+						<h2 class="subtitle subtitle-methods">Instance Methods</h2>
 						
 						<div class="section-method">
-	<a name="//api/name/entries" title="entries"></a>
-	<h3 class="subsubtitle method-title">entries</h3>
+	<a name="//api/name/updateEntries:error:" title="updateEntries:error:"></a>
+	<h3 class="subsubtitle method-title">updateEntries:error:</h3>
 	
 	
 	
 	<div class="method-subsection brief-description">
-		<p>The array of <a href="../Classes/ZZArchiveEntry.html">ZZArchiveEntry</a> entries within this archive.
-To write new entries in the zip file, set this property to a different array of <a href="../Classes/ZZArchiveEntry.html">ZZArchiveEntry</a> entries.</p>
+		<p>Updates the entries and writes them to the source.</p>
 	</div>		
 	
+    
+
+	<div class="method-subsection method-declaration"><code>- (BOOL)updateEntries:(NSArray *)<em>newEntries</em> error:(NSError **)<em>error</em></code></div>
+
+    
 	
-	<div class="method-subsection method-declaration"><code>@property (copy, nonatomic) NSArray *entries</code></div>
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>newEntries</em></dt>
+			<dd><p>The entries to update to, may contain some or all existing entries.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>error</em></dt>
+			<dd><p>The error information when an error occurs. Pass in <em>nil</em> if you do not want error information.</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p>Whether the update was successful or not.</p>
+	</div>
 	
 	
 	
 	
 	
-	
-	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>If the write fails and the entries are completely new, the existing zip file will be untouched.</p>
+
+<p>If the write fails and the entries contain some or all existing entries, the zip file may be corrupted.
+In this case, the error information will report the ZZReplaceWriteErrorCode error code.</p>
+	</div>
 	
 	
 	
@@ -188,10 +218,8 @@ To write new entries in the zip file, set this property to a different array of 
 					</div>
 					
 					
-					
-					
-					
-					
+                    
+                    
 				</div>
 				<div class="main-navigation navigation-bottom">
 					<ul>
@@ -202,9 +230,9 @@ To write new entries in the zip file, set this property to a different array of 
 				<div id="footer">
 					<hr />
 					<div class="footer-copyright">
-						<p><span class="copyright">&copy; 2012 Pixelglow Sofware. All rights reserved. (Last updated: 2012-10-29)</span><br />
+						<p><span class="copyright">&copy; 2013 Pixelglow Software. All rights reserved. (Last updated: 2013-11-21)</span><br />
 						
-						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.0.5 (build 737)</a>.</span></p>
+						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2 (build 963)</a>.</span></p>
 						
 					</div>
 				</div>
@@ -292,6 +320,14 @@ To write new entries in the zip file, set this property to a different array of 
 			}
 			
 			window.onload = init;
+			
+			// If showing in Xcode, hide the TOC and Header
+			if (navigator.userAgent.match(/xcode/i)) {
+				document.getElementById("contents").className = "hideInXcode"
+				document.getElementById("tocContainer").className = "hideInXcode"
+				document.getElementById("top_header").className = "hideInXcode"
+			}
+			
 		</script>
 	</body>
 </html>

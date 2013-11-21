@@ -4,16 +4,15 @@
 		<meta http-equiv="Content-Type" content="html/html; charset=utf-8" />
 		<title>ZZArchive Class Reference</title>
 		<meta id="xcode-display" name="xcode-display" content="render"/>
-		<meta name="viewport" content="width=550" />
 		<link rel="stylesheet" type="text/css" href="../css/styles.css" media="all" />
 		<link rel="stylesheet" type="text/css" media="print" href="../css/stylesPrint.css" />
-		<meta name="generator" content="appledoc 2.0.5 (build 737)" />
+		<meta name="generator" content="appledoc 2.2 (build 963)" />
 	</head>
 	<body>
 		<header id="top_header">
 			<div id="library" class="hideInXcode">
 				<h1><a id="libraryTitle" href="../index.html">zipzap </a></h1>
-				<a id="developerHome" href="../index.html">Pixelglow Sofware</a>
+				<a id="developerHome" href="../index.html">Pixelglow Software</a>
 			</div>
 			
 			<div id="title" role="banner">
@@ -42,6 +41,8 @@
 	
 	<option value="//api/name/URL">&nbsp;&nbsp;&nbsp;&nbsp;URL</option>
 	
+	<option value="//api/name/contents">&nbsp;&nbsp;&nbsp;&nbsp;contents</option>
+	
 	<option value="//api/name/entries">&nbsp;&nbsp;&nbsp;&nbsp;entries</option>
 	
 	
@@ -51,14 +52,18 @@
 	
 	<option value="//api/name/archiveWithContentsOfURL:">&nbsp;&nbsp;&nbsp;&nbsp;+ archiveWithContentsOfURL:</option>
 	
+	<option value="//api/name/archiveWithData:">&nbsp;&nbsp;&nbsp;&nbsp;+ archiveWithData:</option>
+	
 	
 	
 	
 	<option value="instance_methods">Instance Methods</option>
 	
-	<option value="//api/name/initWithContentsOfURL:">&nbsp;&nbsp;&nbsp;&nbsp;- initWithContentsOfURL:</option>
+	<option value="//api/name/initWithContentsOfURL:encoding:">&nbsp;&nbsp;&nbsp;&nbsp;- initWithContentsOfURL:encoding:</option>
 	
-	<option value="//api/name/reload">&nbsp;&nbsp;&nbsp;&nbsp;- reload</option>
+	<option value="//api/name/initWithData:encoding:">&nbsp;&nbsp;&nbsp;&nbsp;- initWithData:encoding:</option>
+	
+	<option value="//api/name/load:">&nbsp;&nbsp;&nbsp;&nbsp;- load:</option>
 	
 	
 	
@@ -86,6 +91,8 @@
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/URL">URL</a></span></li>
 	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/contents">contents</a></span></li>
+	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/entries">entries</a></span></li>
 	
 </ul></li>
@@ -96,15 +103,19 @@
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/archiveWithContentsOfURL:">archiveWithContentsOfURL:</a></span></li>
 	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/archiveWithData:">archiveWithData:</a></span></li>
+	
 </ul></li>
 
 
 
 <li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#instance_methods">Instance Methods</a></span><ul>
 	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/initWithContentsOfURL:">initWithContentsOfURL:</a></span></li>
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/initWithContentsOfURL:encoding:">initWithContentsOfURL:encoding:</a></span></li>
 	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/reload">reload</a></span></li>
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/initWithData:encoding:">initWithData:encoding:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/load:">load:</a></span></li>
 	
 </ul></li>
 
@@ -137,8 +148,8 @@
 </tr>
 						</tbody></table></div>
 					
-					
-					
+                    
+                    
 					
 					<div class="section section-overview">
 						<a title="Overview" name="overview"></a>
@@ -162,35 +173,48 @@
 							<li>
 	<span class="tooltip">
 		<code><a href="#//api/name/URL">&nbsp;&nbsp;URL</a></code>
-		<span class="tooltip"><p>The URL representing this archive.</p></span>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/contents">&nbsp;&nbsp;contents</a></code>
 	</span>
 	<span class="task-item-suffix">property</span>
 	
 </li><li>
 	<span class="tooltip">
 		<code><a href="#//api/name/entries">&nbsp;&nbsp;entries</a></code>
-		<span class="tooltip"><p>The array of <a href="../Classes/ZZArchiveEntry.html">ZZArchiveEntry</a> entries within this archive.</p></span>
 	</span>
 	<span class="task-item-suffix">property</span>
 	
 </li><li>
 	<span class="tooltip">
 		<code><a href="#//api/name/archiveWithContentsOfURL:">+&nbsp;archiveWithContentsOfURL:</a></code>
-		<span class="tooltip"><p>Creates a new archive with the zip file at the given file URL.</p></span>
 	</span>
 	
 	
 </li><li>
 	<span class="tooltip">
-		<code><a href="#//api/name/initWithContentsOfURL:">&ndash;&nbsp;initWithContentsOfURL:</a></code>
-		<span class="tooltip"><p>Initializes a new archive with the zip file at the given file URL.</p></span>
+		<code><a href="#//api/name/archiveWithData:">+&nbsp;archiveWithData:</a></code>
 	</span>
 	
 	
 </li><li>
 	<span class="tooltip">
-		<code><a href="#//api/name/reload">&ndash;&nbsp;reload</a></code>
-		<span class="tooltip"><p>Reloads the entries from the URL.</p></span>
+		<code><a href="#//api/name/initWithContentsOfURL:encoding:">&ndash;&nbsp;initWithContentsOfURL:encoding:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/initWithData:encoding:">&ndash;&nbsp;initWithData:encoding:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/load:">&ndash;&nbsp;load:</a></code>
 	</span>
 	
 	
@@ -217,9 +241,47 @@
 		<p>The URL representing this archive.</p>
 	</div>		
 	
-	
+    
+
 	<div class="method-subsection method-declaration"><code>@property (readonly, nonatomic) NSURL *URL</code></div>
+
+    
 	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">ZZArchive.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/contents" title="contents"></a>
+	<h3 class="subsubtitle method-title">contents</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>The uninterpreted contents of this archive.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (readonly, nonatomic) NSData *contents</code></div>
+
+    
 	
 	
 	
@@ -251,9 +313,11 @@
 		<p>The array of <a href="../Classes/ZZArchiveEntry.html">ZZArchiveEntry</a> entries within this archive.</p>
 	</div>		
 	
-	
-	<div class="method-subsection method-declaration"><code>@property (readonly, copy, nonatomic) NSArray *entries</code></div>
-	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (readonly, nonatomic) NSArray *entries</code></div>
+
+    
 	
 	
 	
@@ -290,19 +354,21 @@
 	
 	
 	<div class="method-subsection brief-description">
-		<p>Creates a new archive with the zip file at the given file URL.</p>
+		<p>Creates a new archive with the zip file at the given file <a href="#//api/name/URL">URL</a>.</p>
 	</div>		
 	
-	
-	<div class="method-subsection method-declaration"><code>+ (id)archiveWithContentsOfURL:(NSURL *)<em>URL</em></code></div>
-	
+    
+
+	<div class="method-subsection method-declaration"><code>+ (instancetype)archiveWithContentsOfURL:(NSURL *)<em>URL</em></code></div>
+
+    
 	
 	<div class="method-subsection arguments-section parameters">
 		<h4 class="method-subtitle parameter-title">Parameters</h4>
 		
 		<dl class="argument-def parameter-def">
 			<dt><em>URL</em></dt>
-			<dd><p>The file URL of the zip file.</p></dd>
+			<dd><p>The file <a href="#//api/name/URL">URL</a> of the zip file.</p></dd>
 		</dl>
 		
 	</div>
@@ -311,12 +377,73 @@
 	
 	<div class="method-subsection return">
 		<h4 class="method-subtitle parameter-title">Return Value</h4>
-		<p>The initialized archive. If the zip file does not exist, this will have no entries.</p>
+		<p>The initialized archive. If the zip file does not exist, this will have no <a href="#//api/name/entries">entries</a>.</p>
 	</div>
 	
 	
 	
 	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>The archive will use UTF-8 encoding for reading entry file names and comments.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">ZZArchive.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/archiveWithData:" title="archiveWithData:"></a>
+	<h3 class="subsubtitle method-title">archiveWithData:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Creates a new archive with the raw zip file data given.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>+ (instancetype)archiveWithData:(NSData *)<em>data</em></code></div>
+
+    
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>data</em></dt>
+			<dd><p>The raw data of the zip file</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p>The initialized archive.</p>
+	</div>
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>The archive will use UTF-8 encoding for reading entry file names and comments.</p>
+	</div>
 	
 	
 	
@@ -341,25 +468,32 @@
 						<h2 class="subtitle subtitle-methods">Instance Methods</h2>
 						
 						<div class="section-method">
-	<a name="//api/name/initWithContentsOfURL:" title="initWithContentsOfURL:"></a>
-	<h3 class="subsubtitle method-title">initWithContentsOfURL:</h3>
+	<a name="//api/name/initWithContentsOfURL:encoding:" title="initWithContentsOfURL:encoding:"></a>
+	<h3 class="subsubtitle method-title">initWithContentsOfURL:encoding:</h3>
 	
 	
 	
 	<div class="method-subsection brief-description">
-		<p>Initializes a new archive with the zip file at the given file URL.</p>
+		<p>Initializes a new archive with the zip file at the given file <a href="#//api/name/URL">URL</a>.</p>
 	</div>		
 	
-	
-	<div class="method-subsection method-declaration"><code>- (id)initWithContentsOfURL:(NSURL *)<em>URL</em></code></div>
-	
+    
+
+	<div class="method-subsection method-declaration"><code>- (id)initWithContentsOfURL:(NSURL *)<em>URL</em> encoding:(NSStringEncoding)<em>encoding</em></code></div>
+
+    
 	
 	<div class="method-subsection arguments-section parameters">
 		<h4 class="method-subtitle parameter-title">Parameters</h4>
 		
 		<dl class="argument-def parameter-def">
 			<dt><em>URL</em></dt>
-			<dd><p>The file URL of the zip file.</p></dd>
+			<dd><p>The file <a href="#//api/name/URL">URL</a> of the zip file.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>encoding</em></dt>
+			<dd><p>The encoding for reading entry file names and comments.</p></dd>
 		</dl>
 		
 	</div>
@@ -368,7 +502,7 @@
 	
 	<div class="method-subsection return">
 		<h4 class="method-subtitle parameter-title">Return Value</h4>
-		<p>The initialized archive. If the zip file does not exist, this will have no entries.</p>
+		<p>The initialized archive. If the zip file does not exist, this will have no <a href="#//api/name/entries">entries</a>.</p>
 	</div>
 	
 	
@@ -390,20 +524,42 @@
 </div>
 						
 						<div class="section-method">
-	<a name="//api/name/reload" title="reload"></a>
-	<h3 class="subsubtitle method-title">reload</h3>
+	<a name="//api/name/initWithData:encoding:" title="initWithData:encoding:"></a>
+	<h3 class="subsubtitle method-title">initWithData:encoding:</h3>
 	
 	
 	
 	<div class="method-subsection brief-description">
-		<p>Reloads the entries from the URL.</p>
+		<p>Initializes a new archive with the raw zip file data given.</p>
 	</div>		
 	
+    
+
+	<div class="method-subsection method-declaration"><code>- (id)initWithData:(NSData *)<em>data</em> encoding:(NSStringEncoding)<em>encoding</em></code></div>
+
+    
 	
-	<div class="method-subsection method-declaration"><code>- (void)reload</code></div>
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>data</em></dt>
+			<dd><p>The raw data of the zip file</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>encoding</em></dt>
+			<dd><p>The encoding for reading entry file names and comments.</p></dd>
+		</dl>
+		
+	</div>
 	
 	
 	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p>The initialized archive.</p>
+	</div>
 	
 	
 	
@@ -423,9 +579,68 @@
 	
 </div>
 						
+						<div class="section-method">
+	<a name="//api/name/load:" title="load:"></a>
+	<h3 class="subsubtitle method-title">load:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Loads the <a href="#//api/name/contents">contents</a> and <a href="#//api/name/entries">entries</a> from the source. Any old <a href="#//api/name/entries">entries</a> will then be considered invalid.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (BOOL)load:(NSError **)<em>error</em></code></div>
+
+    
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>error</em></dt>
+			<dd><p>The error information when an error occurs. Pass in <em>nil</em> if you do not want error information.</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p>Whether the load was successful or not.</p>
+	</div>
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>If you access <a href="#//api/name/entries">entries</a> or <a href="#//api/name/contents">contents</a>, the receiver already automatically loads them if needed.
+You only need to call this method to force a reload from source, or to check for errors when loading.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">ZZArchive.h</code><br />
+	</div>				
+	
+	
+</div>
+						
 					</div>
 					
 					
+                    
+                    
 				</div>
 				<div class="main-navigation navigation-bottom">
 					<ul>
@@ -436,9 +651,9 @@
 				<div id="footer">
 					<hr />
 					<div class="footer-copyright">
-						<p><span class="copyright">&copy; 2012 Pixelglow Sofware. All rights reserved. (Last updated: 2012-10-29)</span><br />
+						<p><span class="copyright">&copy; 2013 Pixelglow Software. All rights reserved. (Last updated: 2013-11-21)</span><br />
 						
-						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.0.5 (build 737)</a>.</span></p>
+						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2 (build 963)</a>.</span></p>
 						
 					</div>
 				</div>
@@ -526,6 +741,14 @@
 			}
 			
 			window.onload = init;
+			
+			// If showing in Xcode, hide the TOC and Header
+			if (navigator.userAgent.match(/xcode/i)) {
+				document.getElementById("contents").className = "hideInXcode"
+				document.getElementById("tocContainer").className = "hideInXcode"
+				document.getElementById("top_header").className = "hideInXcode"
+			}
+			
 		</script>
 	</body>
 </html>
