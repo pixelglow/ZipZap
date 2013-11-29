@@ -16,7 +16,19 @@ enum class ZZCompressionMethod : uint16_t
 
 enum class ZZFileAttributeCompatibility : uint8_t
 {
-	unix = 3
+	msdos = 0,
+	unix = 3,
+	ntfs = 10
+};
+
+enum class ZZMSDOSAttributes : uint8_t
+{
+	readonly = 1 << 0,
+	hidden = 1 << 1,
+	system = 1 << 2,
+	volume = 1 << 3,
+	subdirectory = 1 << 4,
+	archive = 1 << 5
 };
 
 #pragma pack(1)
