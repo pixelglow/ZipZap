@@ -23,4 +23,8 @@
 - (void)testExtractingZipEntryDataProvider;
 - (void)testExtractingZipEntryDataProviderImage;
 
+// Decryptions
+- (void)testExtractingAndStandardDecryptingSmallZipEntryData;
+- (void)testExtractingAndStandardDecryptingLargeZipEntryData;
+
 @end

@@ -147,10 +147,11 @@
 								
 		ZZLocalFileHeader* nextLocalFileHeader = (ZZLocalFileHeader*)(beginContent
 																	  + nextCentralFileHeader->relativeOffsetOfLocalHeader);
-
+		
 		[entries addObject:[[ZZOldArchiveEntry alloc] initWithCentralFileHeader:nextCentralFileHeader
 																localFileHeader:nextLocalFileHeader
-																	   encoding:_encoding]];
+																	   encoding:_encoding
+                                                                          error:error]];
 		
 		nextCentralFileHeader = nextCentralFileHeader->nextCentralFileHeader();
 	}
@@ -275,3 +276,4 @@
 }
 
 @end
+

@@ -31,6 +31,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "ZZConstants.h"
 
 /**
  * The ZZArchive class represents a zip file for reading only.
@@ -125,5 +126,17 @@
  */
 - (BOOL)updateEntries:(NSArray*)newEntries
 				error:(NSError**)error;
+
+@end
+
+/**
+ * The ZZArchive category for stuff about encryptions
+ */
+@interface ZZArchive (Encryption)
+
+/**
+ * Is this archive encrypted? (even one file in it...).
+ */
+@property (nonatomic, readonly) BOOL isEncrypted;
 
 @end

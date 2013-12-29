@@ -300,4 +300,48 @@
 	}
 }
 
+#pragma mark - Standard Decryption Tests
+
+- (void)testExtractingAndStandardDecryptingSmallZipEntryData
+{ // This file was small to begin with, encrypted with Standard and Store compression mode
+	ZZArchive* zipFile = [ZZArchive archiveWithContentsOfURL:[[NSBundle bundleForClass:ZZUnzipTests.class] URLForResource:@"small-test-encrypted-standard" withExtension:@"zip"]];
+	
+	ZZArchiveEntry *fileEntry = zipFile.entries[0];
+	
+	static NSString *testString = @"1234567890abcdefghijklmnopqrstuvwxyz";
+	
+	XCTAssertEqualObjects([fileEntry newDataWithPassword:@"1234567890"], [NSData dataWithBytes:testString.UTF8String length:testString.length], @"[fileEntry newDataWithPassword:...] must match the original data.");
+}
+
+- (void)testExtractingAndStandardDecryptingLargeZipEntryData
+{ // This file was large to begin with, encrypted with Standard and Deflate compression mode
+	ZZArchive* zipFile = [ZZArchive archiveWithContentsOfURL:[[NSBundle bundleForClass:ZZUnzipTests.class] URLForResource:@"large-test-encrypted-standard" withExtension:@"zip"]];
+	
+	ZZArchiveEntry *fileEntry = zipFile.entries[0];
+	
+	static NSString *testString = @"1234567890abcdefghijklmnopqrstuvwxyz";
+	
+	NSInputStream *stream = [fileEntry newStreamWithPassword:@"qwertyuiop"];
+	if (!stream) XCTFail(@"[fileEntry newStreamWithPassword:...] must return a non-nil stream.");
+
+	if (stream)
+	{
+		NSUInteger bufferLength = testString.length;
+		uint8_t *buffer = (uint8_t*)malloc(bufferLength);
+		const char *originalData = testString.UTF8String;
+		
+		[stream open];
+		while ([stream read:buffer maxLength:bufferLength] > 0)
+		{
+			if (strncmp((char*)buffer, originalData, bufferLength) != 0)
+			{
+				XCTFail(@"[fileEntry newStreamWithPassword:...] stream must match the original data.");
+			}
+		}
+		[stream close];
+		
+		free(buffer);
+	}
+}
+
 @end

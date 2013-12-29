@@ -16,6 +16,7 @@
 #import <Foundation/Foundation.h>
 
 #import "ZZArchiveEntry.h"
+#import "ZZHeaders.h"
 
 @interface ZZOldArchiveEntry : ZZArchiveEntry
 
@@ -26,15 +27,14 @@
 @property (readonly, nonatomic) NSUInteger uncompressedSize;
 @property (readonly, nonatomic) mode_t fileMode;
 @property (readonly, nonatomic) NSString* fileName;
+@property (readonly, assign) ZZCentralFileHeader* centralFileHeader;
+@property (readonly, assign) ZZLocalFileHeader* localFileHeader;
 
 - (id)initWithCentralFileHeader:(struct ZZCentralFileHeader*)centralFileHeader
 				localFileHeader:(struct ZZLocalFileHeader*)localFileHeader
-					   encoding:(NSStringEncoding)encoding;
+					   encoding:(NSStringEncoding)encoding
+                          error:(out NSError **)error;
 
 - (BOOL)check:(NSError **)error;
-
-- (NSInputStream*)newStream;
-- (NSData*)newData;
-- (CGDataProviderRef)newDataProvider;
 
 @end

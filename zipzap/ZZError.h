@@ -80,11 +80,21 @@ typedef NS_ENUM(NSInteger, ZZErrorCode)
 	 * Cannot write the end of central directory.
 	 */
 	ZZEndOfCentralDirectoryWriteErrorCode,
-
+    
 	/**
 	 * Cannot replace the zip file after writing.
 	 */
-	ZZReplaceWriteErrorCode
+	ZZReplaceWriteErrorCode,
+    
+	/**
+	 * The encryption used is currently unsupported.
+	 */
+	ZZUnsupportedEncryptionMethod,
+    
+	/**
+	 * An invalid CRC checksum has been encountered.
+	 */
+	ZZInvalidCRChecksum
 };
 
 static inline BOOL ZZRaiseError(NSError** error, ZZErrorCode errorCode, NSDictionary* userInfo)
