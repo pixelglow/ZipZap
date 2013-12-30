@@ -78,7 +78,6 @@ Require
 * **Link**: Only system libraries; no third-party libraries needed.
   * *ApplicationServices.framework* (Mac OS X) or *ImageIO.framework* (iOS)
   * *Foundation.framework*
-  * *libc++.dylib* if your project doesn't already use C++ or Objective-C++.
   * *libz.dylib*
 * **Run**: Mac OS X 10.7 (Lion) or iOS 5.0 and later.
 

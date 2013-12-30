@@ -66,7 +66,6 @@
 		D899D017162CCEDC00112F49 /* pangram.txt in Resources */ = {isa = PBXBuildFile; fileRef = D899D016162CCEDC00112F49 /* pangram.txt */; };
 		D899D01A162CCF9700112F49 /* ZZUnzipTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D899D019162CCF9700112F49 /* ZZUnzipTests.m */; };
 		D899D01C162CD51A00112F49 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D899D01B162CD51A00112F49 /* libz.dylib */; };
-		D899D01E162CD57700112F49 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D899D01D162CD57700112F49 /* libc++.dylib */; };
 		D899D021162F6C9700112F49 /* ZZZipTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D899D020162F6C9700112F49 /* ZZZipTests.m */; };
 		D899D0241631888100112F49 /* ZZTasks.m in Sources */ = {isa = PBXBuildFile; fileRef = D899D0231631888000112F49 /* ZZTasks.m */; };
 		D8B0FD621640A6B000727A70 /* zipzap.h in Headers */ = {isa = PBXBuildFile; fileRef = D8B0FD611640A6B000727A70 /* zipzap.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -104,6 +103,7 @@
 
 /* Begin PBXFileReference section */
 		D810EBCE164B19DA00200834 /* 拉链.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "拉链.txt"; sourceTree = "<group>"; };
+		D81DF41E1871471E00501A61 /* ZZScopeGuard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZZScopeGuard.h; sourceTree = "<group>"; };
 		D8366ACC16B1F8B400BC012E /* ZZError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZZError.h; sourceTree = "<group>"; };
 		D8366ACD16B1F8B400BC012E /* ZZError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZZError.m; sourceTree = "<group>"; };
 		D84A449E16A0D91B00CF00A9 /* ZZChannel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZZChannel.h; sourceTree = "<group>"; };
@@ -176,7 +176,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D899D01E162CD57700112F49 /* libc++.dylib in Frameworks */,
 				D899D01C162CD51A00112F49 /* libz.dylib in Frameworks */,
 				D88E8E0C16394B49002207B3 /* ApplicationServices.framework in Frameworks */,
 				D88E8E0A16394A24002207B3 /* Foundation.framework in Frameworks */,
@@ -212,6 +211,7 @@
 		2757532E16AEE59F00388503 /* Private */ = {
 			isa = PBXGroup;
 			children = (
+				D81DF41E1871471E00501A61 /* ZZScopeGuard.h */,
 				D899CFE5162C608300112F49 /* ZZNewArchiveEntry.h */,
 				D899CFE6162C608300112F49 /* ZZNewArchiveEntry.mm */,
 				D88E8E05163816FD002207B3 /* ZZOldArchiveEntry.h */,
@@ -577,7 +577,8 @@
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_ENABLE_CPP_EXCEPTIONS = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "zipzap/zipzap-Prefix.pch";
@@ -593,6 +594,10 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(OTHER_CFLAGS)",
+					"-fno-objc-arc-exceptions",
+				);
 				PRODUCT_NAME = zipzap;
 				SDKROOT = macosx;
 			};
@@ -617,7 +622,8 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_C_LANGUAGE_STANDARD = c99;
-				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_ENABLE_CPP_EXCEPTIONS = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "zipzap/zipzap-Prefix.pch";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -627,6 +633,10 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(OTHER_CFLAGS)",
+					"-fno-objc-arc-exceptions",
+				);
 				PRODUCT_NAME = zipzap;
 				SDKROOT = macosx;
 			};
@@ -735,6 +745,8 @@
 				DSTROOT = /tmp/zipzap.dst;
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_CPP_EXCEPTIONS = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "zipzap/zipzap-Prefix.pch";
@@ -750,6 +762,10 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(OTHER_CFLAGS)",
+					"-fno-objc-arc-exceptions",
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = zipzap;
 				SDKROOT = iphoneos;
@@ -777,6 +793,8 @@
 				DSTROOT = /tmp/zipzap.dst;
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_ENABLE_CPP_EXCEPTIONS = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "zipzap/zipzap-Prefix.pch";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -786,6 +804,10 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(OTHER_CFLAGS)",
+					"-fno-objc-arc-exceptions",
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = zipzap;
 				SDKROOT = iphoneos;

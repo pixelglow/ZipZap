@@ -10,6 +10,7 @@
 
 #import "ZZChannelOutput.h"
 #import "ZZDeflateOutputStream.h"
+#import "ZZScopeGuard.h"
 #import "ZZNewArchiveEntryWriter.h"
 #import "ZZStoreOutputStream.h"
 #import "ZZHeaders.h"
@@ -191,9 +192,10 @@ namespace ZZDataConsumer
 		// use of one the blocks to write to a stream that deflates directly to the output file handle
 		ZZDeflateOutputStream* outputStream = [[ZZDeflateOutputStream alloc] initWithChannelOutput:channelOutput
 																				  compressionLevel:_compressionLevel];
-		[outputStream open];
-		@try
 		{
+			[outputStream open];
+			ZZScopeGuard outputStreamCloser(^{[outputStream close];});
+			
 			if (_dataBlock)
 			{
 				NSError* err = nil;
@@ -229,20 +231,11 @@ namespace ZZDataConsumer
 			else if (_dataConsumerBlock)
 			{
 				CGDataConsumerRef dataConsumer = CGDataConsumerCreate((__bridge void*)outputStream, &ZZDataConsumer::callbacks);
-				@try
-				{
-					if (!_dataConsumerBlock(dataConsumer, error))
-						return NO;
-				}
-				@finally
-				{
-					CGDataConsumerRelease(dataConsumer);
-				}
+				ZZScopeGuard dataConsumerReleaser(^{CGDataConsumerRelease(dataConsumer);});
+
+				if (!_dataConsumerBlock(dataConsumer, error))
+					return NO;
 			}
-		}
-		@finally
-		{
-			[outputStream close];
 		}
 		
 		dataDescriptor.crc32 = outputStream.crc32;
@@ -277,10 +270,11 @@ namespace ZZDataConsumer
 		{
 			// if stream block, data consumer block or no block, use to write to a stream that just outputs to the output file handle
 			ZZStoreOutputStream* outputStream = [[ZZStoreOutputStream alloc] initWithChannelOutput:channelOutput];
-			[outputStream open];
 			
-			@try
 			{
+				[outputStream open];
+				ZZScopeGuard outputStreamCloser(^{[outputStream close];});
+				
 				if (_streamBlock)
 				{
 					if (!_streamBlock(outputStream, error))
@@ -289,20 +283,11 @@ namespace ZZDataConsumer
 				else if (_dataConsumerBlock)
 				{
 					CGDataConsumerRef dataConsumer = CGDataConsumerCreate((__bridge void*)outputStream, &ZZDataConsumer::callbacks);
-					@try
-					{
-						if (!_dataConsumerBlock(dataConsumer, error))
-							return NO;
-					}
-					@finally
-					{
-						CGDataConsumerRelease(dataConsumer);
-					}
+					ZZScopeGuard dataConsumerReleaser(^{CGDataConsumerRelease(dataConsumer);});
+					
+					if (!_dataConsumerBlock(dataConsumer, error))
+						return NO;
 				}
-			}
-			@finally
-			{
-				[outputStream close];
 			}
 			
 			dataDescriptor.crc32 = outputStream.crc32;
