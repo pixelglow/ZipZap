@@ -47,6 +47,10 @@ struct ZZExtraField
 	{
 		return sizeof(*this) + size;
 	}
+    ZZExtraField *nextExtraField()
+    {
+		return reinterpret_cast<ZZExtraField*>(((uint8_t*)this) + sizeof(ZZExtraField) + size);
+    }
 };
 
 struct ZZAesExtraDataRecord
@@ -88,14 +92,14 @@ struct ZZCentralFileHeader
 		return reinterpret_cast<uint8_t*>(this) + sizeof(*this);
 	}
 	
-	uint8_t* extraField()
+	ZZExtraField* extraField()
 	{
-		return fileName() + fileNameLength;
+		return reinterpret_cast<ZZExtraField*>(fileName() + fileNameLength);
 	}
 	
 	uint8_t* fileComment()
 	{
-		return extraField() + extraFieldLength;
+		return ((uint8_t*)extraField()) + extraFieldLength;
 	}
 	
 	bool isFileNameUtf8Encoded()
@@ -122,17 +126,17 @@ struct ZZCentralFileHeader
     ZZAesExtraDataRecord* aesExtraDataRecord()
     {
         uint16_t pos = 0;
-        ZZExtraField *field = NULL;
-        uint8_t *extraField = this->extraField();
+        ZZExtraField *field = this->extraField();
         while (pos < extraFieldLength)
         {
-            field = field ? (ZZExtraField *)(((uint8_t*)field) + field->totalSize()) : (ZZExtraField *)extraField;
             pos += field->totalSize();
             
             if (field->header == sign_extra_aes_record)
             {
                 return (ZZAesExtraDataRecord *)field;
             }
+            
+            field = field->nextExtraField();
         }
         return NULL;
     }
@@ -169,14 +173,14 @@ struct ZZLocalFileHeader
 		return reinterpret_cast<uint8_t*>(this) + sizeof(*this);
 	}
 	
-	uint8_t* extraField()
+	ZZExtraField* extraField()
 	{
-		return fileName() + fileNameLength;
+		return reinterpret_cast<ZZExtraField*>(fileName() + fileNameLength);
 	}
 	
 	uint8_t* fileData()
 	{
-		return extraField() + extraFieldLength;
+		return ((uint8_t*)extraField()) + extraFieldLength;
 	}
 	
 	bool isFileNameUtf8Encoded()
@@ -210,17 +214,17 @@ struct ZZLocalFileHeader
     ZZAesExtraDataRecord* aesExtraDataRecord()
     {
         uint16_t pos = 0;
-        ZZExtraField *field = NULL;
-        uint8_t *extraField = this->extraField();
+        ZZExtraField *field = this->extraField();
         while (pos < extraFieldLength)
         {
-            field = field ? (ZZExtraField *)(((uint8_t*)field) + field->totalSize()) : (ZZExtraField *)extraField;
             pos += field->totalSize();
             
             if (field->header == sign_extra_aes_record)
             {
                 return (ZZAesExtraDataRecord *)field;
             }
+            
+            field = field->nextExtraField();
         }
         return NULL;
     }
