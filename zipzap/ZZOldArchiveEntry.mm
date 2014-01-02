@@ -33,40 +33,51 @@
 	NSStringEncoding _encoding;
 	ZZEncryptionMode _encryptionMode;
 	unsigned long dataStartOffset;
+	BOOL encryptionModeDetected;
 }
 
 - (id)initWithCentralFileHeader:(struct ZZCentralFileHeader*)centralFileHeader
 				localFileHeader:(struct ZZLocalFileHeader*)localFileHeader
 					   encoding:(NSStringEncoding)encoding
-                          error:(out NSError**)error
 {
 	if ((self = [super init]))
 	{
 		_centralFileHeader = centralFileHeader;
 		_localFileHeader = localFileHeader;
 		_encoding = encoding;
-		_encryptionMode = [self encryptionModeForCentralFileHeader:centralFileHeader];
-		
-		if (_encryptionMode != ZZEncryptionModeNone)
-		{
-			if (_encryptionMode == ZZEncryptionModeAES)
-			{
-                ZZRaiseError(error, ZZUnsupportedEncryptionMethod, @{@"description": @"AES encryption is not supported."});
-				return nil;
-			}
-			else if (_encryptionMode == ZZEncryptionModeStrong)
-			{
-                ZZRaiseError(error, ZZUnsupportedEncryptionMethod, @{@"description": @"STRONG encryption is not supported."});
-				return nil;
-			}
-			else if (_encryptionMode == ZZEncryptionModeStandard)
-			{
-				dataStartOffset += 12;
-			}
-		}
 	}
 	return self;
 }
+
+- (BOOL)detectEncryptionModeWithError:(NSError**)error
+{
+	if (!encryptionModeDetected)
+	{
+		encryptionModeDetected = YES;
+		_encryptionMode = [self encryptionModeForCentralFileHeader:_centralFileHeader];
+	}
+	
+	if (_encryptionMode != ZZEncryptionModeNone)
+	{
+		if (_encryptionMode == ZZEncryptionModeAES)
+		{
+			ZZRaiseError(error, ZZUnsupportedEncryptionMethod, @{@"description": @"AES encryption is not supported."});
+			return NO;
+		}
+		else if (_encryptionMode == ZZEncryptionModeStrong)
+		{
+			ZZRaiseError(error, ZZUnsupportedEncryptionMethod, @{@"description": @"STRONG encryption is not supported."});
+			return NO;
+		}
+		else if (_encryptionMode == ZZEncryptionModeStandard)
+		{
+			dataStartOffset += 12;
+		}
+	}
+	
+	return YES; // No errors
+}
+
 - (ZZEncryptionMode)encryptionModeForCentralFileHeader:(ZZCentralFileHeader *)fileHeader
 {
 	if (fileHeader->isEncrypted())
@@ -115,6 +126,7 @@
 
 - (ZZCompressionMethod)compressionMethod
 {
+	[self detectEncryptionModeWithError:nil];
     if (_encryptionMode == ZZEncryptionModeAES)
     {
         return _centralFileHeader->aesExtraDataRecord()->compressionMethod;
@@ -205,23 +217,7 @@
 		localUncompressedSize = _localFileHeader->uncompressedSize;		
 	}
 	
-	if (_encryptionMode != ZZEncryptionModeNone)
-	{
-		if (_encryptionMode == ZZEncryptionModeAES)
-		{
-            ZZRaiseError(error, ZZUnsupportedEncryptionMethod, @{@"description": @"AES encryption is not supported."});
-            return NO;
-		}
-		else if (_encryptionMode == ZZEncryptionModeStrong)
-		{
-            ZZRaiseError(error, ZZUnsupportedEncryptionMethod, @{@"description": @"STRONG encryption is not supported."});
-            return NO;
-		}
-		else if (_encryptionMode == ZZEncryptionModeStandard)
-		{
-			localCompressedSize -= 12;
-		}
-	}
+	if (![self detectEncryptionModeWithError:error]) return NO;
 	
 	// sanity check:
 	if (
@@ -252,21 +248,13 @@
 {
 	ZZDecrypter *decrypter = NULL;
 	
+	if (![self detectEncryptionModeWithError:error]) return nil;
+	
 	if (_encryptionMode != ZZEncryptionModeNone)
 	{
         if (!password) password = @""; // Prevent dereferencing a NULL password.UTF8String...
         
-		if (_encryptionMode == ZZEncryptionModeAES)
-		{
-            ZZRaiseError(error, ZZUnsupportedEncryptionMethod, @{@"description": @"AES encryption is not supported."});
-            return nil;
-		}
-		else if (_encryptionMode == ZZEncryptionModeStrong)
-		{
-            ZZRaiseError(error, ZZUnsupportedEncryptionMethod, @{@"description": @"STRONG encryption is not supported."});
-			return nil;
-		}
-		else if (_encryptionMode == ZZEncryptionModeStandard)
+		if (_encryptionMode == ZZEncryptionModeStandard)
 		{
 			unsigned char headerBytes[12];
 			memcpy(&headerBytes[0], fileData.bytes, 12);
@@ -292,7 +280,6 @@
 - (NSInputStream*)newStreamWithPassword:(NSString *)password error:(NSError **)error
 {
 	NSData *fileData = [self fileData];
-	NSData *fileDataWithOffsetToContent = [self fileDataWithOffsetToContent];
 	
     NSError *decError = nil;
 	ZZDecrypter *decrypter = [self decrpyterForFileData:fileData withPassword:password error:&decError];
@@ -300,6 +287,8 @@
 	
     if (!decrypter && decError) return nil;
 	
+	NSData *fileDataWithOffsetToContent = [self fileDataWithOffsetToContent];
+    
 	switch (_centralFileHeader->compressionMethod)
 	{
 		case ZZCompressionMethod::stored:
@@ -344,13 +333,14 @@
 - (NSData*)newDataWithPassword:(NSString *)password error:(NSError **)error
 {
 	NSData *fileData = [self fileData];
-	NSData *fileDataWithOffsetToContent = [self fileDataWithOffsetToContent];
 	
     NSError *decError = nil;
 	ZZDecrypter *decrypter = [self decrpyterForFileData:fileData withPassword:password error:&decError];
     if (error && decError) *error = decError;
 	
     if (!decrypter && decError) return nil;
+	
+	NSData *fileDataWithOffsetToContent = [self fileDataWithOffsetToContent];
 	
 	switch (_centralFileHeader->compressionMethod)
 	{
@@ -409,13 +399,14 @@
 - (CGDataProviderRef)newDataProviderWithPassword:(NSString *)password error:(NSError *__autoreleasing *)error
 {
 	NSData *fileData = [self fileData];
-	NSData *fileDataWithOffsetToContent = [self fileDataWithOffsetToContent];
 	
     NSError *decError = nil;
 	ZZDecrypter *decrypter = [self decrpyterForFileData:fileData withPassword:password error:&decError];
     if (error && decError) *error = decError;
 	
     if (!decrypter && decError) return nil;
+	
+	NSData *fileDataWithOffsetToContent = [self fileDataWithOffsetToContent];
 	
 	switch (_centralFileHeader->compressionMethod)
 	{

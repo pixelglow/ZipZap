@@ -150,8 +150,7 @@
 		
 		[entries addObject:[[ZZOldArchiveEntry alloc] initWithCentralFileHeader:nextCentralFileHeader
 																localFileHeader:nextLocalFileHeader
-																	   encoding:_encoding
-                                                                          error:error]];
+																	   encoding:_encoding]];
 		
 		nextCentralFileHeader = nextCentralFileHeader->nextCentralFileHeader();
 	}

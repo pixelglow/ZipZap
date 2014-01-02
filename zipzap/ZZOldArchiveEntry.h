@@ -32,8 +32,7 @@
 
 - (id)initWithCentralFileHeader:(struct ZZCentralFileHeader*)centralFileHeader
 				localFileHeader:(struct ZZLocalFileHeader*)localFileHeader
-					   encoding:(NSStringEncoding)encoding
-                          error:(out NSError **)error;
+					   encoding:(NSStringEncoding)encoding;
 
 - (BOOL)check:(NSError **)error;
 
