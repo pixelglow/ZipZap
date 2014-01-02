@@ -284,12 +284,12 @@
 	return decrypter;
 }
 
-- (NSInputStream*)newStreamWithError:(out NSError **)error
+- (NSInputStream*)newStreamWithError:(NSError **)error
 {
     return [self newStreamWithPassword:nil error:error];
 }
 
-- (NSInputStream*)newStreamWithPassword:(NSString *)password error:(out NSError **)error
+- (NSInputStream*)newStreamWithPassword:(NSString *)password error:(NSError **)error
 {
 	NSData *fileData = [self fileData];
 	NSData *fileDataWithOffsetToContent = [self fileDataWithOffsetToContent];
@@ -336,12 +336,12 @@
 	}
 }
 
-- (NSData*)newDataWithError:(out NSError **)error
+- (NSData*)newDataWithError:(NSError **)error
 {
     return [self newDataWithPassword:nil error:error];
 }
 
-- (NSData*)newDataWithPassword:(NSString *)password error:(out NSError **)error
+- (NSData*)newDataWithPassword:(NSString *)password error:(NSError **)error
 {
 	NSData *fileData = [self fileData];
 	NSData *fileDataWithOffsetToContent = [self fileDataWithOffsetToContent];
@@ -401,12 +401,12 @@
 	}
 }
 
-- (CGDataProviderRef)newDataProviderWithError:(out NSError **)error
+- (CGDataProviderRef)newDataProviderWithError:(NSError **)error
 {
     return [self newDataProviderWithPassword:nil error:error];
 }
 
-- (CGDataProviderRef)newDataProviderWithPassword:(NSString *)password error:(out NSError *__autoreleasing *)error
+- (CGDataProviderRef)newDataProviderWithPassword:(NSString *)password error:(NSError *__autoreleasing *)error
 {
 	NSData *fileData = [self fileData];
 	NSData *fileDataWithOffsetToContent = [self fileDataWithOffsetToContent];

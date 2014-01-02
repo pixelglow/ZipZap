@@ -62,7 +62,7 @@
 		ZZArchiveEntry* nextEntry = _zipFile.entries[index];
 		NSString* nextEntryFilePath = _entryFilePaths[index];
 		
-		NSInputStream* stream = [nextEntry newStream];
+		NSInputStream* stream = [nextEntry newStreamWithError:nil];
 		
 		[stream open];
 		
@@ -210,7 +210,7 @@
 
 		XCTAssertEqual(zipEntry.crc32, zipFromDataEntry.crc32, @"zipFromDataEntry.entries[%lu].crc32 must match the reference entry.", (unsigned long)index);
 
-		XCTAssertEqualObjects([zipEntry newData], [zipFromDataEntry newData], @"zipFromDataEntry.entries[%lu].data must match the reference entry.", (unsigned long)index);
+		XCTAssertEqualObjects([zipEntry newDataWithError:nil], [zipFromDataEntry newDataWithError:nil], @"zipFromDataEntry.entries[%lu].data must match the reference entry.", (unsigned long)index);
 
 		XCTAssertEqual(zipEntry.fileMode, zipFromDataEntry.fileMode, @"zipFromDataEntry.entries[%lu].fileMode must match the reference entry.", (unsigned long)index);
 
@@ -229,7 +229,7 @@
 		ZZArchiveEntry* nextEntry = _zipFile.entries[index];
 		NSString* nextEntryFilePath = _entryFilePaths[index];
 		
-		XCTAssertEqualObjects([nextEntry newData],
+		XCTAssertEqualObjects([nextEntry newDataWithError:nil],
 							 [self dataAtFilePath:nextEntryFilePath],
 							 @"zipFile.entries[%lu].data must match the original file data.",
 							 (unsigned long)index);
@@ -253,7 +253,7 @@
 		ZZArchiveEntry* nextEntry = _zipFile.entries[index];
 		NSString* nextEntryFilePath = _entryFilePaths[index];
 		
-		CGDataProviderRef dataProvider = [nextEntry newDataProvider];
+		CGDataProviderRef dataProvider = [nextEntry newDataProviderWithError:nil];
 		CFDataRef providerData = CGDataProviderCopyData(dataProvider);
 		XCTAssertEqualObjects((__bridge NSData*)providerData,
 							 [self dataAtFilePath:nextEntryFilePath],
@@ -275,7 +275,7 @@
 		
 		if ([nextEntryPathExtension isEqualToString:@"png"] || [nextEntryPathExtension isEqualToString:@"jpg"])
 		{
-			CGDataProviderRef dataProvider = [nextEntry newDataProvider];
+			CGDataProviderRef dataProvider = [nextEntry newDataProviderWithError:nil];
 			CGImageSourceRef dataProviderImageSource = CGImageSourceCreateWithDataProvider(dataProvider, NULL);
 			CGImageRef dataProviderImage = CGImageSourceCreateImageAtIndex(dataProviderImageSource, 0, NULL);
 			
@@ -310,7 +310,7 @@
 	
 	static NSString *testString = @"1234567890abcdefghijklmnopqrstuvwxyz";
 	
-	XCTAssertEqualObjects([fileEntry newDataWithPassword:@"1234567890"], [NSData dataWithBytes:testString.UTF8String length:testString.length], @"[fileEntry newDataWithPassword:...] must match the original data.");
+	XCTAssertEqualObjects([fileEntry newDataWithPassword:@"1234567890" error:nil], [NSData dataWithBytes:testString.UTF8String length:testString.length], @"[fileEntry newDataWithPassword:...] must match the original data.");
 }
 
 - (void)testExtractingAndStandardDecryptingLargeZipEntryData
@@ -321,7 +321,7 @@
 	
 	static NSString *testString = @"1234567890abcdefghijklmnopqrstuvwxyz";
 	
-	NSInputStream *stream = [fileEntry newStreamWithPassword:@"qwertyuiop"];
+	NSInputStream *stream = [fileEntry newStreamWithPassword:@"qwertyuiop" error:nil];
 	if (!stream) XCTFail(@"[fileEntry newStreamWithPassword:...] must return a non-nil stream.");
 
 	if (stream)

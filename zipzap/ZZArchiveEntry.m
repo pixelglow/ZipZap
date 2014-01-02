@@ -115,22 +115,12 @@
 	return nil;
 }
 
-- (NSInputStream*)newStream
-{
-	return [self newStreamWithError:nil];
-}
-
-- (NSInputStream*)newStreamWithError:(out NSError **)error
+- (NSInputStream*)newStreamWithError:(NSError **)error
 {
 	return nil;
 }
 
-- (NSInputStream*)newStreamWithPassword:(NSString *)password
-{
-	return [self newStreamWithPassword:password error:nil];
-}
-
-- (NSInputStream*)newStreamWithPassword:(NSString *)password error:(out NSError **)error
+- (NSInputStream*)newStreamWithPassword:(NSString *)password error:(NSError **)error
 { // Assume that by default the subclass did not implement it, so we will fallback to the newStreamWithError:
 	return [self newStreamWithError:error];
 }
@@ -140,42 +130,22 @@
 	return YES;
 }
 
-- (NSData*)newData
-{
-	return [self newDataWithError:nil];
-}
-
-- (NSData*)newDataWithError:(out NSError *__autoreleasing *)error
+- (NSData*)newDataWithError:(NSError **)error
 {
 	return nil;
 }
 
-- (NSData*)newDataWithPassword:(NSString *)password
-{
-	return [self newDataWithPassword:password error:nil];
-}
-
-- (NSData*)newDataWithPassword:(NSString *)password error:(out NSError **)error
+- (NSData*)newDataWithPassword:(NSString *)password error:(NSError **)error
 { // Assume that by default the subclass did not implement it, so we will fallback to the newStreamWithError:
 	return [self newDataWithError:error];
 }
 
-- (CGDataProviderRef)newDataProvider
-{
-	return [self newDataProviderWithError:nil];
-}
-
-- (CGDataProviderRef)newDataProviderWithError:(out NSError *__autoreleasing *)error
+- (CGDataProviderRef)newDataProviderWithError:(NSError **)error
 {
 	return NULL;
 }
 
-- (CGDataProviderRef)newDataProviderWithPassword:(NSString *)password
-{
-	return [self newDataProviderWithPassword:password error:nil];
-}
-
-- (CGDataProviderRef)newDataProviderWithPassword:(NSString *)password error:(out NSError *__autoreleasing *)error
+- (CGDataProviderRef)newDataProviderWithPassword:(NSString *)password error:(NSError **)error
 { // Assume that by default the subclass did not implement it, so we will fallback to the newStreamWithError:
 	return [self newDataProviderWithError:error];
 }
