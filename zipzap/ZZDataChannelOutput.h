@@ -16,12 +16,12 @@
 
 - (uint32_t)offset;
 - (BOOL)seekToOffset:(uint32_t)offset
-			   error:(NSError**)error;
+			   error:(out NSError**)error;
 
 - (BOOL)writeData:(NSData*)data
-			error:(NSError**)error;
+			error:(out NSError**)error;
 - (BOOL)truncateAtOffset:(uint32_t)offset
-				   error:(NSError**)error;
+				   error:(out NSError**)error;
 - (void)close;
 
 @end

@@ -115,37 +115,37 @@
 	return nil;
 }
 
-- (NSInputStream*)newStreamWithError:(NSError **)error
+- (NSInputStream*)newStreamWithError:(NSError**)error
 {
 	return nil;
 }
 
-- (NSInputStream*)newStreamWithPassword:(NSString *)password error:(NSError **)error
+- (NSInputStream*)newStreamWithPassword:(NSString*)password error:(NSError**)error
 { // Assume that by default the subclass did not implement it, so we will fallback to the newStreamWithError:
 	return [self newStreamWithError:error];
 }
 
-- (BOOL)check:(NSError **)error
+- (BOOL)check:(NSError**)error
 {
 	return YES;
 }
 
-- (NSData*)newDataWithError:(NSError **)error
+- (NSData*)newDataWithError:(NSError**)error
 {
 	return nil;
 }
 
-- (NSData*)newDataWithPassword:(NSString *)password error:(NSError **)error
+- (NSData*)newDataWithPassword:(NSString*)password error:(NSError**)error
 { // Assume that by default the subclass did not implement it, so we will fallback to the newStreamWithError:
 	return [self newDataWithError:error];
 }
 
-- (CGDataProviderRef)newDataProviderWithError:(NSError **)error
+- (CGDataProviderRef)newDataProviderWithError:(NSError**)error
 {
 	return NULL;
 }
 
-- (CGDataProviderRef)newDataProviderWithPassword:(NSString *)password error:(NSError **)error
+- (CGDataProviderRef)newDataProviderWithPassword:(NSString*)password error:(NSError**)error
 { // Assume that by default the subclass did not implement it, so we will fallback to the newStreamWithError:
 	return [self newDataProviderWithError:error];
 }

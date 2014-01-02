@@ -49,7 +49,7 @@
 	return self;
 }
 
-- (BOOL)detectEncryptionModeWithError:(NSError**)error
+- (BOOL)detectEncryptionModeWithError:(out NSError**)error
 {
 	if (!encryptionModeDetected)
 	{
@@ -272,12 +272,12 @@
 	return decrypter;
 }
 
-- (NSInputStream*)newStreamWithError:(NSError **)error
+- (NSInputStream*)newStreamWithError:(out NSError**)error
 {
     return [self newStreamWithPassword:nil error:error];
 }
 
-- (NSInputStream*)newStreamWithPassword:(NSString *)password error:(NSError **)error
+- (NSInputStream*)newStreamWithPassword:(NSString*)password error:(out NSError**)error
 {
 	NSData *fileData = [self fileData];
 	
@@ -325,12 +325,12 @@
 	}
 }
 
-- (NSData*)newDataWithError:(NSError **)error
+- (NSData*)newDataWithError:(out NSError**)error
 {
     return [self newDataWithPassword:nil error:error];
 }
 
-- (NSData*)newDataWithPassword:(NSString *)password error:(NSError **)error
+- (NSData*)newDataWithPassword:(NSString*)password error:(out NSError**)error
 {
 	NSData *fileData = [self fileData];
 	
@@ -391,12 +391,12 @@
 	}
 }
 
-- (CGDataProviderRef)newDataProviderWithError:(NSError **)error
+- (CGDataProviderRef)newDataProviderWithError:(out NSError**)error
 {
     return [self newDataProviderWithPassword:nil error:error];
 }
 
-- (CGDataProviderRef)newDataProviderWithPassword:(NSString *)password error:(NSError *__autoreleasing *)error
+- (CGDataProviderRef)newDataProviderWithPassword:(NSString*)password error:(out NSError**)error
 {
 	NSData *fileData = [self fileData];
 	

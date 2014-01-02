@@ -174,7 +174,7 @@ namespace ZZDataConsumer
 
 - (BOOL)writeLocalFileToChannelOutput:(id<ZZChannelOutput>)channelOutput
 					  withInitialSkip:(uint32_t)initialSkip
-								error:(NSError**)error
+								error:(out NSError**)error
 {
 	ZZCentralFileHeader* centralFileHeader = [self centralFileHeader];
 	
@@ -309,7 +309,7 @@ namespace ZZDataConsumer
 }
 
 - (BOOL)writeCentralFileHeaderToChannelOutput:(id<ZZChannelOutput>)channelOutput
-										error:(NSError**)error
+										error:(out NSError**)error
 
 {
 	return [channelOutput writeData:_centralFileHeader

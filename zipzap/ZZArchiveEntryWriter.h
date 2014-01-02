@@ -15,7 +15,7 @@
 - (uint32_t)offsetToLocalFileEnd;
 - (BOOL)writeLocalFileToChannelOutput:(id<ZZChannelOutput>)channelOutput
 					  withInitialSkip:(uint32_t)initialSkip
-								error:(NSError**)error;
+								error:(out NSError**)error;
 - (BOOL)writeCentralFileHeaderToChannelOutput:(id<ZZChannelOutput>)channelOutput
-										error:(NSError**)error;
+										error:(out NSError**)error;
 @end

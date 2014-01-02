@@ -155,7 +155,7 @@
  * @param error The error information when an error occurs. Pass in nil if you do not want error information.
  * @return Whether entry file is consistent or not.
  */
-- (BOOL)check:(NSError**)error;
+- (BOOL)check:(out NSError**)error;
 
 /**
  * Creates a stream to represent the entry file.

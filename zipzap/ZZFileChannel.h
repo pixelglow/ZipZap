@@ -16,12 +16,12 @@
 
 - (id)initWithURL:(NSURL*)URL;
 
-- (instancetype)temporaryChannel:(NSError**)error;
+- (instancetype)temporaryChannel:(out NSError**)error;
 - (BOOL)replaceWithChannel:(id<ZZChannel>)channel
-					 error:(NSError**)error;
+					 error:(out NSError**)error;
 - (void)removeAsTemporary;
 
-- (NSData*)newInput:(NSError**)error;
-- (id<ZZChannelOutput>)newOutput:(NSError**)error;
+- (NSData*)newInput:(out NSError**)error;
+- (id<ZZChannelOutput>)newOutput:(out NSError**)error;
 
 @end

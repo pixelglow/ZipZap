@@ -26,7 +26,7 @@
 }
 
 - (BOOL)seekToOffset:(uint32_t)offset
-			   error:(NSError**)error
+			   error:(out NSError**)error
 {
 	if (lseek(_fileDescriptor, offset, SEEK_SET) == -1)
 	{
@@ -39,7 +39,7 @@
 }
 
 - (BOOL)writeData:(NSData*)data
-			error:(NSError**)error
+			error:(out NSError**)error
 {
 	// output up to INT_MAX bytes at a time: Darwin errors with EINVAL if we write > INT_MAX bytes
 	const uint8_t* bytes;
@@ -61,7 +61,7 @@
 }
 
 - (BOOL)truncateAtOffset:(uint32_t)offset
-				   error:(NSError**)error
+				   error:(out NSError**)error
 {
 	if (ftruncate(_fileDescriptor, offset) == -1)
 	{

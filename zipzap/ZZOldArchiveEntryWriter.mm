@@ -61,7 +61,7 @@
 
 - (BOOL)writeLocalFileToChannelOutput:(id<ZZChannelOutput>)channelOutput
 					  withInitialSkip:(uint32_t)initialSkip
-								error:(NSError**)error
+								error:(out NSError**)error
 {
 	if (_localFile)
 	{
@@ -75,7 +75,7 @@
 }
 
 - (BOOL)writeCentralFileHeaderToChannelOutput:(id<ZZChannelOutput>)channelOutput
-										error:(NSError**)error
+										error:(out NSError**)error
 {
 	return [channelOutput writeData:_centralFileHeader
 							  error:error];

@@ -34,6 +34,4 @@
 				localFileHeader:(struct ZZLocalFileHeader*)localFileHeader
 					   encoding:(NSStringEncoding)encoding;
 
-- (BOOL)check:(NSError **)error;
-
 @end
