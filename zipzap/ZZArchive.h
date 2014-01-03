@@ -31,6 +31,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "ZZConstants.h"
 
 /**
  * The ZZArchive class represents a zip file for reading only.
@@ -101,7 +102,7 @@
  * @param error The error information when an error occurs. Pass in nil if you do not want error information.
  * @return Whether the load was successful or not.
  */
-- (BOOL)load:(NSError**)error;
+- (BOOL)load:(out NSError**)error;
 
 @end
 
@@ -124,6 +125,6 @@
  *
  */
 - (BOOL)updateEntries:(NSArray*)newEntries
-				error:(NSError**)error;
+				error:(out NSError**)error;
 
 @end

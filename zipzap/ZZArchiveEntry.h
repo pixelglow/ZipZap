@@ -51,6 +51,11 @@
 @property (readonly, nonatomic) BOOL compressed;
 
 /**
+ * Whether the entry is encrypted.
+ */
+@property (readonly, nonatomic) BOOL encrypted;
+
+/**
  * The last modified date and time of the entry. The time value is only accurate to 2 seconds.
  */
 @property (readonly, nonatomic) NSDate* lastModified;
@@ -155,28 +160,58 @@
  * @param error The error information when an error occurs. Pass in nil if you do not want error information.
  * @return Whether entry file is consistent or not.
  */
-- (BOOL)check:(NSError**)error;
+- (BOOL)check:(out NSError**)error;
 
 /**
  * Creates a stream to represent the entry file.
  *
+ * @param error A pointer to a variable that will contain the error if any.
  * @return The new stream: nil for new entries.
  */
-- (NSInputStream*)newStream;
+- (NSInputStream*)newStreamWithError:(NSError**)error;
+
+/**
+ * Creates a stream to represent the entry file.
+ *
+ * @param password The password to be used for decryption.
+ * @param error A pointer to a variable that will contain the error if any.
+ * @return The new stream: nil for new entries.
+ */
+- (NSInputStream*)newStreamWithPassword:(NSString*)password error:(NSError**)error;
 
 /**
  * Creates data to represent the entry file.
  *
+ * @param error A pointer to a variable that will contain the error if any.
  * @return The new data: nil for new entries.
  */
-- (NSData*)newData;
+- (NSData*)newDataWithError:(NSError**)error;
+
+/**
+ * Creates data to represent the entry file.
+ *
+ * @param password The password to be used for decryption.
+ * @param error A pointer to a variable that will contain the error if any.
+ * @return The new data: nil for new entries.
+ */
+- (NSData*)newDataWithPassword:(NSString*)password error:(NSError**)error;
 
 /**
  * Creates a data provider to represent the entry file.
  *
+ * @param error A pointer to a variable that will contain the error if any.
  * @return The new data provider: nil for new entries.
  */
-- (CGDataProviderRef)newDataProvider;
+- (CGDataProviderRef)newDataProviderWithError:(NSError**)error;
+
+/**
+ * Creates a data provider to represent the entry file.
+ *
+ * @param password The password to be used for decryption.
+ * @param error A pointer to a variable that will contain the error if any.
+ * @return The new data provider: nil for new entries.
+ */
+- (CGDataProviderRef)newDataProviderWithPassword:(NSString*)password error:(NSError**)error;
 
 - (id<ZZArchiveEntryWriter>)newWriterCanSkipLocalFile:(BOOL)canSkipLocalFile;
 

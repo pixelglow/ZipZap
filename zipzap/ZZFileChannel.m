@@ -27,7 +27,7 @@
 	return _URL;
 }
 
-- (instancetype)temporaryChannel:(NSError**)error
+- (instancetype)temporaryChannel:(out NSError**)error
 {
 	NSURL* temporaryDirectory = [[NSFileManager defaultManager] URLForDirectory:NSItemReplacementDirectory
 																	   inDomain:NSUserDomainMask
@@ -39,7 +39,7 @@
 }
 
 - (BOOL)replaceWithChannel:(id<ZZChannel>)channel
-					 error:(NSError**)error
+					 error:(out NSError**)error
 {
 	NSURL* __autoreleasing resultingURL;
 	return [[NSFileManager defaultManager] replaceItemAtURL:_URL
@@ -56,14 +56,14 @@
 											  error:nil];
 }
 
-- (NSData*)newInput:(NSError**)error
+- (NSData*)newInput:(out NSError**)error
 {
 	return [[NSData alloc] initWithContentsOfURL:_URL
 										 options:NSDataReadingMappedAlways
 										   error:error];
 }
 
-- (id<ZZChannelOutput>)newOutput:(NSError**)error
+- (id<ZZChannelOutput>)newOutput:(out NSError**)error
 {
 	int fileDescriptor =  open(_URL.path.fileSystemRepresentation,
 							   O_WRONLY | O_CREAT,

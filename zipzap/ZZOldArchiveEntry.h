@@ -16,10 +16,12 @@
 #import <Foundation/Foundation.h>
 
 #import "ZZArchiveEntry.h"
+#import "ZZHeaders.h"
 
 @interface ZZOldArchiveEntry : ZZArchiveEntry
 
 @property (readonly, nonatomic) BOOL compressed;
+@property (readonly, nonatomic) BOOL encrypted;
 @property (readonly, nonatomic) NSDate* lastModified;
 @property (readonly, nonatomic) NSUInteger crc32;
 @property (readonly, nonatomic) NSUInteger compressedSize;
@@ -30,11 +32,5 @@
 - (id)initWithCentralFileHeader:(struct ZZCentralFileHeader*)centralFileHeader
 				localFileHeader:(struct ZZLocalFileHeader*)localFileHeader
 					   encoding:(NSStringEncoding)encoding;
-
-- (BOOL)check:(NSError **)error;
-
-- (NSInputStream*)newStream;
-- (NSData*)newData;
-- (CGDataProviderRef)newDataProvider;
 
 @end
