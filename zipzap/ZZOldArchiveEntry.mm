@@ -9,45 +9,13 @@
 
 #include <zlib.h>
 
+#import "ZZDataProvider.h"
 #import "ZZError.h"
 #import "ZZInflateInputStream.h"
 #import "ZZOldArchiveEntry.h"
 #import "ZZOldArchiveEntryWriter.h"
 #import "ZZHeaders.h"
 #import "ZZArchiveEntryWriter.h"
-
-namespace ZZDataProvider
-{
-	static size_t getBytes (void* info, void* buffer, size_t count)
-	{
-		return [(__bridge ZZInflateInputStream*)info read:(uint8_t*)buffer maxLength:count];
-	}
-
-	static off_t skipForwardBytes (void* info, off_t count)
-	{
-		return [(__bridge ZZInflateInputStream*)info skipForward:count];
-	}
-
-	static void rewind (void* info)
-	{
-		[(__bridge ZZInflateInputStream*)info rewind];
-	}
-
-	static void releaseInfo (void* info)
-	{
-		[(__bridge ZZInflateInputStream*)info close];
-		CFRelease(info);
-	}
-
-	static CGDataProviderSequentialCallbacks sequentialCallbacks =
-	{
-		0,
-		&getBytes,
-		&skipForwardBytes,
-		&rewind,
-		&releaseInfo
-	};
-}
 
 @interface ZZOldArchiveEntry ()
 
@@ -208,7 +176,7 @@ namespace ZZDataProvider
 			return [NSInputStream inputStreamWithData:[self fileData]];
 		case ZZCompressionMethod::deflated:
 			// if deflated, use a stream that inflates the file data
-			return [[ZZInflateInputStream alloc] initWithData:[self fileData]];
+			return [[ZZInflateInputStream alloc] initWithStream:[NSInputStream inputStreamWithData:[self fileData]]];
 		default:
 			return nil;
 	}
@@ -224,17 +192,10 @@ namespace ZZDataProvider
 								  length:_centralFileHeader->compressedSize];
 
 		case ZZCompressionMethod::deflated:
-		{
-			// if deflated, inflate all into a buffer and use that
-			ZZInflateInputStream* deflateStream = [[ZZInflateInputStream alloc] initWithData:[self fileData]];
-			
-			NSMutableData* data = [NSMutableData dataWithLength:_centralFileHeader->uncompressedSize];
-			[deflateStream open];
-			[deflateStream read:(uint8_t*)data.mutableBytes maxLength:_centralFileHeader->uncompressedSize];
-			[deflateStream close];
-			
-			return data;
-		}
+			// if deflated, inflate all into data
+			return [ZZInflateInputStream inflateData:[self fileData]
+								withUncompressedSize:_centralFileHeader->uncompressedSize];
+		
 		default:
 			return nil;
 	}
@@ -247,14 +208,12 @@ namespace ZZDataProvider
 		case ZZCompressionMethod::stored:
 			// if stored, just wrap file data in a data provider
 			return CGDataProviderCreateWithCFData((__bridge CFDataRef)[self fileData]);
+			
 		case ZZCompressionMethod::deflated:
-		{
-			// if deflated, wrap a stream that inflates the file data
-			ZZInflateInputStream* deflateStream = [[ZZInflateInputStream alloc] initWithData:[self fileData]];
-			[deflateStream open];
-			return CGDataProviderCreateSequential((__bridge_retained void*)deflateStream,
-												  &ZZDataProvider::sequentialCallbacks);
-		}
+			return ZZDataProvider::create(^
+										  {
+											  return [[ZZInflateInputStream alloc] initWithStream:[NSInputStream inputStreamWithData:[self fileData]]];
+										  });
 		default:
 			return NULL;
 	}

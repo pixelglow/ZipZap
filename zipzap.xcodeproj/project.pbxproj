@@ -102,6 +102,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		D804E4C8187645FE00289404 /* ZZDataProvider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZZDataProvider.h; sourceTree = "<group>"; };
 		D810EBCE164B19DA00200834 /* 拉链.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "拉链.txt"; sourceTree = "<group>"; };
 		D81DF41E1871471E00501A61 /* ZZScopeGuard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZZScopeGuard.h; sourceTree = "<group>"; };
 		D8366ACC16B1F8B400BC012E /* ZZError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZZError.h; sourceTree = "<group>"; };
@@ -227,6 +228,7 @@
 				D84A44AE16A0E8D600CF00A9 /* ZZDataChannel.m */,
 				D84A44CD16A0F8B400CF00A9 /* ZZDataChannelOutput.h */,
 				D84A44CE16A0F8B400CF00A9 /* ZZDataChannelOutput.m */,
+				D804E4C8187645FE00289404 /* ZZDataProvider.h */,
 				D899CFDE162C608300112F49 /* ZZDeflateOutputStream.h */,
 				D899CFDF162C608300112F49 /* ZZDeflateOutputStream.m */,
 				D84A44A316A0E2F300CF00A9 /* ZZFileChannel.h */,

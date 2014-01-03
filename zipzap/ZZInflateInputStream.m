@@ -10,19 +10,51 @@
 
 #import "ZZInflateInputStream.h"
 
-static const uInt _skipMaxLength = 1024;
+static const NSUInteger _bufferLength = 16384; // 16K buffer
 
 @implementation ZZInflateInputStream
 {
-	NSData* _data;
+	NSInputStream* _upstream;
+	NSMutableData* _readBuffer;
+	NSStreamStatus _status;
+	NSError* _error;
 	z_stream _stream;
 }
 
-- (id)initWithData:(NSData*)data
++ (NSData*)inflateData:(NSData*)data
+  withUncompressedSize:(NSUInteger)uncompressedSize
+{
+	NSMutableData* inflatedData = [NSMutableData dataWithLength:uncompressedSize];
+	
+	z_stream stream;
+	stream.zalloc = Z_NULL;
+	stream.zfree = Z_NULL;
+	stream.opaque = Z_NULL;
+	stream.next_in = (Bytef*)data.bytes;
+	stream.avail_in = (uInt)data.length;
+	stream.next_out = (Bytef*)inflatedData.mutableBytes;
+	stream.avail_out = (uInt)inflatedData.length;
+	
+	inflateInit2(&stream, -15);
+	switch (inflate(&stream, Z_FINISH))
+	{
+		case Z_STREAM_END:
+			return inflatedData;
+		default:
+			// TODO: reference some kind of error
+			return nil;
+	}
+}
+
+- (id)initWithStream:(NSInputStream*)upstream
 {
 	if ((self = [super init]))
 	{
-		_data = data;
+		_upstream = upstream;
+		
+		_readBuffer = [NSMutableData dataWithLength:_bufferLength];
+		_status = NSStreamStatusNotOpen;
+		_error = nil;
 		
 		_stream.zalloc = Z_NULL;
 		_stream.zfree = Z_NULL;
@@ -33,28 +65,76 @@ static const uInt _skipMaxLength = 1024;
 	return self;
 }
 
+- (NSStreamStatus)streamStatus
+{
+	return _status;
+}
+
+- (NSError*)streamError
+{
+	return _error;
+}
+
 - (void)open
 {
-	// gzip stream references the data
-	_stream.next_in = (Bytef*)_data.bytes;
-	_stream.avail_in = (uInt)_data.length;
-	
+	[_upstream open];
+	_status = NSStreamStatusOpen;
+
 	inflateInit2(&_stream, -15);
 }
 
 - (void)close
 {
 	inflateEnd(&_stream);
+	
+	[_upstream close];
+	_status = NSStreamStatusClosed;
 }
 
 - (NSInteger)read:(uint8_t*)buffer maxLength:(NSUInteger)len
 {
+	// if buffer is empty and stream is still OK, read in up to 16K bytes from upstream
+	NSInteger bytesRead;
+	if (_stream.avail_in == 0)
+		switch (_upstream.streamStatus)
+		{
+			case NSStreamStatusOpening:
+			case NSStreamStatusOpen:
+				bytesRead = [_upstream read:_readBuffer.mutableBytes maxLength:_bufferLength];
+				if (bytesRead >= 0)
+				{
+					_stream.next_in = (Bytef*)_readBuffer.bytes;
+					_stream.avail_in = (uInt)bytesRead;
+				}
+				else
+				{
+					_status = NSStreamStatusError;
+					_error = _upstream.streamError;
+					return -1;
+				}
+				break;
+			default:
+				break;
+		}
+
+	// zlib available bytes limited to 32 bits
+	if (len > UINT_MAX)
+		len = UINT_MAX;
+		
+	// inflate buffer
 	_stream.next_out = buffer;
 	_stream.avail_out = (uInt)len;
+	switch (inflate(&_stream, Z_NO_FLUSH))
+	{
+		case Z_STREAM_END:
+			_status = NSStreamStatusAtEnd;
+			break;
+		// TODO: need to handle Z_DATA_ERROR etc.
+		default:
+			break;
+	}
 	
-	inflate(&_stream, Z_NO_FLUSH);
-	
-	// return how many bytes consumed by inflate
+	// return how many bytes produced by inflate
 	return len - _stream.avail_out;
 }
 
@@ -65,42 +145,7 @@ static const uInt _skipMaxLength = 1024;
 
 - (BOOL)hasBytesAvailable
 {
-	return _stream.next_in != Z_NULL;
-}
-
-- (void)rewind
-{
-	// gzip stream references the data
-	_stream.next_in = (Bytef*)_data.bytes;
-	_stream.avail_in = (uInt)_data.length;
-	
-	// same as inflateEnd + inflateInit, but w/o freeing up memory
-	// NOTE: this should be safe and relatively fast to do multiple times or after a [self open]
-	inflateReset(&_stream);
-}
-
-- (off_t)skipForward:(off_t)count
-{
-	uint8_t skipBuffer[_skipMaxLength];
-	
-	off_t newCount = count;
-	_stream.avail_out = 0;
-	
-	// consume up to count bytes of inflated data, a bufferfull at a time
-	while (newCount > 0 && _stream.avail_out == 0)
-	{
-		uInt skipLength = (uInt)MIN(newCount, (off_t)sizeof(skipBuffer));
-		
-		_stream.next_out = skipBuffer;
-		_stream.avail_out = skipLength;
-		
-		inflate(&_stream, Z_NO_FLUSH);
-		newCount -= skipLength - _stream.avail_out;
-	}
-	
-	// return how many bytes skipped
-	// NOTE: this may not equal count if gzip stream runs out of bytes while skipping
-	return count - newCount;
+	return YES;
 }
 
 @end

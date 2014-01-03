@@ -10,7 +10,13 @@
 
 @interface ZZInflateInputStream : NSInputStream
 
-- (id)initWithData:(NSData*)data;
++ (NSData*)inflateData:(NSData*)data
+  withUncompressedSize:(NSUInteger)uncompressedSize;
+
+- (id)initWithStream:(NSInputStream*)upstream;
+
+- (NSStreamStatus)streamStatus;
+- (NSError*)streamError;
 
 - (void)open;
 - (void)close;
@@ -18,8 +24,5 @@
 - (NSInteger)read:(uint8_t*)buffer maxLength:(NSUInteger)len;
 - (BOOL)getBuffer:(uint8_t**)buffer length:(NSUInteger*)len;
 - (BOOL)hasBytesAvailable;
-
-- (void)rewind;
-- (off_t)skipForward:(off_t)count;
 
 @end
