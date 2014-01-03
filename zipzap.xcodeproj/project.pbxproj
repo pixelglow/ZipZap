@@ -7,9 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5B14D3DB1875649C005D9F55 /* ZZArchive+Encryption.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5B14D3D91875649C005D9F55 /* ZZArchive+Encryption.mm */; };
-		5B14D3DC187564E8005D9F55 /* ZZArchive+Encryption.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5B14D3D91875649C005D9F55 /* ZZArchive+Encryption.mm */; };
-		5B14D3DD187564E8005D9F55 /* ZZArchive+Encryption.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5B14D3D91875649C005D9F55 /* ZZArchive+Encryption.mm */; };
 		5B503928187068F6002B2B12 /* ZZDecrypter.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B503926187068F6002B2B12 /* ZZDecrypter.h */; };
 		5B503929187068F6002B2B12 /* ZZDecrypter.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5B503927187068F6002B2B12 /* ZZDecrypter.mm */; };
 		5B50392C18706904002B2B12 /* ZZStandardDecrypter.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B50392A18706904002B2B12 /* ZZStandardDecrypter.h */; };
@@ -106,13 +103,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		5B50393618709896002B2B12 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = D899CF77162C5E8400112F49 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = D899CFAF162C5EEB00112F49;
-			remoteInfo = "zipzap (iOS)";
-		};
 		D899CF9A162C5EC100112F49 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = D899CF77162C5E8400112F49 /* Project object */;
@@ -139,7 +129,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		5B14D3D91875649C005D9F55 /* ZZArchive+Encryption.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "ZZArchive+Encryption.mm"; sourceTree = "<group>"; };
 		5B50392518706368002B2B12 /* ZZConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZZConstants.h; sourceTree = "<group>"; };
 		5B503926187068F6002B2B12 /* ZZDecrypter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZZDecrypter.h; sourceTree = "<group>"; };
 		5B503927187068F6002B2B12 /* ZZDecrypter.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ZZDecrypter.mm; sourceTree = "<group>"; };
@@ -252,7 +241,6 @@
 				D899CFDB162C608300112F49 /* ZZArchive.mm */,
 				D899CFD8162C608300112F49 /* ZZArchiveEntry.h */,
 				D899CFD9162C608300112F49 /* ZZArchiveEntry.m */,
-				5B14D3D91875649C005D9F55 /* ZZArchive+Encryption.mm */,
 				D8366ACC16B1F8B400BC012E /* ZZError.h */,
 				D8366ACD16B1F8B400BC012E /* ZZError.m */,
 				5B50392518706368002B2B12 /* ZZConstants.h */,
@@ -463,7 +451,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				5B50393718709896002B2B12 /* PBXTargetDependency */,
 				D899CF9B162C5EC100112F49 /* PBXTargetDependency */,
 			);
 			name = zipzapTests;
@@ -564,7 +551,6 @@
 				D899CFFA162C608300112F49 /* ZZOldArchiveEntryWriter.mm in Sources */,
 				D899CFFE162C608300112F49 /* ZZNewArchiveEntry.mm in Sources */,
 				D834256318767E1900E7A559 /* ZZDecryptInputStream.mm in Sources */,
-				5B14D3DB1875649C005D9F55 /* ZZArchive+Encryption.mm in Sources */,
 				D899D001162C608300112F49 /* ZZNewArchiveEntryWriter.mm in Sources */,
 				D88E8E08163816FD002207B3 /* ZZOldArchiveEntry.mm in Sources */,
 				D84A44A616A0E2F400CF00A9 /* ZZFileChannel.m in Sources */,
@@ -589,7 +575,6 @@
 				5BC58CB518745D35002FAE04 /* ZZNewArchiveEntry.mm in Sources */,
 				5BC58CB818745D35002FAE04 /* ZZOldArchiveEntryWriter.mm in Sources */,
 				5BC58CA918745D19002FAE04 /* ZZDecrypter.mm in Sources */,
-				5B14D3DD187564E8005D9F55 /* ZZArchive+Encryption.mm in Sources */,
 				D899D01A162CCF9700112F49 /* ZZUnzipTests.m in Sources */,
 				D899D021162F6C9700112F49 /* ZZZipTests.m in Sources */,
 				5BC58CB918745D35002FAE04 /* ZZDataChannel.m in Sources */,
@@ -614,7 +599,6 @@
 				5BC58CAC18745D22002FAE04 /* ZZStandardCryptoEngine.mm in Sources */,
 				D899CFF8162C608300112F49 /* ZZStoreOutputStream.m in Sources */,
 				D834256418767E1900E7A559 /* ZZDecryptInputStream.mm in Sources */,
-				5B14D3DC187564E8005D9F55 /* ZZArchive+Encryption.mm in Sources */,
 				D899CFFB162C608300112F49 /* ZZOldArchiveEntryWriter.mm in Sources */,
 				D899CFFF162C608300112F49 /* ZZNewArchiveEntry.mm in Sources */,
 				D899D002162C608300112F49 /* ZZNewArchiveEntryWriter.mm in Sources */,

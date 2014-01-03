@@ -51,6 +51,11 @@
 @property (readonly, nonatomic) BOOL compressed;
 
 /**
+ * Whether the entry is encrypted.
+ */
+@property (readonly, nonatomic) BOOL encrypted;
+
+/**
  * The last modified date and time of the entry. The time value is only accurate to 2 seconds.
  */
 @property (readonly, nonatomic) NSDate* lastModified;

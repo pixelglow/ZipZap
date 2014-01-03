@@ -30,6 +30,8 @@
 
 @implementation ZZOldArchiveEntry
 {
+	ZZCentralFileHeader* _centralFileHeader;
+	ZZLocalFileHeader* _localFileHeader;
 	NSStringEncoding _encoding;
 	ZZEncryptionMode _encryptionMode;
 	unsigned long dataStartOffset;
@@ -137,6 +139,11 @@
 - (BOOL)compressed
 {
 	return self.compressionMethod != ZZCompressionMethod::stored;
+}
+
+- (BOOL)encrypted
+{
+	return _centralFileHeader->isEncrypted();
 }
 
 - (NSDate*)lastModified

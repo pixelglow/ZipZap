@@ -21,14 +21,13 @@
 @interface ZZOldArchiveEntry : ZZArchiveEntry
 
 @property (readonly, nonatomic) BOOL compressed;
+@property (readonly, nonatomic) BOOL encrypted;
 @property (readonly, nonatomic) NSDate* lastModified;
 @property (readonly, nonatomic) NSUInteger crc32;
 @property (readonly, nonatomic) NSUInteger compressedSize;
 @property (readonly, nonatomic) NSUInteger uncompressedSize;
 @property (readonly, nonatomic) mode_t fileMode;
 @property (readonly, nonatomic) NSString* fileName;
-@property (readonly, assign) ZZCentralFileHeader* centralFileHeader;
-@property (readonly, assign) ZZLocalFileHeader* localFileHeader;
 
 - (id)initWithCentralFileHeader:(struct ZZCentralFileHeader*)centralFileHeader
 				localFileHeader:(struct ZZLocalFileHeader*)localFileHeader

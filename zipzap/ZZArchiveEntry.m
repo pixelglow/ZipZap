@@ -85,6 +85,11 @@
 	return NO;
 }
 
+- (BOOL)encrypted
+{
+	return NO;
+}
+
 - (NSDate*)lastModified
 {
 	return nil;

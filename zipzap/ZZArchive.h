@@ -128,15 +128,3 @@
 				error:(out NSError**)error;
 
 @end
-
-/**
- * The ZZArchive category for stuff about encryptions
- */
-@interface ZZArchive (Encryption)
-
-/**
- * Is this archive encrypted? (even one file in it...).
- */
-@property (nonatomic, readonly) BOOL isEncrypted;
-
-@end
