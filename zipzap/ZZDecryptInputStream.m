@@ -12,10 +12,10 @@
 {
 	NSInputStream* _upstream;
 	NSStreamStatus _status;
-	ZZDecrypter *_decrypter;
+	id<ZZDecrypter> _decrypter;
 }
 
-- (id)initWithStream:(NSInputStream*)upstream decrypter:(ZZDecrypter *)decrypter;
+- (id)initWithStream:(NSInputStream*)upstream decrypter:(id<ZZDecrypter>)decrypter
 {
 	if ((self = [super init]))
 	{
@@ -39,18 +39,11 @@
 - (void)open
 {
 	[_upstream open];
-	_status = NSStreamStatusOpen;
-	
+	_status = NSStreamStatusOpen;	
 }
 
 - (void)close
 {
-	if (_decrypter)
-	{
-		delete _decrypter;
-		_decrypter = NULL;
-	}
-	
 	[_upstream close];
 	_status = NSStreamStatusClosed;
 }
@@ -58,7 +51,7 @@
 - (NSInteger)read:(uint8_t*)buffer maxLength:(NSUInteger)len
 {
 	NSInteger bytesRead = [_upstream read:buffer maxLength:len];
-	_decrypter->decryptData(buffer, 0, (int)bytesRead);
+	[_decrypter decrypt:buffer length:bytesRead];
 	
 	return bytesRead;
 }

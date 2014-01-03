@@ -7,64 +7,38 @@
 //
 
 #import "ZZStandardDecrypter.h"
+#import "ZZStandardCryptoEngine.h"
 
-ZZStandardDecrypter::ZZStandardDecrypter(uint32_t crc, unsigned char *password, unsigned char *headerBytes, /* OUT */ BOOL *crcValidated)
+@implementation ZZStandardDecrypter
 {
-	unsigned char crcBytes[4];
-	memcpy(&crcBytes[0], &crc, 4);
-	
-	crcBytes[3] = (crcBytes[3] & 0xFF);
-	crcBytes[2] = ((crcBytes[3] >> 8) & 0xFF);
-	crcBytes[1] = ((crcBytes[3] >> 16) & 0xFF);
-	crcBytes[0] = ((crcBytes[3] >> 24) & 0xFF);
-	
-	crypto = NULL;
-	
-	if (crcBytes[2] > 0 || crcBytes[1] > 0 || crcBytes[0] > 0)
+	ZZStandardCryptoEngine _crypto;
+}
+
+- (id)initWithPassword:(NSString*)password header:(uint8_t*)header
+{
+	if ((self = [super init]))
 	{
-        if (crcValidated) *crcValidated = NO;
-        return;
+		_crypto.initKeys((unsigned char*)password.UTF8String);
+		
+		int result = header[0];
+		for (int i = 0; i < 12; i++)
+		{
+			_crypto.updateKeys(result ^ _crypto.decryptByte());
+			if (i+1 != 12) result = header[i+1];
+		}
 	}
-    else
-    {
-        if (crcValidated) *crcValidated = YES;
-    }
-	
-	crypto = new ZZStandardCryptoEngine();
-	crypto->initKeys(password);
-	
-	int result = headerBytes[0];
-	for (int i = 0; i < 12; i++)
+	return self;
+}
+
+- (void)decrypt:(uint8_t*)buffer length:(NSUInteger)len
+{
+	for (int i = 0; i <  len; i++)
 	{
-		crypto->updateKeys(result ^ crypto->decryptByte());
-		if (i+1 != 12) result = headerBytes[i+1];
+		unsigned char val = buffer[i] & 0xff;
+		val = (val ^ _crypto.decryptByte()) & 0xff;
+		_crypto.updateKeys(val);
+		buffer[i] = val;
 	}
 }
 
-ZZStandardDecrypter::~ZZStandardDecrypter()
-{
-	if (crypto)
-	{
-		delete crypto;
-		crypto = NULL;
-	}
-}
-
-int ZZStandardDecrypter::decryptData(unsigned char *buff, int start, int len)
-{
-	if (start < 0 || len < 0)
-	{
-        NSLog(@"ZZArchive: Failed to decrypt in \"Standard\" crypto. Invalid start/length specified for buffer");
-        return -1;
-	}
-	
-	unsigned char val;
-	for (int i = start; i <  start + len; i++)
-	{
-		val = buff[i] & 0xff;
-		val = (val ^ crypto->decryptByte()) & 0xff;
-		crypto->updateKeys(val);
-		buff[i] = val;
-	}
-	return len;
-}
+@end

@@ -11,7 +11,7 @@
 
 @interface ZZDecryptInputStream : NSInputStream
 
-- (id)initWithStream:(NSInputStream*)upstream decrypter:(ZZDecrypter *)decrypter;
+- (id)initWithStream:(NSInputStream*)upstream decrypter:(id<ZZDecrypter>)decrypter;
 
 - (void)open;
 - (void)close;

@@ -6,20 +6,8 @@
 //
 //
 
-#ifndef __ZZDecrypter__
-#define __ZZDecrypter__
+@protocol ZZDecrypter
 
-class ZZDecrypter
-{
-    
-public:
-    ZZDecrypter();
-    virtual ~ZZDecrypter();
-    
-    virtual int decryptData(unsigned char *buff, int start, int len) = 0;
-    
-private:
-    
-};
+- (void)decrypt:(uint8_t*)buffer length:(NSUInteger)len;
 
-#endif /* defined(__ZZDecrypter__) */
+@end

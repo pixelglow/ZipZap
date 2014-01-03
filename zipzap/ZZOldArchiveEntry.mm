@@ -16,6 +16,7 @@
 #import "ZZOldArchiveEntryWriter.h"
 #import "ZZHeaders.h"
 #import "ZZArchiveEntryWriter.h"
+#import "ZZScopeGuard.h"
 #import "ZZStandardDecrypter.h"
 #import "ZZDecryptInputStream.h"
 #import "ZZConstants.h"
@@ -23,8 +24,9 @@
 @interface ZZOldArchiveEntry ()
 
 - (NSData*)fileData;
-- (NSData*)fileDataWithOffsetToContent;
 - (NSString*)stringWithBytes:(uint8_t*)bytes length:(NSUInteger)length;
+
+- (id<ZZDecrypter>)decrypterWithPassword:(NSString*)password error:(out NSError**)error;
 
 @end
 
@@ -34,8 +36,6 @@
 	ZZLocalFileHeader* _localFileHeader;
 	NSStringEncoding _encoding;
 	ZZEncryptionMode _encryptionMode;
-	unsigned long dataStartOffset;
-	BOOL encryptionModeDetected;
 }
 
 - (id)initWithCentralFileHeader:(struct ZZCentralFileHeader*)centralFileHeader
@@ -47,75 +47,37 @@
 		_centralFileHeader = centralFileHeader;
 		_localFileHeader = localFileHeader;
 		_encoding = encoding;
+		
+		if (_centralFileHeader->isEncrypted())
+		{
+			ZZAesExtraDataRecord *aesRecord = _centralFileHeader->aesExtraDataRecord();
+			if (aesRecord)
+				_encryptionMode = ZZEncryptionModeAES;
+			else if ((_centralFileHeader->generalPurposeBitFlag & 0x4000) == 0x4000)
+				_encryptionMode = ZZEncryptionModeStrong;
+			else
+				_encryptionMode = ZZEncryptionModeStandard;
+		}
+		else
+			_encryptionMode = ZZEncryptionModeNone;
 	}
 	return self;
 }
 
-- (BOOL)detectEncryptionModeWithError:(out NSError**)error
-{
-	if (!encryptionModeDetected)
-	{
-		encryptionModeDetected = YES;
-		_encryptionMode = [self encryptionModeForCentralFileHeader:_centralFileHeader];
-	}
-	
-	if (_encryptionMode != ZZEncryptionModeNone)
-	{
-		if (_encryptionMode == ZZEncryptionModeAES)
-		{
-			ZZRaiseError(error, ZZUnsupportedEncryptionMethod, @{@"description": @"AES encryption is not supported."});
-			return NO;
-		}
-		else if (_encryptionMode == ZZEncryptionModeStrong)
-		{
-			ZZRaiseError(error, ZZUnsupportedEncryptionMethod, @{@"description": @"STRONG encryption is not supported."});
-			return NO;
-		}
-		else if (_encryptionMode == ZZEncryptionModeStandard)
-		{
-			dataStartOffset += 12;
-		}
-	}
-	
-	return YES; // No errors
-}
-
-- (ZZEncryptionMode)encryptionModeForCentralFileHeader:(ZZCentralFileHeader *)fileHeader
-{
-	if (fileHeader->isEncrypted())
-	{
-		ZZAesExtraDataRecord *aesRecord = fileHeader->aesExtraDataRecord();
-		if (aesRecord) return ZZEncryptionModeAES;
-		if ((fileHeader->generalPurposeBitFlag & 0x4000) == 0x4000) return ZZEncryptionModeStrong;
-		else return ZZEncryptionModeStandard;
-	}
-	return ZZEncryptionModeNone;
-}
-
-- (ZZEncryptionMode)encryptionModeForLocalFileHeader:(ZZLocalFileHeader *)fileHeader
-{
-	if (fileHeader->isEncrypted())
-	{
-		ZZAesExtraDataRecord *aesRecord = fileHeader->aesExtraDataRecord();
-		if (aesRecord) return ZZEncryptionModeAES;
-		if ((fileHeader->generalPurposeBitFlag & 0x4000) == 0x4000) return ZZEncryptionModeStrong;
-		else return ZZEncryptionModeStandard;
-	}
-	return ZZEncryptionModeNone;
-}
 
 - (NSData*)fileData
 {
-	return [NSData dataWithBytesNoCopy:(void*)_localFileHeader->fileData()
-								length:_centralFileHeader->compressedSize
-						  freeWhenDone:NO];
-}
+	uint8_t* dataStart = _localFileHeader->fileData();
+	NSUInteger dataLength = _centralFileHeader->compressedSize;
+	
+	// adjust for any standard encryption header
+	if (_encryptionMode == ZZEncryptionModeStandard)
+	{
+		dataStart += 12;
+		dataLength -= 12;
+	}
 
-- (NSData*)fileDataWithOffsetToContent
-{
-	return [NSData dataWithBytesNoCopy:(void*)(_localFileHeader->fileData() + dataStartOffset)
-								length:(_centralFileHeader->compressedSize - dataStartOffset)
-						  freeWhenDone:NO];
+	return [NSData dataWithBytesNoCopy:dataStart length:dataLength freeWhenDone:NO];
 }
 
 - (NSString*)stringWithBytes:(uint8_t*)bytes length:(NSUInteger)length
@@ -128,12 +90,13 @@
 
 - (ZZCompressionMethod)compressionMethod
 {
-	[self detectEncryptionModeWithError:nil];
     if (_encryptionMode == ZZEncryptionModeAES)
-    {
-        return _centralFileHeader->aesExtraDataRecord()->compressionMethod;
-    }
-    return _centralFileHeader->compressionMethod;
+	{
+		ZZAesExtraDataRecord* aesExtraData = _centralFileHeader->aesExtraDataRecord();
+		if (aesExtraData)
+			return aesExtraData->compressionMethod;
+	}
+	return _centralFileHeader->compressionMethod;
 }
 
 - (BOOL)compressed
@@ -224,7 +187,20 @@
 		localUncompressedSize = _localFileHeader->uncompressedSize;		
 	}
 	
-	if (![self detectEncryptionModeWithError:error]) return NO;
+	// figure out local encryption mode
+	ZZEncryptionMode localEncryptionMode;
+	if (_localFileHeader->isEncrypted())
+	{
+		ZZAesExtraDataRecord *aesRecord = _centralFileHeader->aesExtraDataRecord();
+		if (aesRecord)
+			localEncryptionMode = ZZEncryptionModeAES;
+		else if ((_centralFileHeader->generalPurposeBitFlag & 0x4000) == 0x4000)
+			localEncryptionMode = ZZEncryptionModeStrong;
+		else
+			localEncryptionMode = ZZEncryptionModeStandard;
+	}
+	else
+		localEncryptionMode = ZZEncryptionModeNone;
 	
 	// sanity check:
 	if (
@@ -245,38 +221,41 @@
 		|| localCrc32 != _centralFileHeader->crc32
 		|| localCompressedSize != _centralFileHeader->compressedSize
 		|| localUncompressedSize != _centralFileHeader->uncompressedSize
+		|| localEncryptionMode != _encryptionMode
 		|| _localFileHeader->crc32 != (uint32_t)crc32(0, _localFileHeader->fileData(), (uInt)_localFileHeader->compressedSize))
 		ZZRaiseError(error, ZZLocalFileReadErrorCode, nil);
-
+	
+	if (_encryptionMode == ZZEncryptionModeStandard)
+	{
+		// validate encrypted CRC (?)
+		unsigned char crcBytes[4];
+		memcpy(&crcBytes[0], &_centralFileHeader->crc32, 4);
+		
+		crcBytes[3] = (crcBytes[3] & 0xFF);
+		crcBytes[2] = ((crcBytes[3] >> 8) & 0xFF);
+		crcBytes[1] = ((crcBytes[3] >> 16) & 0xFF);
+		crcBytes[0] = ((crcBytes[3] >> 24) & 0xFF);
+		
+		if (crcBytes[2] > 0 || crcBytes[1] > 0 || crcBytes[0] > 0)
+			return ZZRaiseError(error, ZZInvalidCRChecksum, @{});
+	}
+	
 	return YES;
 }
 
-- (ZZDecrypter *)decrpyterForFileData:(NSData*)fileData withPassword:(NSString *)password error:(out NSError**)error
+- (id<ZZDecrypter>)decrypterWithPassword:(NSString*)password error:(out NSError**)error
 {
-	ZZDecrypter *decrypter = NULL;
-	
-	if (![self detectEncryptionModeWithError:error]) return nil;
-	
-	if (_encryptionMode != ZZEncryptionModeNone)
+	switch (_encryptionMode)
 	{
-        if (!password) password = @""; // Prevent dereferencing a NULL password.UTF8String...
-        
-		if (_encryptionMode == ZZEncryptionModeStandard)
-		{
-			unsigned char headerBytes[12];
-			memcpy(&headerBytes[0], fileData.bytes, 12);
-            
-            BOOL crcValidated = NO;
-			decrypter = new ZZStandardDecrypter(_centralFileHeader->crc32, (unsigned char *)password.UTF8String, headerBytes, &crcValidated);
-            if (!crcValidated)
-            {
-                ZZRaiseError(error, ZZInvalidCRChecksum, @{@"description": @"Invalid CRC in File Header, Standard decryption."});
-                return nil;
-            }
-		}
+		case ZZEncryptionModeNone:
+			*error = nil;
+			return nil;
+		case ZZEncryptionModeStandard:
+			return [[ZZStandardDecrypter alloc] initWithPassword:password header:_localFileHeader->fileData()];
+		default:
+			ZZRaiseError(error, ZZUnsupportedEncryptionMethod, @{});
+			return nil;
 	}
-	
-	return decrypter;
 }
 
 - (NSInputStream*)newStreamWithError:(out NSError**)error
@@ -286,49 +265,38 @@
 
 - (NSInputStream*)newStreamWithPassword:(NSString*)password error:(out NSError**)error
 {
-	NSData *fileData = [self fileData];
+	// get a decrypter with given password
+    NSError* decError = nil;
+	id<ZZDecrypter> decrypter = [self decrypterWithPassword:password error:&decError];
+    if (!decrypter && decError)
+	{
+		if (error)
+			*error = decError;
+		return nil;
+	}
 	
-    NSError *decError = nil;
-	ZZDecrypter *decrypter = [self decrpyterForFileData:fileData withPassword:password error:&decError];
-    if (error && decError) *error = decError;
-	
-    if (!decrypter && decError) return nil;
-	
-	NSData *fileDataWithOffsetToContent = [self fileDataWithOffsetToContent];
+	NSData* fileData = [self fileData];
     
 	switch (_centralFileHeader->compressionMethod)
 	{
 		case ZZCompressionMethod::stored:
-		{
 			if (decrypter)
-			{
-				return [[ZZDecryptInputStream alloc] initWithStream:[NSInputStream inputStreamWithData:fileDataWithOffsetToContent]
+				return [[ZZDecryptInputStream alloc] initWithStream:[NSInputStream inputStreamWithData:fileData]
 														  decrypter:decrypter];
-			}
 			else
-			{
 				// if stored, just wrap file data in a stream
-				return [NSInputStream inputStreamWithData:fileDataWithOffsetToContent];
-			}
-		}
+				return [NSInputStream inputStreamWithData:fileData];
+
 		case ZZCompressionMethod::deflated:
-		{
 			// if deflated, use a stream that inflates the file data
 			if (decrypter)
-			{
-				return [[ZZInflateInputStream alloc] initWithStream:[[ZZDecryptInputStream alloc] initWithStream:[NSInputStream inputStreamWithData:fileDataWithOffsetToContent]
+				return [[ZZInflateInputStream alloc] initWithStream:[[ZZDecryptInputStream alloc] initWithStream:[NSInputStream inputStreamWithData:fileData]
 																									   decrypter:decrypter]];
-			}
 			else
-			{
-				return [[ZZInflateInputStream alloc] initWithStream:[NSInputStream inputStreamWithData:[self fileData]]];
-			}
-		}
+				return [[ZZInflateInputStream alloc] initWithStream:[NSInputStream inputStreamWithData:fileData]];
 		default:
-		{
-			if (decrypter) delete decrypter;
+			// TODO: some kind of error?
 			return nil;
-		}
 	}
 }
 
@@ -339,62 +307,64 @@
 
 - (NSData*)newDataWithPassword:(NSString*)password error:(out NSError**)error
 {
+	// get a decrypter with given password
+    NSError* decError = nil;
+	id<ZZDecrypter> decrypter = [self decrypterWithPassword:password error:&decError];
+    if (!decrypter && decError)
+	{
+		if (error)
+			*error = decError;
+		return nil;
+	}
+
 	NSData *fileData = [self fileData];
-	
-    NSError *decError = nil;
-	ZZDecrypter *decrypter = [self decrpyterForFileData:fileData withPassword:password error:&decError];
-    if (error && decError) *error = decError;
-	
-    if (!decrypter && decError) return nil;
-	
-	NSData *fileDataWithOffsetToContent = [self fileDataWithOffsetToContent];
 	
 	switch (_centralFileHeader->compressionMethod)
 	{
 		case ZZCompressionMethod::stored:
 		{
-			NSMutableData* data = [NSMutableData dataWithBytes:(unsigned char*)(_localFileHeader->fileData() + dataStartOffset)
-														length:(_centralFileHeader->compressedSize - dataStartOffset)];
+			NSMutableData* data = [fileData mutableCopy];
 			if (decrypter)
-			{
-				decrypter->decryptData((unsigned char*)data.mutableBytes, 0, _centralFileHeader->uncompressedSize);
-			}
+				[decrypter decrypt:(uint8_t*)data.mutableBytes length:_centralFileHeader->uncompressedSize];
 			
 			return data;
 		}
 		case ZZCompressionMethod::deflated:
-		{
 			if (decrypter)
 			{
-				NSInputStream* stream = [[ZZInflateInputStream alloc] initWithStream:[[ZZDecryptInputStream alloc] initWithStream:[NSInputStream inputStreamWithData:fileDataWithOffsetToContent]
+				NSInputStream* stream = [[ZZInflateInputStream alloc] initWithStream:[[ZZDecryptInputStream alloc] initWithStream:[NSInputStream inputStreamWithData:fileData]
 																														decrypter:decrypter]];
 				NSMutableData* data = [NSMutableData dataWithLength:_centralFileHeader->uncompressedSize];
 				
 				[stream open];
+				ZZScopeGuard streamCloser(^{[stream close];});
+				
+				// read until all decompressed or EOF (should not happen since we know uncompressed size) or error
 				NSUInteger totalBytesRead = 0;
 				while (totalBytesRead < _centralFileHeader->uncompressedSize)
 				{
 					NSInteger bytesRead = [stream read:(uint8_t*)data.mutableBytes + totalBytesRead
 											 maxLength:_centralFileHeader->uncompressedSize - totalBytesRead];
 					if (bytesRead > 0)
-					totalBytesRead += bytesRead;
+						totalBytesRead += bytesRead;
 					else
-					break;
+						break;
 				}
-				[stream close];
+				if (stream.streamError)
+				{
+					if (error)
+						*error = stream.streamError;
+					return nil;
+				}
+
 				return data;
 			}
 			else
-			{
-				return [ZZInflateInputStream inflateData:fileDataWithOffsetToContent
+				return [ZZInflateInputStream inflateData:fileData
 									withUncompressedSize:_centralFileHeader->uncompressedSize];
-			}
-		}
 		default:
-		{
-			if (decrypter) delete decrypter;
+			// TODO: some kind of error?
 			return nil;
-		}
 	}
 }
 
@@ -405,58 +375,46 @@
 
 - (CGDataProviderRef)newDataProviderWithPassword:(NSString*)password error:(out NSError**)error
 {
+	// get a decrypter with given password
+    NSError* decError = nil;
+	id<ZZDecrypter> decrypter = [self decrypterWithPassword:password error:&decError];
+    if (!decrypter && decError)
+	{
+		if (error)
+		*error = decError;
+		return nil;
+	}
+
 	NSData *fileData = [self fileData];
-	
-    NSError *decError = nil;
-	ZZDecrypter *decrypter = [self decrpyterForFileData:fileData withPassword:password error:&decError];
-    if (error && decError) *error = decError;
-	
-    if (!decrypter && decError) return nil;
-	
-	NSData *fileDataWithOffsetToContent = [self fileDataWithOffsetToContent];
-	
+		
 	switch (_centralFileHeader->compressionMethod)
 	{
 		case ZZCompressionMethod::stored:
-		{
 			if (decrypter)
-			{
 				return ZZDataProvider::create(^
 											  {
-												  return [[ZZDecryptInputStream alloc] initWithStream:[NSInputStream inputStreamWithData:fileDataWithOffsetToContent]
+												  return [[ZZDecryptInputStream alloc] initWithStream:[NSInputStream inputStreamWithData:fileData]
 																							decrypter:decrypter];
 											  });
-			}
 			else
-			{
 				// if stored, just wrap file data in a data provider
-				return CGDataProviderCreateWithCFData((__bridge CFDataRef)fileDataWithOffsetToContent);
-			}
-		}
+				return CGDataProviderCreateWithCFData((__bridge CFDataRef)fileData);
 		case ZZCompressionMethod::deflated:
-		{
 			if (decrypter)
-			{
 				return ZZDataProvider::create(^
 											  {
-												  return [[ZZDecryptInputStream alloc] initWithStream:[[ZZInflateInputStream alloc] initWithStream:[NSInputStream inputStreamWithData:fileDataWithOffsetToContent]]
+												  return [[ZZDecryptInputStream alloc] initWithStream:[[ZZInflateInputStream alloc] initWithStream:[NSInputStream inputStreamWithData:fileData]]
 																							decrypter:decrypter];
 											  });
-			}
 			else
-			{
-				// if stored, just wrap file data in a data provider
 				return ZZDataProvider::create(^
 											  {
 												  return [[ZZInflateInputStream alloc] initWithStream:[NSInputStream inputStreamWithData:fileData]];
 											  });
-			}
-		}
+
 		default:
-		{
-			if (decrypter) delete decrypter;
+			// TODO: some kind of error?
 			return nil;
-		}
 	}
 }
 

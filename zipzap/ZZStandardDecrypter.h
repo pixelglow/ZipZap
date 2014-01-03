@@ -6,24 +6,12 @@
 //
 //
 
-#ifndef __ZZStandardDecrypter__
-#define __ZZStandardDecrypter__
-
 #import "ZZDecrypter.h"
-#include <stdint.h>
-#include "ZZStandardCryptoEngine.h"
 
-class ZZStandardDecrypter : public ZZDecrypter
-{
-	
-public:
-	ZZStandardDecrypter(uint32_t crc, unsigned char *password, unsigned char *headerBytes, /* OUT */ BOOL *crcValidated);
-	virtual ~ZZStandardDecrypter();
-	int decryptData(unsigned char *buff, int start, int len);
-	
-private:
-	ZZStandardCryptoEngine *crypto;
-	
-};
+@interface ZZStandardDecrypter : NSObject <ZZDecrypter>
 
-#endif /* defined(__ZZStandardDecrypter__) */
+- (id)initWithPassword:(NSString*)password header:(uint8_t*)header;
+
+- (void)decrypt:(uint8_t*)buffer length:(NSUInteger)len;
+
+@end
