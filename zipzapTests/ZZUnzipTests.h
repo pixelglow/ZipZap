@@ -26,5 +26,11 @@
 // Decryptions
 - (void)testExtractingAndStandardDecryptingSmallZipEntryData;
 - (void)testExtractingAndStandardDecryptingLargeZipEntryData;
+- (void)testExtractingAndAes128DecryptingSmallZipEntryData;
+- (void)testExtractingAndAes128DecryptingLargeZipEntryData;
+- (void)testExtractingAndAes192DecryptingSmallZipEntryData;
+- (void)testExtractingAndAes192DecryptingLargeZipEntryData;
+- (void)testExtractingAndAes256DecryptingSmallZipEntryData;
+- (void)testExtractingAndAes256DecryptingLargeZipEntryData;
 
 @end

@@ -91,6 +91,12 @@
 		D8B0FD661640A77F00727A70 /* zipzap.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8B0FD611640A6B000727A70 /* zipzap.h */; };
 		D8B0FD671640A77F00727A70 /* ZZArchive.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D899CFDA162C608300112F49 /* ZZArchive.h */; };
 		D8B0FD681640A77F00727A70 /* ZZArchiveEntry.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D899CFD8162C608300112F49 /* ZZArchiveEntry.h */; };
+		D8E366F0188832C0009F3008 /* large-test-encrypted-aes128.zip in Resources */ = {isa = PBXBuildFile; fileRef = D8E366EA188832C0009F3008 /* large-test-encrypted-aes128.zip */; };
+		D8E366F1188832C0009F3008 /* large-test-encrypted-aes192.zip in Resources */ = {isa = PBXBuildFile; fileRef = D8E366EB188832C0009F3008 /* large-test-encrypted-aes192.zip */; };
+		D8E366F2188832C0009F3008 /* large-test-encrypted-aes256.zip in Resources */ = {isa = PBXBuildFile; fileRef = D8E366EC188832C0009F3008 /* large-test-encrypted-aes256.zip */; };
+		D8E366F3188832C0009F3008 /* small-test-encrypted-aes128.zip in Resources */ = {isa = PBXBuildFile; fileRef = D8E366ED188832C0009F3008 /* small-test-encrypted-aes128.zip */; };
+		D8E366F4188832C0009F3008 /* small-test-encrypted-aes192.zip in Resources */ = {isa = PBXBuildFile; fileRef = D8E366EE188832C0009F3008 /* small-test-encrypted-aes192.zip */; };
+		D8E366F5188832C0009F3008 /* small-test-encrypted-aes256.zip in Resources */ = {isa = PBXBuildFile; fileRef = D8E366EF188832C0009F3008 /* small-test-encrypted-aes256.zip */; };
 		D8E3C26A17E6FF0E007D0020 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8E3C26917E6FF0E007D0020 /* XCTest.framework */; };
 /* End PBXBuildFile section */
 
@@ -188,6 +194,12 @@
 		D8A32627163BFF3D008606AC /* README.markdown */ = {isa = PBXFileReference; lastKnownFileType = text; path = README.markdown; sourceTree = "<group>"; };
 		D8A32673163C2240008606AC /* LICENSE.text */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE.text; sourceTree = "<group>"; };
 		D8B0FD611640A6B000727A70 /* zipzap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zipzap.h; sourceTree = "<group>"; };
+		D8E366EA188832C0009F3008 /* large-test-encrypted-aes128.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = "large-test-encrypted-aes128.zip"; sourceTree = "<group>"; };
+		D8E366EB188832C0009F3008 /* large-test-encrypted-aes192.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = "large-test-encrypted-aes192.zip"; sourceTree = "<group>"; };
+		D8E366EC188832C0009F3008 /* large-test-encrypted-aes256.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = "large-test-encrypted-aes256.zip"; sourceTree = "<group>"; };
+		D8E366ED188832C0009F3008 /* small-test-encrypted-aes128.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = "small-test-encrypted-aes128.zip"; sourceTree = "<group>"; };
+		D8E366EE188832C0009F3008 /* small-test-encrypted-aes192.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = "small-test-encrypted-aes192.zip"; sourceTree = "<group>"; };
+		D8E366EF188832C0009F3008 /* small-test-encrypted-aes256.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = "small-test-encrypted-aes256.zip"; sourceTree = "<group>"; };
 		D8E3C26917E6FF0E007D0020 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 /* End PBXFileReference section */
 
@@ -278,6 +290,12 @@
 		5BC58CA318745940002FAE04 /* assets */ = {
 			isa = PBXGroup;
 			children = (
+				D8E366EA188832C0009F3008 /* large-test-encrypted-aes128.zip */,
+				D8E366EB188832C0009F3008 /* large-test-encrypted-aes192.zip */,
+				D8E366EC188832C0009F3008 /* large-test-encrypted-aes256.zip */,
+				D8E366ED188832C0009F3008 /* small-test-encrypted-aes128.zip */,
+				D8E366EE188832C0009F3008 /* small-test-encrypted-aes192.zip */,
+				D8E366EF188832C0009F3008 /* small-test-encrypted-aes256.zip */,
 				5BC58CA418745940002FAE04 /* large-test-encrypted-standard.zip */,
 				5BC58CA518745940002FAE04 /* small-test-encrypted-standard.zip */,
 			);
@@ -489,13 +507,19 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D8E366F5188832C0009F3008 /* small-test-encrypted-aes256.zip in Resources */,
 				D899CFA2162C5EC100112F49 /* InfoPlist.strings in Resources */,
 				D899D014162CCA0400112F49 /* li-europan-lingues.txt in Resources */,
 				D899D015162CCA8200112F49 /* lorem-ipsum.txt in Resources */,
 				D899D017162CCEDC00112F49 /* pangram.txt in Resources */,
+				D8E366F0188832C0009F3008 /* large-test-encrypted-aes128.zip in Resources */,
 				D88E8DFF16375C66002207B3 /* dog.jpg in Resources */,
+				D8E366F2188832C0009F3008 /* large-test-encrypted-aes256.zip in Resources */,
 				D88E8E0016375C66002207B3 /* dog.png in Resources */,
 				5BC58CA718745940002FAE04 /* small-test-encrypted-standard.zip in Resources */,
+				D8E366F1188832C0009F3008 /* large-test-encrypted-aes192.zip in Resources */,
+				D8E366F3188832C0009F3008 /* small-test-encrypted-aes128.zip in Resources */,
+				D8E366F4188832C0009F3008 /* small-test-encrypted-aes192.zip in Resources */,
 				D810EBCF164B19DA00200834 /* 拉链.txt in Resources */,
 				5BC58CA618745940002FAE04 /* large-test-encrypted-standard.zip in Resources */,
 			);
