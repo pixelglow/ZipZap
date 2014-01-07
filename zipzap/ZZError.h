@@ -85,6 +85,11 @@ typedef NS_ENUM(NSInteger, ZZErrorCode)
 	 * Cannot replace the zip file after writing.
 	 */
 	ZZReplaceWriteErrorCode,
+	
+	/**
+	 * The compression used is currently unsupported.
+	 */
+	ZZUnsupportedCompressionMethod,
     
 	/**
 	 * The encryption used is currently unsupported.

@@ -10,8 +10,8 @@
 
 @interface ZZInflateInputStream : NSInputStream
 
-+ (NSData*)inflateData:(NSData*)data
-  withUncompressedSize:(NSUInteger)uncompressedSize;
++ (NSData*)decompressData:(NSData*)data
+	 withUncompressedSize:(NSUInteger)uncompressedSize;
 
 - (id)initWithStream:(NSInputStream*)upstream;
 

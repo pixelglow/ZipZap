@@ -1,27 +1,36 @@
 //
-//  ZZDecryptInputStream.m
+//  ZZStandardDecryptInputStream.mm
 //  zipzap
 //
 //  Created by Daniel Cohen Gindi on 12/29/13.
 //
 //
 
-#import "ZZDecryptInputStream.h"
+#import "ZZStandardDecryptInputStream.h"
+#import "ZZStandardCryptoEngine.h"
 
-@implementation ZZDecryptInputStream
+@implementation ZZStandardDecryptInputStream
 {
 	NSInputStream* _upstream;
 	NSStreamStatus _status;
-	id<ZZDecrypter> _decrypter;
+	ZZStandardCryptoEngine _crypto;
 }
 
-- (id)initWithStream:(NSInputStream*)upstream decrypter:(id<ZZDecrypter>)decrypter
+- (id)initWithStream:(NSInputStream*)upstream password:(NSString*)password header:(uint8_t*)header
 {
 	if ((self = [super init]))
 	{
 		_upstream = upstream;
 		_status = NSStreamStatusNotOpen;
-		_decrypter = decrypter;
+
+		_crypto.initKeys((unsigned char*)password.UTF8String);
+		
+		int result = header[0];
+		for (int i = 0; i < 12; i++)
+		{
+			_crypto.updateKeys(result ^ _crypto.decryptByte());
+			if (i+1 != 12) result = header[i+1];
+		}
 	}
 	return self;
 }
@@ -51,7 +60,14 @@
 - (NSInteger)read:(uint8_t*)buffer maxLength:(NSUInteger)len
 {
 	NSInteger bytesRead = [_upstream read:buffer maxLength:len];
-	[_decrypter decrypt:buffer length:bytesRead];
+	
+	for (NSInteger i = 0; i < bytesRead; i++)
+	{
+		unsigned char val = buffer[i] & 0xff;
+		val = (val ^ _crypto.decryptByte()) & 0xff;
+		_crypto.updateKeys(val);
+		buffer[i] = val;
+	}
 	
 	return bytesRead;
 }

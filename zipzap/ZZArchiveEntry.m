@@ -122,12 +122,12 @@
 
 - (NSInputStream*)newStreamWithError:(NSError**)error
 {
-	return nil;
+	return [self newStreamWithPassword:nil error:error];
 }
 
 - (NSInputStream*)newStreamWithPassword:(NSString*)password error:(NSError**)error
-{ // Assume that by default the subclass did not implement it, so we will fallback to the newStreamWithError:
-	return [self newStreamWithError:error];
+{
+	return nil;
 }
 
 - (BOOL)check:(NSError**)error
@@ -137,22 +137,22 @@
 
 - (NSData*)newDataWithError:(NSError**)error
 {
-	return nil;
+	return [self newDataWithPassword:nil error:error];
 }
 
 - (NSData*)newDataWithPassword:(NSString*)password error:(NSError**)error
-{ // Assume that by default the subclass did not implement it, so we will fallback to the newStreamWithError:
-	return [self newDataWithError:error];
+{
+	return nil;
 }
 
 - (CGDataProviderRef)newDataProviderWithError:(NSError**)error
 {
-	return NULL;
+	return [self newDataProviderWithPassword:nil error:error];
 }
 
 - (CGDataProviderRef)newDataProviderWithPassword:(NSString*)password error:(NSError**)error
-{ // Assume that by default the subclass did not implement it, so we will fallback to the newStreamWithError:
-	return [self newDataProviderWithError:error];
+{
+	return nil;
 }
 
 - (id<ZZArchiveEntryWriter>)newWriterCanSkipLocalFile:(BOOL)canSkipLocalFile

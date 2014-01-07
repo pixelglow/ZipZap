@@ -1,5 +1,5 @@
 //
-//  ZZDecryptInputStream.h
+//  ZZStandardDecryptInputStream.h
 //  zipzap
 //
 //  Created by Daniel Cohen Gindi on 12/29/13.
@@ -7,11 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
-#include "ZZDecrypter.h"
 
-@interface ZZDecryptInputStream : NSInputStream
+@interface ZZStandardDecryptInputStream : NSInputStream
 
-- (id)initWithStream:(NSInputStream*)upstream decrypter:(id<ZZDecrypter>)decrypter;
+- (id)initWithStream:(NSInputStream*)upstream password:(NSString*)password header:(uint8_t*)header;
 
 - (void)open;
 - (void)close;

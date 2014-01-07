@@ -21,8 +21,8 @@ static const NSUInteger _bufferLength = 16384; // 16K buffer
 	z_stream _stream;
 }
 
-+ (NSData*)inflateData:(NSData*)data
-  withUncompressedSize:(NSUInteger)uncompressedSize
++ (NSData*)decompressData:(NSData*)data
+	 withUncompressedSize:(NSUInteger)uncompressedSize
 {
 	NSMutableData* inflatedData = [NSMutableData dataWithLength:uncompressedSize];
 	
