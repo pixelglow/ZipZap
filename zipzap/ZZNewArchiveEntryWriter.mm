@@ -73,36 +73,36 @@ namespace ZZDataConsumer
 		centralFileHeader->versionNeededToExtract = localFileHeader->versionNeededToExtract = 0x000a;
 		
 		// general purpose flag = approximate compression level + use of data descriptor (bit 3) + language encoding flag (EFS, bit 11)
-		uint32_t compressionFlag;
+		ZZGeneralPurposeBitFlag compressionFlag;
 		switch (compressionLevel)
 		{
 			case -1:
 			default:
-				compressionFlag = 0x0;
+				compressionFlag = ZZGeneralPurposeBitFlag::normalCompression;
 				break;
 			case 1:
 			case 2:
 				// super fast (-es)
-				compressionFlag = 0x3;
+				compressionFlag = ZZGeneralPurposeBitFlag::superFastCompression;
 				break;
 			case 3:
 			case 4:
 				// fast (-ef)
-				compressionFlag = 0x2;
+				compressionFlag = ZZGeneralPurposeBitFlag::fastCompression;
 				break;
 			case 5:
 			case 6:
 			case 7:
 				// normal (-en)
-				compressionFlag = 0x0;
+				compressionFlag = ZZGeneralPurposeBitFlag::normalCompression;
 				break;
 			case 8:
 			case 9:
 				// maximum (-ex)
-				compressionFlag = 0x1;
+				compressionFlag = ZZGeneralPurposeBitFlag::maximumCompression;
 				break;
 		}
-		centralFileHeader->generalPurposeBitFlag = localFileHeader->generalPurposeBitFlag = compressionFlag | (1 << 3) | (1 << 11);
+		centralFileHeader->generalPurposeBitFlag = localFileHeader->generalPurposeBitFlag = compressionFlag | ZZGeneralPurposeBitFlag::sizeInDataDescriptor | ZZGeneralPurposeBitFlag::fileNameUTF8Encoded;
 
 		centralFileHeader->compressionMethod = localFileHeader->compressionMethod = compressionLevel ? ZZCompressionMethod::deflated : ZZCompressionMethod::stored;
 		

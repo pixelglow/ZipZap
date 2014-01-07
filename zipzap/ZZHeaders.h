@@ -32,36 +32,50 @@ enum class ZZMSDOSAttributes : uint8_t
 	archive = 1 << 5
 };
 
+enum class ZZGeneralPurposeBitFlag: uint16_t
+{
+	none = 0,
+	encrypted = 1 << 0,
+	normalCompression = 0,
+	maximumCompression = 1 << 1,
+	fastCompression = 1 << 2,
+	superFastCompression = (1 << 1) | (1 << 2),
+	sizeInDataDescriptor = 1 << 3,
+	encryptionStrong = 1 << 6,
+	fileNameUTF8Encoded = 1 << 11
+};
+
+inline ZZGeneralPurposeBitFlag operator|(ZZGeneralPurposeBitFlag lhs, ZZGeneralPurposeBitFlag rhs)
+{
+	return static_cast<ZZGeneralPurposeBitFlag>(static_cast<uint16_t>(lhs) | static_cast<uint16_t>(rhs));
+}
+
+inline ZZGeneralPurposeBitFlag operator&(ZZGeneralPurposeBitFlag lhs, ZZGeneralPurposeBitFlag rhs)
+{
+	return static_cast<ZZGeneralPurposeBitFlag>(static_cast<uint16_t>(lhs) & static_cast<uint16_t>(rhs));
+}
+
 #pragma pack(1)
 
 struct ZZExtraField
 {
-	uint16_t header;
-	uint16_t size;
+	uint16_t headerID;
+	uint16_t dataSize;
 	
-	uint8_t* data()
-	{
-		return reinterpret_cast<uint8_t*>(this) + sizeof(*this);
-	}
-	uint32_t totalSize()
-	{
-		return sizeof(*this) + size;
-	}
-    ZZExtraField *nextExtraField()
+    ZZExtraField* nextExtraField()
     {
-		return reinterpret_cast<ZZExtraField*>(((uint8_t*)this) + sizeof(ZZExtraField) + size);
+		return reinterpret_cast<ZZExtraField*>(((uint8_t*)this) + sizeof(ZZExtraField) + dataSize);
     }
 };
 
-struct ZZAesExtraDataRecord
+struct ZZWinZipAESExtraField: public ZZExtraField
 {
-	uint16_t header;
-	uint16_t size;
 	uint16_t versionNumber;
-	uint8_t vendorId0;
-	uint8_t vendorId1;
-    ZZAesStrength aesStrength;
+	uint8_t vendorId[2];
+    ZZAESEncryptionStrength encryptionStrength;
     ZZCompressionMethod compressionMethod;
+	
+	static const uint16_t head = 0x9901;
 };
 
 struct ZZCentralFileHeader
@@ -70,7 +84,7 @@ struct ZZCentralFileHeader
 	uint8_t versionMadeBy;
 	ZZFileAttributeCompatibility fileAttributeCompatibility;
 	uint16_t versionNeededToExtract;
-	uint16_t generalPurposeBitFlag;
+	ZZGeneralPurposeBitFlag generalPurposeBitFlag;
 	ZZCompressionMethod compressionMethod;
 	uint16_t lastModFileTime;
 	uint16_t lastModFileDate;
@@ -92,54 +106,34 @@ struct ZZCentralFileHeader
 		return reinterpret_cast<uint8_t*>(this) + sizeof(*this);
 	}
 	
-	ZZExtraField* extraField()
+	ZZExtraField* firstExtraField()
 	{
 		return reinterpret_cast<ZZExtraField*>(fileName() + fileNameLength);
 	}
 	
+	ZZExtraField* lastExtraField()
+	{
+		return reinterpret_cast<ZZExtraField*>(reinterpret_cast<uint8_t*>(firstExtraField()) + extraFieldLength);
+	}
+	
 	uint8_t* fileComment()
 	{
-		return ((uint8_t*)extraField()) + extraFieldLength;
+		return reinterpret_cast<uint8_t*>(lastExtraField());
 	}
-	
-	bool isFileNameUtf8Encoded()
-	{
-		return (generalPurposeBitFlag & 0x800) != 0;
-	}
-	
-	bool isEncrypted()
-	{
-		return (generalPurposeBitFlag & 0x01) != 0;
-	}
-	
-	bool isEncryptionStrong()
-	{
-		return (generalPurposeBitFlag & 0x80) != 0;
-	}
-	
+			
 	ZZCentralFileHeader* nextCentralFileHeader()
 	{
 		return reinterpret_cast<ZZCentralFileHeader*>(fileComment() + fileCommentLength);
 	}
-    
-    static const uint16_t sign_extra_aes_record = 0x9901;
-    ZZAesExtraDataRecord* aesExtraDataRecord()
-    {
-        uint16_t pos = 0;
-        ZZExtraField *field = this->extraField();
-        while (pos < extraFieldLength)
-        {
-            pos += field->totalSize();
-            
-            if (field->header == sign_extra_aes_record)
-            {
-                return (ZZAesExtraDataRecord *)field;
-            }
-            
-            field = field->nextExtraField();
-        }
-        return NULL;
-    }
+	
+	template <typename T> T* extraField()
+	{
+		for (auto nextField = firstExtraField(), lastField = lastExtraField(); nextField < lastField; nextField = nextField->nextExtraField())
+			if (nextField->headerID == T::head)
+				// ASSUME: T is a subclass of ZZExtraField
+				return static_cast<T*>(nextField);
+		return NULL;
+	}
 };
 
 struct ZZDataDescriptor
@@ -156,7 +150,7 @@ struct ZZLocalFileHeader
 {
 	uint32_t signature;
 	uint16_t versionNeededToExtract;
-	uint16_t generalPurposeBitFlag;
+	ZZGeneralPurposeBitFlag generalPurposeBitFlag;
 	ZZCompressionMethod compressionMethod;
 	uint16_t lastModFileTime;
 	uint16_t lastModFileDate;
@@ -173,31 +167,21 @@ struct ZZLocalFileHeader
 		return reinterpret_cast<uint8_t*>(this) + sizeof(*this);
 	}
 	
-	ZZExtraField* extraField()
+	ZZExtraField* firstExtraField()
 	{
 		return reinterpret_cast<ZZExtraField*>(fileName() + fileNameLength);
 	}
 	
+	ZZExtraField* lastExtraField()
+	{
+		return reinterpret_cast<ZZExtraField*>(reinterpret_cast<uint8_t*>(firstExtraField()) + extraFieldLength);
+	}
+	
 	uint8_t* fileData()
 	{
-		return ((uint8_t*)extraField()) + extraFieldLength;
+		return reinterpret_cast<uint8_t*>(lastExtraField());
 	}
-	
-	bool isFileNameUtf8Encoded()
-	{
-		return (generalPurposeBitFlag & 0x800) != 0;
-	}
-	
-	bool isEncrypted()
-	{
-		return (generalPurposeBitFlag & 0x01) != 0;
-	}
-	
-	bool isEncryptionStrong()
-	{
-		return (generalPurposeBitFlag & 0x80) != 0;
-	}
-	
+		
 	ZZDataDescriptor* dataDescriptor(uint32_t compressedSize)
 	{
 		return reinterpret_cast<ZZDataDescriptor*>(fileData() + compressedSize);
@@ -206,28 +190,18 @@ struct ZZLocalFileHeader
 	ZZLocalFileHeader* nextLocalFileHeader(uint32_t compressedSize)
 	{
 		return reinterpret_cast<ZZLocalFileHeader*>(fileData()
-														  + compressedSize
-														  + (generalPurposeBitFlag & 0x08 ? sizeof(ZZDataDescriptor) : 0));
+													+ compressedSize
+													+ ((generalPurposeBitFlag & ZZGeneralPurposeBitFlag::sizeInDataDescriptor) == ZZGeneralPurposeBitFlag::none ? 0 : sizeof(ZZDataDescriptor)));
 	}
-    
-    static const uint16_t sign_extra_aes_record = 0x9901;
-    ZZAesExtraDataRecord* aesExtraDataRecord()
-    {
-        uint16_t pos = 0;
-        ZZExtraField *field = this->extraField();
-        while (pos < extraFieldLength)
-        {
-            pos += field->totalSize();
-            
-            if (field->header == sign_extra_aes_record)
-            {
-                return (ZZAesExtraDataRecord *)field;
-            }
-            
-            field = field->nextExtraField();
-        }
-        return NULL;
-    }
+	
+	template <typename T> T* extraField()
+	{
+		for (auto nextField = firstExtraField(), lastField = lastExtraField(); nextField < lastField; nextField = nextField->nextExtraField())
+			if (nextField->headerID == T::head)
+				// ASSUME: T is a subclass of ZZExtraField
+				return static_cast<T*>(nextField);
+		return NULL;
+	}
 };
 
 struct ZZEndOfCentralDirectory

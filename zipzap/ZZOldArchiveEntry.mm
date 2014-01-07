@@ -48,12 +48,12 @@
 		_localFileHeader = localFileHeader;
 		_encoding = encoding;
 		
-		if (_centralFileHeader->isEncrypted())
+		if ((_centralFileHeader->generalPurposeBitFlag & ZZGeneralPurposeBitFlag::encrypted) != ZZGeneralPurposeBitFlag::none)
 		{
-			ZZAesExtraDataRecord *aesRecord = _centralFileHeader->aesExtraDataRecord();
-			if (aesRecord)
+			ZZWinZipAESExtraField *winZipAESRecord = _centralFileHeader->extraField<ZZWinZipAESExtraField>();
+			if (winZipAESRecord)
 				_encryptionMode = ZZEncryptionModeAES;
-			else if ((_centralFileHeader->generalPurposeBitFlag & 0x4000) == 0x4000)
+			else if ((_centralFileHeader->generalPurposeBitFlag & ZZGeneralPurposeBitFlag::encryptionStrong) != ZZGeneralPurposeBitFlag::none)
 				_encryptionMode = ZZEncryptionModeStrong;
 			else
 				_encryptionMode = ZZEncryptionModeStandard;
@@ -85,16 +85,16 @@
 	// if EFS bit is set, use UTF-8; otherwise use fallback encoding
 	return [[NSString alloc] initWithBytes:bytes
 									length:length
-								  encoding:_centralFileHeader->isFileNameUtf8Encoded() ? NSUTF8StringEncoding : _encoding];
+								  encoding:(_centralFileHeader->generalPurposeBitFlag & ZZGeneralPurposeBitFlag::fileNameUTF8Encoded) == ZZGeneralPurposeBitFlag::none ? _encoding :NSUTF8StringEncoding];
 }
 
 - (ZZCompressionMethod)compressionMethod
 {
     if (_encryptionMode == ZZEncryptionModeAES)
 	{
-		ZZAesExtraDataRecord* aesExtraData = _centralFileHeader->aesExtraDataRecord();
-		if (aesExtraData)
-			return aesExtraData->compressionMethod;
+		ZZWinZipAESExtraField *winZipAESRecord = _centralFileHeader->extraField<ZZWinZipAESExtraField>();
+		if (winZipAESRecord)
+			return winZipAESRecord->compressionMethod;
 	}
 	return _centralFileHeader->compressionMethod;
 }
@@ -106,7 +106,7 @@
 
 - (BOOL)encrypted
 {
-	return _centralFileHeader->isEncrypted();
+	return (_centralFileHeader->generalPurposeBitFlag & ZZGeneralPurposeBitFlag::encrypted) != ZZGeneralPurposeBitFlag::none;
 }
 
 - (NSDate*)lastModified
@@ -171,7 +171,14 @@
 	uint32_t localCrc32;
 	uint32_t localCompressedSize;
 	uint32_t localUncompressedSize;
-	if (_localFileHeader->generalPurposeBitFlag & 0x08)
+	if ((_localFileHeader->generalPurposeBitFlag & ZZGeneralPurposeBitFlag::sizeInDataDescriptor) == ZZGeneralPurposeBitFlag::none)
+	{
+		dataDescriptorSignature = ZZDataDescriptor::sign;
+		localCrc32 = _localFileHeader->crc32;
+		localCompressedSize = _localFileHeader->compressedSize;
+		localUncompressedSize = _localFileHeader->uncompressedSize;
+	}
+	else
 	{
 		const ZZDataDescriptor* dataDescriptor = _localFileHeader->dataDescriptor(_localFileHeader->compressedSize);
 		dataDescriptorSignature = dataDescriptor->signature;
@@ -179,22 +186,16 @@
 		localCompressedSize = dataDescriptor->compressedSize;
 		localUncompressedSize = dataDescriptor->uncompressedSize;
 	}
-	else
-	{
-		dataDescriptorSignature = ZZDataDescriptor::sign;
-		localCrc32 = _localFileHeader->crc32;
-		localCompressedSize = _localFileHeader->compressedSize;
-		localUncompressedSize = _localFileHeader->uncompressedSize;		
-	}
 	
 	// figure out local encryption mode
 	ZZEncryptionMode localEncryptionMode;
-	if (_localFileHeader->isEncrypted())
+	if ((_localFileHeader->generalPurposeBitFlag & ZZGeneralPurposeBitFlag::encrypted) != ZZGeneralPurposeBitFlag::none)
 	{
-		ZZAesExtraDataRecord *aesRecord = _centralFileHeader->aesExtraDataRecord();
-		if (aesRecord)
+		ZZWinZipAESExtraField *winZipAESRecord = _localFileHeader->extraField<ZZWinZipAESExtraField>();
+		
+		if (winZipAESRecord)
 			localEncryptionMode = ZZEncryptionModeAES;
-		else if ((_centralFileHeader->generalPurposeBitFlag & 0x4000) == 0x4000)
+		else if ((_localFileHeader->generalPurposeBitFlag & ZZGeneralPurposeBitFlag::encryptionStrong) != ZZGeneralPurposeBitFlag::none)
 			localEncryptionMode = ZZEncryptionModeStrong;
 		else
 			localEncryptionMode = ZZEncryptionModeStandard;
