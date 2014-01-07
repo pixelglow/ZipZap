@@ -99,7 +99,12 @@ typedef NS_ENUM(NSInteger, ZZErrorCode)
 	/**
 	 * An invalid CRC checksum has been encountered.
 	 */
-	ZZInvalidCRChecksum
+	ZZInvalidCRChecksum,
+    
+	/**
+	 * The wrong key was passed in (don't count on this; we cannot always detect that the problem is indeed a wrong password. in most "wrong password" cases we will raise a CRC error.)
+	 */
+	ZZWrongPassword
 };
 
 static inline BOOL ZZRaiseError(NSError** error, ZZErrorCode errorCode, NSDictionary* userInfo)
