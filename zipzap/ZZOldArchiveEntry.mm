@@ -210,20 +210,18 @@
 		|| _localFileHeader->versionNeededToExtract != _centralFileHeader->versionNeededToExtract
 		|| _localFileHeader->generalPurposeBitFlag != _centralFileHeader->generalPurposeBitFlag
 		|| _localFileHeader->compressionMethod != _centralFileHeader->compressionMethod
-		|| _localFileHeader->lastModFileTime != _centralFileHeader->lastModFileDate
+		|| _localFileHeader->lastModFileDate != _centralFileHeader->lastModFileDate
+		|| _localFileHeader->lastModFileTime != _centralFileHeader->lastModFileTime
 		|| _localFileHeader->fileNameLength != _centralFileHeader->fileNameLength
-		|| _localFileHeader->extraFieldLength != _centralFileHeader->extraFieldLength
-		// extra data in local and central headers match
+		// file name in local and central headers match
 		|| memcmp(_localFileHeader->fileName(), _centralFileHeader->fileName(), _localFileHeader->fileNameLength) != 0
-		|| memcmp(_localFileHeader->extraField(), _centralFileHeader->extraField(), _localFileHeader->extraFieldLength) != 0
 		// descriptor fields in local and central headers match
 		|| dataDescriptorSignature != ZZDataDescriptor::sign
 		|| localCrc32 != _centralFileHeader->crc32
 		|| localCompressedSize != _centralFileHeader->compressedSize
 		|| localUncompressedSize != _centralFileHeader->uncompressedSize
-		|| localEncryptionMode != _encryptionMode
-		|| _localFileHeader->crc32 != (uint32_t)crc32(0, _localFileHeader->fileData(), (uInt)_localFileHeader->compressedSize))
-		ZZRaiseError(error, ZZLocalFileReadErrorCode, nil);
+		|| localEncryptionMode != _encryptionMode)
+		return ZZRaiseError(error, ZZLocalFileReadErrorCode, nil);
 	
 	if (_encryptionMode == ZZEncryptionModeStandard)
 	{
