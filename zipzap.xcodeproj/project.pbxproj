@@ -13,17 +13,6 @@
 		5BC58CA618745940002FAE04 /* large-test-encrypted-standard.zip in Resources */ = {isa = PBXBuildFile; fileRef = 5BC58CA418745940002FAE04 /* large-test-encrypted-standard.zip */; };
 		5BC58CA718745940002FAE04 /* small-test-encrypted-standard.zip in Resources */ = {isa = PBXBuildFile; fileRef = 5BC58CA518745940002FAE04 /* small-test-encrypted-standard.zip */; };
 		5BC58CAC18745D22002FAE04 /* ZZStandardCryptoEngine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B50392E187069E4002B2B12 /* ZZStandardCryptoEngine.cpp */; };
-		5BC58CAD18745D22002FAE04 /* ZZStandardCryptoEngine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B50392E187069E4002B2B12 /* ZZStandardCryptoEngine.cpp */; };
-		5BC58CB018745D28002FAE04 /* ZZStoreOutputStream.m in Sources */ = {isa = PBXBuildFile; fileRef = D899CFE1162C608300112F49 /* ZZStoreOutputStream.m */; };
-		5BC58CB218745D2E002FAE04 /* ZZFileChannelOutput.m in Sources */ = {isa = PBXBuildFile; fileRef = D84A44A916A0E30B00CF00A9 /* ZZFileChannelOutput.m */; };
-		5BC58CB318745D30002FAE04 /* ZZDeflateOutputStream.m in Sources */ = {isa = PBXBuildFile; fileRef = D899CFDF162C608300112F49 /* ZZDeflateOutputStream.m */; };
-		5BC58CB418745D30002FAE04 /* ZZFileChannel.m in Sources */ = {isa = PBXBuildFile; fileRef = D84A44A416A0E2F400CF00A9 /* ZZFileChannel.m */; };
-		5BC58CB518745D35002FAE04 /* ZZNewArchiveEntry.mm in Sources */ = {isa = PBXBuildFile; fileRef = D899CFE6162C608300112F49 /* ZZNewArchiveEntry.mm */; };
-		5BC58CB618745D35002FAE04 /* ZZOldArchiveEntry.mm in Sources */ = {isa = PBXBuildFile; fileRef = D88E8E06163816FD002207B3 /* ZZOldArchiveEntry.mm */; };
-		5BC58CB718745D35002FAE04 /* ZZNewArchiveEntryWriter.mm in Sources */ = {isa = PBXBuildFile; fileRef = D899CFE8162C608300112F49 /* ZZNewArchiveEntryWriter.mm */; };
-		5BC58CB818745D35002FAE04 /* ZZOldArchiveEntryWriter.mm in Sources */ = {isa = PBXBuildFile; fileRef = D899CFE3162C608300112F49 /* ZZOldArchiveEntryWriter.mm */; };
-		5BC58CB918745D35002FAE04 /* ZZDataChannel.m in Sources */ = {isa = PBXBuildFile; fileRef = D84A44AE16A0E8D600CF00A9 /* ZZDataChannel.m */; };
-		5BC58CBA18745D35002FAE04 /* ZZDataChannelOutput.m in Sources */ = {isa = PBXBuildFile; fileRef = D84A44CE16A0F8B400CF00A9 /* ZZDataChannelOutput.m */; };
 		D810EBCF164B19DA00200834 /* 拉链.txt in Resources */ = {isa = PBXBuildFile; fileRef = D810EBCE164B19DA00200834 /* 拉链.txt */; };
 		D83425601876747200E7A559 /* ZZInflateInputStream.m in Sources */ = {isa = PBXBuildFile; fileRef = D834255F1876747200E7A559 /* ZZInflateInputStream.m */; };
 		D83425611876747200E7A559 /* ZZInflateInputStream.m in Sources */ = {isa = PBXBuildFile; fileRef = D834255F1876747200E7A559 /* ZZInflateInputStream.m */; };
@@ -589,20 +578,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5BC58CB318745D30002FAE04 /* ZZDeflateOutputStream.m in Sources */,
-				5BC58CB218745D2E002FAE04 /* ZZFileChannelOutput.m in Sources */,
-				5BC58CAD18745D22002FAE04 /* ZZStandardCryptoEngine.cpp in Sources */,
-				5BC58CB718745D35002FAE04 /* ZZNewArchiveEntryWriter.mm in Sources */,
-				5BC58CB518745D35002FAE04 /* ZZNewArchiveEntry.mm in Sources */,
-				5BC58CB818745D35002FAE04 /* ZZOldArchiveEntryWriter.mm in Sources */,
 				D899D01A162CCF9700112F49 /* ZZUnzipTests.m in Sources */,
 				D899D021162F6C9700112F49 /* ZZZipTests.m in Sources */,
-				5BC58CB918745D35002FAE04 /* ZZDataChannel.m in Sources */,
-				5BC58CBA18745D35002FAE04 /* ZZDataChannelOutput.m in Sources */,
-				5BC58CB018745D28002FAE04 /* ZZStoreOutputStream.m in Sources */,
 				D899D0241631888100112F49 /* ZZTasks.m in Sources */,
-				5BC58CB418745D30002FAE04 /* ZZFileChannel.m in Sources */,
-				5BC58CB618745D35002FAE04 /* ZZOldArchiveEntry.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
