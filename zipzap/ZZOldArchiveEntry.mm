@@ -18,6 +18,7 @@
 #import "ZZArchiveEntryWriter.h"
 #import "ZZScopeGuard.h"
 #import "ZZStandardDecryptInputStream.h"
+#import "ZZAESDecryptInputStream.h"
 #import "ZZConstants.h"
 
 @interface ZZOldArchiveEntry ()
@@ -52,7 +53,7 @@
 		{
 			ZZWinZipAESExtraField *winZipAESRecord = _centralFileHeader->extraField<ZZWinZipAESExtraField>();
 			if (winZipAESRecord)
-				_encryptionMode = ZZEncryptionModeAES;
+				_encryptionMode = ZZEncryptionModeWinZipAES;
 			else if ((_centralFileHeader->generalPurposeBitFlag & ZZGeneralPurposeBitFlag::encryptionStrong) != ZZGeneralPurposeBitFlag::none)
 				_encryptionMode = ZZEncryptionModeStrong;
 			else
@@ -76,6 +77,16 @@
 		dataStart += 12;
 		dataLength -= 12;
 	}
+	else if (_encryptionMode == ZZEncryptionModeWinZipAES)
+	{
+		ZZWinZipAESExtraField *winZipAESRecord = _localFileHeader->extraField<ZZWinZipAESExtraField>();
+		if (winZipAESRecord)
+		{
+			int saltLength = winZipAESRecord->saltLength();
+			dataStart += saltLength + 2; // saltLength + password verifier length
+			dataLength -= saltLength + 2 + 10; // saltLength + password verifier + authentication stuff
+		}
+	}
 
 	return [NSData dataWithBytesNoCopy:dataStart length:dataLength freeWhenDone:NO];
 }
@@ -90,7 +101,7 @@
 
 - (ZZCompressionMethod)compressionMethod
 {
-    if (_encryptionMode == ZZEncryptionModeAES)
+    if (_encryptionMode == ZZEncryptionModeWinZipAES)
 	{
 		ZZWinZipAESExtraField *winZipAESRecord = _centralFileHeader->extraField<ZZWinZipAESExtraField>();
 		if (winZipAESRecord)
@@ -194,7 +205,7 @@
 		ZZWinZipAESExtraField *winZipAESRecord = _localFileHeader->extraField<ZZWinZipAESExtraField>();
 		
 		if (winZipAESRecord)
-			localEncryptionMode = ZZEncryptionModeAES;
+			localEncryptionMode = ZZEncryptionModeWinZipAES;
 		else if ((_localFileHeader->generalPurposeBitFlag & ZZGeneralPurposeBitFlag::encryptionStrong) != ZZGeneralPurposeBitFlag::none)
 			localEncryptionMode = ZZEncryptionModeStrong;
 		else
@@ -210,7 +221,7 @@
 		// general fields in local and central headers match
 		|| _localFileHeader->versionNeededToExtract != _centralFileHeader->versionNeededToExtract
 		|| _localFileHeader->generalPurposeBitFlag != _centralFileHeader->generalPurposeBitFlag
-		|| _localFileHeader->compressionMethod != _centralFileHeader->compressionMethod
+		|| _localFileHeader->compressionMethod != self.compressionMethod
 		|| _localFileHeader->lastModFileDate != _centralFileHeader->lastModFileDate
 		|| _localFileHeader->lastModFileTime != _centralFileHeader->lastModFileTime
 		|| _localFileHeader->fileNameLength != _centralFileHeader->fileNameLength
@@ -248,12 +259,13 @@
 	{
 		case ZZEncryptionModeNone:
 		case ZZEncryptionModeStandard:
+		case ZZEncryptionModeWinZipAES:
 			break;
 		default:
 			return ZZRaiseError(error, ZZUnsupportedEncryptionMethod, @{});
 	}
 	
-	switch (_centralFileHeader->compressionMethod)
+	switch (self.compressionMethod)
 	{
 		case ZZCompressionMethod::stored:
 		case ZZCompressionMethod::deflated:
@@ -267,6 +279,8 @@
 
 - (NSInputStream*)streamForData:(NSData*)data withPassword:(NSString*)password
 {
+	// We need to output an error, becase in AES we have (most of the time) knowledge about the password verification even before starting to decrypt. So we should not supply a stream when we KNOW that the password is wrong.
+	
 	NSInputStream* dataStream = [NSInputStream inputStreamWithData:data];
 	
 	// decrypt if needed
@@ -278,8 +292,14 @@
 			break;
 		case ZZEncryptionModeStandard:
 			decryptedStream = [[ZZStandardDecryptInputStream alloc] initWithStream:dataStream
-																		password:password
-																		  header:_localFileHeader->fileData()];
+																		  password:password
+																			header:_localFileHeader->fileData()];
+			break;
+		case ZZEncryptionModeWinZipAES:
+			decryptedStream = [[ZZAESDecryptInputStream alloc] initWithStream:dataStream
+																	 password:password
+																	   header:_localFileHeader->fileData()
+																	extraData:_localFileHeader->extraField<ZZWinZipAESExtraField>()];
 			break;
 		default:
 			decryptedStream = nil;
@@ -288,7 +308,7 @@
 	
 	// decompress if needed
 	NSInputStream* decompressedDecryptedStream;
-	switch (_centralFileHeader->compressionMethod)
+	switch (self.compressionMethod)
 	{
 		case ZZCompressionMethod::stored:
 			decompressedDecryptedStream = decryptedStream;
@@ -321,7 +341,7 @@
 	NSData* fileData = [self fileData];
 	
 	if (_encryptionMode == ZZEncryptionModeNone)
-		switch (_centralFileHeader->compressionMethod)
+		switch (self.compressionMethod)
 		{
 			case ZZCompressionMethod::stored:
 				// unencrypted, stored: just return as-is
@@ -336,6 +356,7 @@
 	else
 	{
 		NSInputStream* stream = [self streamForData:fileData withPassword:password];
+		if (!stream) return nil;
 		
 		NSMutableData* data = [NSMutableData dataWithLength:_centralFileHeader->uncompressedSize];
 		
@@ -370,12 +391,13 @@
 
 	NSData* fileData = [self fileData];
 	
-	if (_centralFileHeader->compressionMethod == ZZCompressionMethod::stored && _encryptionMode == ZZEncryptionModeNone)
+	if (self.compressionMethod == ZZCompressionMethod::stored && _encryptionMode == ZZEncryptionModeNone)
 		// simple data provider that just wraps the data
 		return CGDataProviderCreateWithCFData((__bridge CFDataRef)[fileData copy]);
 	else
 		return ZZDataProvider::create(^
 									  {
+										  // FIXME: How do we handle the error here?
 										  return [self streamForData:fileData withPassword:password];
 									  });
 }

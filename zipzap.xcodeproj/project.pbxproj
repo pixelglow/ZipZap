@@ -87,10 +87,22 @@
 		D899D01C162CD51A00112F49 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D899D01B162CD51A00112F49 /* libz.dylib */; };
 		D899D021162F6C9700112F49 /* ZZZipTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D899D020162F6C9700112F49 /* ZZZipTests.m */; };
 		D899D0241631888100112F49 /* ZZTasks.m in Sources */ = {isa = PBXBuildFile; fileRef = D899D0231631888000112F49 /* ZZTasks.m */; };
+		D8ABBF3E18883528002858BE /* ZZAESDecryptInputStream.h in Headers */ = {isa = PBXBuildFile; fileRef = D8ABBF3C18883528002858BE /* ZZAESDecryptInputStream.h */; };
+		D8ABBF3F18883528002858BE /* ZZAESDecryptInputStream.mm in Sources */ = {isa = PBXBuildFile; fileRef = D8ABBF3D18883528002858BE /* ZZAESDecryptInputStream.mm */; };
+		D8ABBF4018883528002858BE /* ZZAESDecryptInputStream.mm in Sources */ = {isa = PBXBuildFile; fileRef = D8ABBF3D18883528002858BE /* ZZAESDecryptInputStream.mm */; };
 		D8B0FD621640A6B000727A70 /* zipzap.h in Headers */ = {isa = PBXBuildFile; fileRef = D8B0FD611640A6B000727A70 /* zipzap.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D8B0FD661640A77F00727A70 /* zipzap.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8B0FD611640A6B000727A70 /* zipzap.h */; };
 		D8B0FD671640A77F00727A70 /* ZZArchive.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D899CFDA162C608300112F49 /* ZZArchive.h */; };
 		D8B0FD681640A77F00727A70 /* ZZArchiveEntry.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D899CFD8162C608300112F49 /* ZZArchiveEntry.h */; };
+		D8E366F0188832C0009F3008 /* large-test-encrypted-aes128.zip in Resources */ = {isa = PBXBuildFile; fileRef = D8E366EA188832C0009F3008 /* large-test-encrypted-aes128.zip */; };
+		D8E366F1188832C0009F3008 /* large-test-encrypted-aes192.zip in Resources */ = {isa = PBXBuildFile; fileRef = D8E366EB188832C0009F3008 /* large-test-encrypted-aes192.zip */; };
+		D8E366F2188832C0009F3008 /* large-test-encrypted-aes256.zip in Resources */ = {isa = PBXBuildFile; fileRef = D8E366EC188832C0009F3008 /* large-test-encrypted-aes256.zip */; };
+		D8E366F3188832C0009F3008 /* small-test-encrypted-aes128.zip in Resources */ = {isa = PBXBuildFile; fileRef = D8E366ED188832C0009F3008 /* small-test-encrypted-aes128.zip */; };
+		D8E366F4188832C0009F3008 /* small-test-encrypted-aes192.zip in Resources */ = {isa = PBXBuildFile; fileRef = D8E366EE188832C0009F3008 /* small-test-encrypted-aes192.zip */; };
+		D8E366F5188832C0009F3008 /* small-test-encrypted-aes256.zip in Resources */ = {isa = PBXBuildFile; fileRef = D8E366EF188832C0009F3008 /* small-test-encrypted-aes256.zip */; };
+		D8E366F8188833E0009F3008 /* ZZAESCryptoEngine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8E366F6188833E0009F3008 /* ZZAESCryptoEngine.cpp */; };
+		D8E366F9188833E0009F3008 /* ZZAESCryptoEngine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8E366F6188833E0009F3008 /* ZZAESCryptoEngine.cpp */; };
+		D8E366FA188833E0009F3008 /* ZZAESCryptoEngine.h in Headers */ = {isa = PBXBuildFile; fileRef = D8E366F7188833E0009F3008 /* ZZAESCryptoEngine.h */; };
 		D8E3C26A17E6FF0E007D0020 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8E3C26917E6FF0E007D0020 /* XCTest.framework */; };
 /* End PBXBuildFile section */
 
@@ -187,7 +199,17 @@
 		D899D0231631888000112F49 /* ZZTasks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZZTasks.m; sourceTree = "<group>"; };
 		D8A32627163BFF3D008606AC /* README.markdown */ = {isa = PBXFileReference; lastKnownFileType = text; path = README.markdown; sourceTree = "<group>"; };
 		D8A32673163C2240008606AC /* LICENSE.text */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE.text; sourceTree = "<group>"; };
+		D8ABBF3C18883528002858BE /* ZZAESDecryptInputStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZZAESDecryptInputStream.h; sourceTree = "<group>"; };
+		D8ABBF3D18883528002858BE /* ZZAESDecryptInputStream.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ZZAESDecryptInputStream.mm; sourceTree = "<group>"; };
 		D8B0FD611640A6B000727A70 /* zipzap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zipzap.h; sourceTree = "<group>"; };
+		D8E366EA188832C0009F3008 /* large-test-encrypted-aes128.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = "large-test-encrypted-aes128.zip"; sourceTree = "<group>"; };
+		D8E366EB188832C0009F3008 /* large-test-encrypted-aes192.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = "large-test-encrypted-aes192.zip"; sourceTree = "<group>"; };
+		D8E366EC188832C0009F3008 /* large-test-encrypted-aes256.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = "large-test-encrypted-aes256.zip"; sourceTree = "<group>"; };
+		D8E366ED188832C0009F3008 /* small-test-encrypted-aes128.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = "small-test-encrypted-aes128.zip"; sourceTree = "<group>"; };
+		D8E366EE188832C0009F3008 /* small-test-encrypted-aes192.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = "small-test-encrypted-aes192.zip"; sourceTree = "<group>"; };
+		D8E366EF188832C0009F3008 /* small-test-encrypted-aes256.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = "small-test-encrypted-aes256.zip"; sourceTree = "<group>"; };
+		D8E366F6188833E0009F3008 /* ZZAESCryptoEngine.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ZZAESCryptoEngine.cpp; sourceTree = "<group>"; };
+		D8E366F7188833E0009F3008 /* ZZAESCryptoEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZZAESCryptoEngine.h; sourceTree = "<group>"; };
 		D8E3C26917E6FF0E007D0020 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 /* End PBXFileReference section */
 
@@ -271,6 +293,10 @@
 				D899CFE1162C608300112F49 /* ZZStoreOutputStream.m */,
 				5B50392F187069E4002B2B12 /* ZZStandardCryptoEngine.h */,
 				5B50392E187069E4002B2B12 /* ZZStandardCryptoEngine.cpp */,
+				D8E366F7188833E0009F3008 /* ZZAESCryptoEngine.h */,
+				D8E366F6188833E0009F3008 /* ZZAESCryptoEngine.cpp */,
+				D8ABBF3C18883528002858BE /* ZZAESDecryptInputStream.h */,
+				D8ABBF3D18883528002858BE /* ZZAESDecryptInputStream.mm */,
 			);
 			name = Private;
 			sourceTree = "<group>";
@@ -278,6 +304,12 @@
 		5BC58CA318745940002FAE04 /* assets */ = {
 			isa = PBXGroup;
 			children = (
+				D8E366EA188832C0009F3008 /* large-test-encrypted-aes128.zip */,
+				D8E366EB188832C0009F3008 /* large-test-encrypted-aes192.zip */,
+				D8E366EC188832C0009F3008 /* large-test-encrypted-aes256.zip */,
+				D8E366ED188832C0009F3008 /* small-test-encrypted-aes128.zip */,
+				D8E366EE188832C0009F3008 /* small-test-encrypted-aes192.zip */,
+				D8E366EF188832C0009F3008 /* small-test-encrypted-aes256.zip */,
 				5BC58CA418745940002FAE04 /* large-test-encrypted-standard.zip */,
 				5BC58CA518745940002FAE04 /* small-test-encrypted-standard.zip */,
 			);
@@ -382,10 +414,12 @@
 				D899CFEA162C608300112F49 /* ZZArchiveEntry.h in Headers */,
 				D8366ACE16B1F8B400BC012E /* ZZError.h in Headers */,
 				D899D003162C608300112F49 /* ZZArchiveEntryWriter.h in Headers */,
+				D8ABBF3E18883528002858BE /* ZZAESDecryptInputStream.h in Headers */,
 				D899CFF0162C608300112F49 /* ZZInflateInputStream.h in Headers */,
 				D899CFF3162C608300112F49 /* ZZDeflateOutputStream.h in Headers */,
 				D899CFFC162C608300112F49 /* ZZHeaders.h in Headers */,
 				D899CFFD162C608300112F49 /* ZZNewArchiveEntry.h in Headers */,
+				D8E366FA188833E0009F3008 /* ZZAESCryptoEngine.h in Headers */,
 				D899D000162C608300112F49 /* ZZNewArchiveEntryWriter.h in Headers */,
 				D899CFF9162C608300112F49 /* ZZOldArchiveEntryWriter.h in Headers */,
 				D88E8E07163816FD002207B3 /* ZZOldArchiveEntry.h in Headers */,
@@ -489,13 +523,19 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D8E366F5188832C0009F3008 /* small-test-encrypted-aes256.zip in Resources */,
 				D899CFA2162C5EC100112F49 /* InfoPlist.strings in Resources */,
 				D899D014162CCA0400112F49 /* li-europan-lingues.txt in Resources */,
 				D899D015162CCA8200112F49 /* lorem-ipsum.txt in Resources */,
 				D899D017162CCEDC00112F49 /* pangram.txt in Resources */,
+				D8E366F0188832C0009F3008 /* large-test-encrypted-aes128.zip in Resources */,
 				D88E8DFF16375C66002207B3 /* dog.jpg in Resources */,
+				D8E366F2188832C0009F3008 /* large-test-encrypted-aes256.zip in Resources */,
 				D88E8E0016375C66002207B3 /* dog.png in Resources */,
 				5BC58CA718745940002FAE04 /* small-test-encrypted-standard.zip in Resources */,
+				D8E366F1188832C0009F3008 /* large-test-encrypted-aes192.zip in Resources */,
+				D8E366F3188832C0009F3008 /* small-test-encrypted-aes128.zip in Resources */,
+				D8E366F4188832C0009F3008 /* small-test-encrypted-aes192.zip in Resources */,
 				D810EBCF164B19DA00200834 /* 拉链.txt in Resources */,
 				5BC58CA618745940002FAE04 /* large-test-encrypted-standard.zip in Resources */,
 			);
@@ -530,6 +570,7 @@
 				D899CFF4162C608300112F49 /* ZZDeflateOutputStream.m in Sources */,
 				D899CFF7162C608300112F49 /* ZZStoreOutputStream.m in Sources */,
 				D899CFFA162C608300112F49 /* ZZOldArchiveEntryWriter.mm in Sources */,
+				D8E366F8188833E0009F3008 /* ZZAESCryptoEngine.cpp in Sources */,
 				D899CFFE162C608300112F49 /* ZZNewArchiveEntry.mm in Sources */,
 				D834256318767E1900E7A559 /* ZZStandardDecryptInputStream.mm in Sources */,
 				D899D001162C608300112F49 /* ZZNewArchiveEntryWriter.mm in Sources */,
@@ -537,6 +578,7 @@
 				D84A44A616A0E2F400CF00A9 /* ZZFileChannel.m in Sources */,
 				D84A44AB16A0E30C00CF00A9 /* ZZFileChannelOutput.m in Sources */,
 				D84A44B016A0E8D600CF00A9 /* ZZDataChannel.m in Sources */,
+				D8ABBF3F18883528002858BE /* ZZAESDecryptInputStream.mm in Sources */,
 				D84A44D016A0F8B400CF00A9 /* ZZDataChannelOutput.m in Sources */,
 				D8366ACF16B1F8B400BC012E /* ZZError.m in Sources */,
 				5B503930187069E4002B2B12 /* ZZStandardCryptoEngine.cpp in Sources */,
@@ -574,6 +616,7 @@
 				D899CFF5162C608300112F49 /* ZZDeflateOutputStream.m in Sources */,
 				5BC58CAC18745D22002FAE04 /* ZZStandardCryptoEngine.cpp in Sources */,
 				D899CFF8162C608300112F49 /* ZZStoreOutputStream.m in Sources */,
+				D8E366F9188833E0009F3008 /* ZZAESCryptoEngine.cpp in Sources */,
 				D834256418767E1900E7A559 /* ZZStandardDecryptInputStream.mm in Sources */,
 				D899CFFB162C608300112F49 /* ZZOldArchiveEntryWriter.mm in Sources */,
 				D899CFFF162C608300112F49 /* ZZNewArchiveEntry.mm in Sources */,
@@ -581,6 +624,7 @@
 				D88E8E09163816FD002207B3 /* ZZOldArchiveEntry.mm in Sources */,
 				D84A44A716A0E2F400CF00A9 /* ZZFileChannel.m in Sources */,
 				D84A44AC16A0E30C00CF00A9 /* ZZFileChannelOutput.m in Sources */,
+				D8ABBF4018883528002858BE /* ZZAESDecryptInputStream.mm in Sources */,
 				D84A44B116A0E8D600CF00A9 /* ZZDataChannel.m in Sources */,
 				D84A44D116A0F8B400CF00A9 /* ZZDataChannelOutput.m in Sources */,
 				D8366AD016B1F8B400BC012E /* ZZError.m in Sources */,

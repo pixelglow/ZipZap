@@ -28,6 +28,12 @@
 		<string>dog.jpg</string>
 		<string>small-test-encrypted-standard.zip</string>
 		<string>large-test-encrypted-standard.zip</string>
+		<string>small-test-encrypted-aes128.zip</string>
+		<string>small-test-encrypted-aes192.zip</string>
+		<string>small-test-encrypted-aes256.zip</string>
+		<string>large-test-encrypted-aes128.zip</string>
+		<string>large-test-encrypted-aes192.zip</string>
+		<string>large-test-encrypted-aes256.zip</string>
 	</array>
 </dict>
 </plist>

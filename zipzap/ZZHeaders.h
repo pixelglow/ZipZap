@@ -62,7 +62,7 @@ struct ZZExtraField
 	uint16_t headerID;
 	uint16_t dataSize;
 	
-    ZZExtraField* nextExtraField()
+    ZZExtraField *nextExtraField()
     {
 		return reinterpret_cast<ZZExtraField*>(((uint8_t*)this) + sizeof(ZZExtraField) + dataSize);
     }
@@ -71,11 +71,59 @@ struct ZZExtraField
 struct ZZWinZipAESExtraField: public ZZExtraField
 {
 	uint16_t versionNumber;
-	uint8_t vendorId[2];
+	uint8_t vendorId[2]; // For WinZip, should always be AE
     ZZAESEncryptionStrength encryptionStrength;
     ZZCompressionMethod compressionMethod;
-	
+    
 	static const uint16_t head = 0x9901;
+    
+	static const uint16_t version_AE1 = 0x0001;
+	static const uint16_t version_AE2 = 0x0002;
+	
+	int8_t saltLength()
+	{
+		switch (encryptionStrength)
+		{
+			case ZZAESEncryptionStrength128:
+				return 8;
+			case ZZAESEncryptionStrength192:
+				return 12;
+			case ZZAESEncryptionStrength256:
+				return 16;
+			default:
+				return -1;
+		}
+	}
+	
+	int8_t keyLength()
+	{
+		switch (encryptionStrength)
+		{
+			case ZZAESEncryptionStrength128:
+				return 16;
+			case ZZAESEncryptionStrength192:
+				return 24;
+			case ZZAESEncryptionStrength256:
+				return 32;
+			default:
+				return -1;
+		}
+	}
+	
+	int8_t macLength()
+	{
+		switch (encryptionStrength)
+		{
+			case ZZAESEncryptionStrength128:
+				return 16;
+			case ZZAESEncryptionStrength192:
+				return 24;
+			case ZZAESEncryptionStrength256:
+				return 32;
+			default:
+				return -1;
+		}
+	}
 };
 
 struct ZZCentralFileHeader

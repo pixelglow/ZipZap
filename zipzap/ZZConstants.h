@@ -34,7 +34,7 @@ typedef NS_ENUM(NSInteger, ZZEncryptionMode)
 	ZZEncryptionModeNone,
 	ZZEncryptionModeStandard,
 	ZZEncryptionModeStrong,
-	ZZEncryptionModeAES
+	ZZEncryptionModeWinZipAES
 };
 
 typedef NS_ENUM(uint8_t, ZZAESEncryptionStrength)
