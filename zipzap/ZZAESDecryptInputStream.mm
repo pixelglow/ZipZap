@@ -6,9 +6,9 @@
 //
 //
 
+#import <CommonCrypto/CommonCrypto.h>
+
 #import "ZZAESDecryptInputStream.h"
-#import "ZZAESCryptoEngine.h"
-#import <CommonCrypto/CommonKeyDerivation.h>
 #import "ZZError.h"
 
 #define BLOCK_SIZE 16
@@ -21,7 +21,7 @@
 	NSStreamStatus _status;
 	NSError* _error;
 	
-	ZZAESCryptoEngine _aes;
+	CCCryptorRef _aes;
 	
 	NSMutableData *_key;
 	u_int8_t _ivBytes[BLOCK_SIZE], _processedBytes[BLOCK_SIZE];
@@ -67,10 +67,22 @@
 			
 			_nonce = 1;
 			
-			_aes.generateKeySchedule((u_int8_t *)aesKey.bytes, (int)aesKey.length);
+			CCCryptorCreate(kCCEncrypt,
+							kCCAlgorithmAES,
+							kCCOptionECBMode,
+							aesKey.bytes,
+							aesKey.length,
+							NULL,
+							&_aes);
 		}
 	}
 	return self;
+}
+
+- (void)dealloc
+{
+	if (_aes)
+		CCCryptorRelease(_aes);
 }
 
 - (NSStreamStatus)streamStatus
@@ -112,7 +124,13 @@
 		(*(uint32_t *)_ivBytes) = _nonce;
 		
 		// Run AES processing
-		_aes.processBlock(_ivBytes, _processedBytes);
+		size_t dataOutMoved = 0;
+		CCCryptorUpdate(_aes,
+						_ivBytes,
+						BLOCK_SIZE,
+						_processedBytes,
+						BLOCK_SIZE,
+						&dataOutMoved);
 		
 		// XOR block
 		for (k = 0; k < processBlockSize; k++)

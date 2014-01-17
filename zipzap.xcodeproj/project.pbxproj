@@ -89,9 +89,6 @@
 		D8E366F3188832C0009F3008 /* small-test-encrypted-aes128.zip in Resources */ = {isa = PBXBuildFile; fileRef = D8E366ED188832C0009F3008 /* small-test-encrypted-aes128.zip */; };
 		D8E366F4188832C0009F3008 /* small-test-encrypted-aes192.zip in Resources */ = {isa = PBXBuildFile; fileRef = D8E366EE188832C0009F3008 /* small-test-encrypted-aes192.zip */; };
 		D8E366F5188832C0009F3008 /* small-test-encrypted-aes256.zip in Resources */ = {isa = PBXBuildFile; fileRef = D8E366EF188832C0009F3008 /* small-test-encrypted-aes256.zip */; };
-		D8E366F8188833E0009F3008 /* ZZAESCryptoEngine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8E366F6188833E0009F3008 /* ZZAESCryptoEngine.cpp */; };
-		D8E366F9188833E0009F3008 /* ZZAESCryptoEngine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8E366F6188833E0009F3008 /* ZZAESCryptoEngine.cpp */; };
-		D8E366FA188833E0009F3008 /* ZZAESCryptoEngine.h in Headers */ = {isa = PBXBuildFile; fileRef = D8E366F7188833E0009F3008 /* ZZAESCryptoEngine.h */; };
 		D8E3C26A17E6FF0E007D0020 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8E3C26917E6FF0E007D0020 /* XCTest.framework */; };
 /* End PBXBuildFile section */
 
@@ -197,8 +194,6 @@
 		D8E366ED188832C0009F3008 /* small-test-encrypted-aes128.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = "small-test-encrypted-aes128.zip"; sourceTree = "<group>"; };
 		D8E366EE188832C0009F3008 /* small-test-encrypted-aes192.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = "small-test-encrypted-aes192.zip"; sourceTree = "<group>"; };
 		D8E366EF188832C0009F3008 /* small-test-encrypted-aes256.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = "small-test-encrypted-aes256.zip"; sourceTree = "<group>"; };
-		D8E366F6188833E0009F3008 /* ZZAESCryptoEngine.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ZZAESCryptoEngine.cpp; sourceTree = "<group>"; };
-		D8E366F7188833E0009F3008 /* ZZAESCryptoEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZZAESCryptoEngine.h; sourceTree = "<group>"; };
 		D8E3C26917E6FF0E007D0020 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 /* End PBXFileReference section */
 
@@ -282,8 +277,6 @@
 				D899CFE1162C608300112F49 /* ZZStoreOutputStream.m */,
 				5B50392F187069E4002B2B12 /* ZZStandardCryptoEngine.h */,
 				5B50392E187069E4002B2B12 /* ZZStandardCryptoEngine.cpp */,
-				D8E366F7188833E0009F3008 /* ZZAESCryptoEngine.h */,
-				D8E366F6188833E0009F3008 /* ZZAESCryptoEngine.cpp */,
 				D8ABBF3C18883528002858BE /* ZZAESDecryptInputStream.h */,
 				D8ABBF3D18883528002858BE /* ZZAESDecryptInputStream.mm */,
 			);
@@ -408,7 +401,6 @@
 				D899CFF3162C608300112F49 /* ZZDeflateOutputStream.h in Headers */,
 				D899CFFC162C608300112F49 /* ZZHeaders.h in Headers */,
 				D899CFFD162C608300112F49 /* ZZNewArchiveEntry.h in Headers */,
-				D8E366FA188833E0009F3008 /* ZZAESCryptoEngine.h in Headers */,
 				D899D000162C608300112F49 /* ZZNewArchiveEntryWriter.h in Headers */,
 				D899CFF9162C608300112F49 /* ZZOldArchiveEntryWriter.h in Headers */,
 				D88E8E07163816FD002207B3 /* ZZOldArchiveEntry.h in Headers */,
@@ -559,7 +551,6 @@
 				D899CFF4162C608300112F49 /* ZZDeflateOutputStream.m in Sources */,
 				D899CFF7162C608300112F49 /* ZZStoreOutputStream.m in Sources */,
 				D899CFFA162C608300112F49 /* ZZOldArchiveEntryWriter.mm in Sources */,
-				D8E366F8188833E0009F3008 /* ZZAESCryptoEngine.cpp in Sources */,
 				D899CFFE162C608300112F49 /* ZZNewArchiveEntry.mm in Sources */,
 				D834256318767E1900E7A559 /* ZZStandardDecryptInputStream.mm in Sources */,
 				D899D001162C608300112F49 /* ZZNewArchiveEntryWriter.mm in Sources */,
@@ -594,7 +585,6 @@
 				D899CFF5162C608300112F49 /* ZZDeflateOutputStream.m in Sources */,
 				5BC58CAC18745D22002FAE04 /* ZZStandardCryptoEngine.cpp in Sources */,
 				D899CFF8162C608300112F49 /* ZZStoreOutputStream.m in Sources */,
-				D8E366F9188833E0009F3008 /* ZZAESCryptoEngine.cpp in Sources */,
 				D834256418767E1900E7A559 /* ZZStandardDecryptInputStream.mm in Sources */,
 				D899CFFB162C608300112F49 /* ZZOldArchiveEntryWriter.mm in Sources */,
 				D899CFFF162C608300112F49 /* ZZNewArchiveEntry.mm in Sources */,
