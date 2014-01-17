@@ -79,52 +79,53 @@ struct ZZWinZipAESExtraField: public ZZExtraField
     
 	static const uint16_t version_AE1 = 0x0001;
 	static const uint16_t version_AE2 = 0x0002;
-	
-	int8_t saltLength()
-	{
-		switch (encryptionStrength)
-		{
-			case ZZAESEncryptionStrength128:
-				return 8;
-			case ZZAESEncryptionStrength192:
-				return 12;
-			case ZZAESEncryptionStrength256:
-				return 16;
-			default:
-				return -1;
-		}
-	}
-	
-	int8_t keyLength()
-	{
-		switch (encryptionStrength)
-		{
-			case ZZAESEncryptionStrength128:
-				return 16;
-			case ZZAESEncryptionStrength192:
-				return 24;
-			case ZZAESEncryptionStrength256:
-				return 32;
-			default:
-				return -1;
-		}
-	}
-	
-	int8_t macLength()
-	{
-		switch (encryptionStrength)
-		{
-			case ZZAESEncryptionStrength128:
-				return 16;
-			case ZZAESEncryptionStrength192:
-				return 24;
-			case ZZAESEncryptionStrength256:
-				return 32;
-			default:
-				return -1;
-		}
-	}
 };
+
+inline size_t getSaltLength(ZZAESEncryptionStrength encryptionStrength)
+{
+	switch (encryptionStrength)
+	{
+		case ZZAESEncryptionStrength128:
+			return 8;
+		case ZZAESEncryptionStrength192:
+			return 12;
+		case ZZAESEncryptionStrength256:
+			return 16;
+		default:
+			return -1;
+	}
+}
+
+inline size_t getKeyLength(ZZAESEncryptionStrength encryptionStrength)
+{
+	switch (encryptionStrength)
+	{
+		case ZZAESEncryptionStrength128:
+			return 16;
+		case ZZAESEncryptionStrength192:
+			return 24;
+		case ZZAESEncryptionStrength256:
+			return 32;
+		default:
+			return -1;
+	}
+}
+
+inline size_t getMacLength(ZZAESEncryptionStrength encryptionStrength)
+{
+	switch (encryptionStrength)
+	{
+		case ZZAESEncryptionStrength128:
+			return 16;
+		case ZZAESEncryptionStrength192:
+			return 24;
+		case ZZAESEncryptionStrength256:
+			return 32;
+		default:
+			return -1;
+	}
+}
+
 
 struct ZZCentralFileHeader
 {

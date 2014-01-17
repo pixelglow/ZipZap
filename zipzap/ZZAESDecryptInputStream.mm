@@ -9,11 +9,10 @@
 #import <CommonCrypto/CommonCrypto.h>
 
 #import "ZZAESDecryptInputStream.h"
+#import "ZZHeaders.h"
 #import "ZZError.h"
 
-#define BLOCK_SIZE 16
-#define PASSWORD_VERIFIER_LENGTH 2
-#define WINZIP_PBKDF2_ROUNDS 1000
+static const uint WINZIP_PBKDF2_ROUNDS = 1000;
 
 @implementation ZZAESDecryptInputStream
 {
@@ -21,68 +20,72 @@
 	NSStreamStatus _status;
 	NSError* _error;
 	
-	CCCryptorRef _aes;
+	uint32_t _counterNonce[4];
+	uint8_t _keystream[16];
+	NSUInteger _keystreamPos;
 	
-	NSMutableData *_key;
-	u_int8_t _ivBytes[BLOCK_SIZE], _processedBytes[BLOCK_SIZE];
-	uint32_t _nonce; // keep this 32-bit
+	CCCryptorRef _aes;
 }
 
-- (id)initWithStream:(NSInputStream*)upstream password:(NSString*)password header:(uint8_t*)header extraData:(ZZWinZipAESExtraField *)extraData
+- (id)initWithStream:(NSInputStream*)upstream password:(NSString*)password header:(uint8_t*)header strength:(ZZAESEncryptionStrength)strength
 {
 	if ((self = [super init]))
 	{
 		_upstream = upstream;
-		_status = NSStreamStatusNotOpen;
 		
-		int saltLength = extraData->saltLength();
-		NSData *salt = [NSData dataWithBytesNoCopy:(void *)header length:saltLength freeWhenDone:NO];
-		NSData *passwordVerifier = [NSData dataWithBytesNoCopy:(void *)(header + saltLength) length:PASSWORD_VERIFIER_LENGTH freeWhenDone:NO];
+		_counterNonce[0] = _counterNonce[1] = _counterNonce[2] = _counterNonce[3] = 0;
+		_keystreamPos = sizeof(_keystream);
 		
-		int keyLength = extraData->keyLength();
-		int macLength = extraData->macLength();
+		size_t saltLength = getSaltLength(strength);
+		size_t keyLength = getKeyLength(strength);
+		size_t macLength = getMacLength(strength);
+		size_t keyMacVerifierLength = keyLength + macLength + sizeof(uint16_t);
 		
-		_key = [[NSMutableData alloc] initWithLength:keyLength + macLength + PASSWORD_VERIFIER_LENGTH];
+		uint8_t* headerSalt = header;
+		uint16_t* headerVerifier = (uint16_t*)(header + saltLength);
+		
+		uint8_t derivedKeyMacVerifier[keyMacVerifierLength];
+		uint8_t* derivedKey = derivedKeyMacVerifier;
+		uint16_t* derivedVerifier = (uint16_t*)(derivedKeyMacVerifier + keyLength + macLength);
 		
 		// Should we use the Zip's filename encoding for the password? We have to figure that out...
-		NSData *passwordData = [password dataUsingEncoding:NSUTF8StringEncoding];
+		NSData* passwordData = [password dataUsingEncoding:NSUTF8StringEncoding];
 		
-		CCKeyDerivationPBKDF( kCCPBKDF2, (char *)passwordData.bytes, passwordData.length,
-							 (u_int8_t *)salt.bytes, salt.length,
-							 kCCPRFHmacAlgSHA1, WINZIP_PBKDF2_ROUNDS,
-							 (u_int8_t *)_key.bytes, _key.length );
+		CCKeyDerivationPBKDF(kCCPBKDF2,
+							 (char*)passwordData.bytes,
+							 passwordData.length,
+							 headerSalt,
+							 saltLength,
+							 kCCPRFHmacAlgSHA1,
+							 WINZIP_PBKDF2_ROUNDS,
+							 derivedKeyMacVerifier,
+							 keyMacVerifierLength);
 		
-		NSData *aesKey = [NSData dataWithBytes:_key.bytes length:keyLength];
 		// NSData *macKey = [NSData dataWithBytes:((char *)_key.bytes + keyLength) length:macLength]; // TODO: Use for authentication
-		NSData *derivedPv = [NSData dataWithBytes:((char *)_key.bytes + keyLength + macLength) length:PASSWORD_VERIFIER_LENGTH];
 		
-		if (![derivedPv isEqual:passwordVerifier])
-		{ // Wrong password
-			_error = [NSError errorWithDomain:ZZErrorDomain code:ZZWrongPassword userInfo:@{}];
-			_status = NSStreamStatusError;
-		}
-		else
+		if (*derivedVerifier == *headerVerifier)
 		{
-			memset(_ivBytes, 0, BLOCK_SIZE);
-			
-			_nonce = 1;
-			
+			_status = NSStreamStatusNotOpen;
+			_error = nil;
+
 			CCCryptorCreate(kCCEncrypt,
 							kCCAlgorithmAES,
 							kCCOptionECBMode,
-							aesKey.bytes,
-							aesKey.length,
+							derivedKey,
+							keyLength,
 							NULL,
 							&_aes);
+			
+		}
+		else
+		{ // Wrong password
+			_status = NSStreamStatusError;
+			_error = [NSError errorWithDomain:ZZErrorDomain code:ZZWrongPassword userInfo:@{}];
+			
+			_aes = NULL;
 		}
 	}
 	return self;
-}
-
-- (void)dealloc
-{
-	if (_aes)
-		CCCryptorRelease(_aes);
 }
 
 - (NSStreamStatus)streamStatus
@@ -98,48 +101,48 @@
 - (void)open
 {
 	[_upstream open];
-	_status = NSStreamStatusOpen;	
+
+	if (!_error)
+		_status = NSStreamStatusOpen;
 }
 
 - (void)close
 {
 	[_upstream close];
-	_status = NSStreamStatusClosed;
+	
+	if (!_error)
+		_status = NSStreamStatusClosed;
 }
 
 - (NSInteger)read:(uint8_t*)buffer maxLength:(NSUInteger)len
 {
-	if (_error) return -1;
+	if (_error)
+		return -1;
 	
-	NSInteger bytesRead = [_upstream read:buffer maxLength:len], processBlockSize;
+	NSInteger bytesRead = [_upstream read:buffer maxLength:len];
 	
-	for (NSInteger i = 0, k; i < bytesRead; i += BLOCK_SIZE)
+	// WinZip uses AES in CTR mode with 32-bit counter = 1, 2, 3... appended to nonce = 0
+	
+	for (NSInteger bufferIndex = 0; bufferIndex < bytesRead; ++bufferIndex, ++_keystreamPos)
 	{
-		// This may not have a full block size left if this is the last block...
-		processBlockSize = (i + BLOCK_SIZE <= bytesRead) ? BLOCK_SIZE : (bytesRead - i);
-		
-		// TODO: Process MAC for AES authentication
-		
-		// Set up IV with the nonce
-		(*(uint32_t *)_ivBytes) = _nonce;
-		
-		// Run AES processing
-		size_t dataOutMoved = 0;
-		CCCryptorUpdate(_aes,
-						_ivBytes,
-						BLOCK_SIZE,
-						_processedBytes,
-						BLOCK_SIZE,
-						&dataOutMoved);
-		
-		// XOR block
-		for (k = 0; k < processBlockSize; k++)
+		// encrypt(next nonce counter, key) -> next keystream block
+		if (_keystreamPos == sizeof(_keystream))
 		{
-			buffer[i + k] ^= _processedBytes[k];
+			_keystreamPos = 0;
+			++_counterNonce[0];
+
+			size_t dataOutMoved = 0;
+			CCCryptorUpdate(_aes,
+							_counterNonce,
+							sizeof(_counterNonce),
+							_keystream,
+							sizeof(_keystream),
+							&dataOutMoved);
+			
 		}
 		
-		// Increment nonce
-		_nonce++;
+		// keystream block XOR plaintext -> ciphertext
+		buffer[bufferIndex] ^= _keystream[_keystreamPos];
 	}
 	
 	return bytesRead;
@@ -153,6 +156,12 @@
 - (BOOL)hasBytesAvailable
 {
 	return YES;
+}
+
+- (void)dealloc
+{
+	if (_aes)
+		CCCryptorRelease(_aes);
 }
 
 @end

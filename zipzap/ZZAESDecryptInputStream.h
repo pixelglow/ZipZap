@@ -7,11 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "ZZHeaders.h"
+
+#import "ZZConstants.h"
 
 @interface ZZAESDecryptInputStream : NSInputStream
 
-- (id)initWithStream:(NSInputStream*)upstream password:(NSString*)password header:(uint8_t*)header extraData:(ZZWinZipAESExtraField *)extraData;
+- (id)initWithStream:(NSInputStream*)upstream password:(NSString*)password header:(uint8_t*)header strength:(ZZAESEncryptionStrength)strength;
 
 - (void)open;
 - (void)close;
@@ -19,5 +20,7 @@
 - (NSInteger)read:(uint8_t*)buffer maxLength:(NSUInteger)len;
 - (BOOL)getBuffer:(uint8_t**)buffer length:(NSUInteger*)len;
 - (BOOL)hasBytesAvailable;
+
+- (void)dealloc;
 
 @end

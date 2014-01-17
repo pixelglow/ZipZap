@@ -82,7 +82,7 @@
 		ZZWinZipAESExtraField *winZipAESRecord = _localFileHeader->extraField<ZZWinZipAESExtraField>();
 		if (winZipAESRecord)
 		{
-			int saltLength = winZipAESRecord->saltLength();
+			size_t saltLength = getSaltLength(winZipAESRecord->encryptionStrength);
 			dataStart += saltLength + 2; // saltLength + password verifier length
 			dataLength -= saltLength + 2 + 10; // saltLength + password verifier + authentication stuff
 		}
@@ -299,7 +299,7 @@
 			decryptedStream = [[ZZAESDecryptInputStream alloc] initWithStream:dataStream
 																	 password:password
 																	   header:_localFileHeader->fileData()
-																	extraData:_localFileHeader->extraField<ZZWinZipAESExtraField>()];
+																	 strength:_localFileHeader->extraField<ZZWinZipAESExtraField>()->encryptionStrength];
 			break;
 		default:
 			decryptedStream = nil;
