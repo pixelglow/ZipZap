@@ -21,7 +21,6 @@
 		D8366ACE16B1F8B400BC012E /* ZZError.h in Headers */ = {isa = PBXBuildFile; fileRef = D8366ACC16B1F8B400BC012E /* ZZError.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D8366ACF16B1F8B400BC012E /* ZZError.m in Sources */ = {isa = PBXBuildFile; fileRef = D8366ACD16B1F8B400BC012E /* ZZError.m */; };
 		D8366AD016B1F8B400BC012E /* ZZError.m in Sources */ = {isa = PBXBuildFile; fileRef = D8366ACD16B1F8B400BC012E /* ZZError.m */; };
-		D8366ADF16B3625D00BC012E /* ZZError.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8366ACC16B1F8B400BC012E /* ZZError.h */; };
 		D84A449F16A0D91B00CF00A9 /* ZZChannel.h in Headers */ = {isa = PBXBuildFile; fileRef = D84A449E16A0D91B00CF00A9 /* ZZChannel.h */; };
 		D84A44A216A0D99C00CF00A9 /* ZZChannelOutput.h in Headers */ = {isa = PBXBuildFile; fileRef = D84A44A116A0D99C00CF00A9 /* ZZChannelOutput.h */; };
 		D84A44A516A0E2F400CF00A9 /* ZZFileChannel.h in Headers */ = {isa = PBXBuildFile; fileRef = D84A44A316A0E2F300CF00A9 /* ZZFileChannel.h */; };
@@ -36,6 +35,9 @@
 		D84A44CF16A0F8B400CF00A9 /* ZZDataChannelOutput.h in Headers */ = {isa = PBXBuildFile; fileRef = D84A44CD16A0F8B400CF00A9 /* ZZDataChannelOutput.h */; };
 		D84A44D016A0F8B400CF00A9 /* ZZDataChannelOutput.m in Sources */ = {isa = PBXBuildFile; fileRef = D84A44CE16A0F8B400CF00A9 /* ZZDataChannelOutput.m */; };
 		D84A44D116A0F8B400CF00A9 /* ZZDataChannelOutput.m in Sources */ = {isa = PBXBuildFile; fileRef = D84A44CE16A0F8B400CF00A9 /* ZZDataChannelOutput.m */; };
+		D86B400C18A8A0BA00017A91 /* ZZConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B50392518706368002B2B12 /* ZZConstants.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D86B400D18A8A0DA00017A91 /* ZZConstants.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5B50392518706368002B2B12 /* ZZConstants.h */; };
+		D86B400E18A8A0FF00017A91 /* ZZError.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8366ACC16B1F8B400BC012E /* ZZError.h */; };
 		D88E8DFF16375C66002207B3 /* dog.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D88E8DFD16375C66002207B3 /* dog.jpg */; };
 		D88E8E0016375C66002207B3 /* dog.png in Resources */ = {isa = PBXBuildFile; fileRef = D88E8DFE16375C66002207B3 /* dog.png */; };
 		D88E8E07163816FD002207B3 /* ZZOldArchiveEntry.h in Headers */ = {isa = PBXBuildFile; fileRef = D88E8E05163816FD002207B3 /* ZZOldArchiveEntry.h */; };
@@ -109,10 +111,11 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
-				D8366ADF16B3625D00BC012E /* ZZError.h in CopyFiles */,
 				D8B0FD661640A77F00727A70 /* zipzap.h in CopyFiles */,
+				D86B400D18A8A0DA00017A91 /* ZZConstants.h in CopyFiles */,
 				D8B0FD671640A77F00727A70 /* ZZArchive.h in CopyFiles */,
 				D8B0FD681640A77F00727A70 /* ZZArchiveEntry.h in CopyFiles */,
+				D86B400E18A8A0FF00017A91 /* ZZError.h in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -151,7 +154,6 @@
 		D899CF8A162C5EC100112F49 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		D899CF8D162C5EC100112F49 /* zipzap-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "zipzap-Prefix.pch"; sourceTree = "<group>"; };
 		D899CF96162C5EC100112F49 /* zipzapTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = zipzapTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		D899CF97162C5EC100112F49 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		D899CF9F162C5EC100112F49 /* zipzapTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "zipzapTests-Info.plist"; sourceTree = "<group>"; };
 		D899CFA1162C5EC100112F49 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		D899CFB0162C5EEB00112F49 /* libzipzap.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libzipzap.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -178,7 +180,6 @@
 		D899D018162CCF9700112F49 /* ZZUnzipTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZZUnzipTests.h; sourceTree = "<group>"; };
 		D899D019162CCF9700112F49 /* ZZUnzipTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZZUnzipTests.m; sourceTree = "<group>"; };
 		D899D01B162CD51A00112F49 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/usr/lib/libz.dylib; sourceTree = DEVELOPER_DIR; };
-		D899D01D162CD57700112F49 /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/usr/lib/libc++.dylib"; sourceTree = DEVELOPER_DIR; };
 		D899D01F162F6C9700112F49 /* ZZZipTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZZZipTests.h; sourceTree = "<group>"; };
 		D899D020162F6C9700112F49 /* ZZZipTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZZZipTests.m; sourceTree = "<group>"; };
 		D899D0221631888000112F49 /* ZZTasks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZZTasks.h; sourceTree = "<group>"; };
@@ -235,9 +236,9 @@
 				D899CFDB162C608300112F49 /* ZZArchive.mm */,
 				D899CFD8162C608300112F49 /* ZZArchiveEntry.h */,
 				D899CFD9162C608300112F49 /* ZZArchiveEntry.m */,
+				5B50392518706368002B2B12 /* ZZConstants.h */,
 				D8366ACC16B1F8B400BC012E /* ZZError.h */,
 				D8366ACD16B1F8B400BC012E /* ZZError.m */,
-				5B50392518706368002B2B12 /* ZZConstants.h */,
 			);
 			name = Public;
 			sourceTree = "<group>";
@@ -326,12 +327,10 @@
 		D899CF84162C5EC100112F49 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				D8E3C26917E6FF0E007D0020 /* XCTest.framework */,
-				D899D01D162CD57700112F49 /* libc++.dylib */,
 				D899D01B162CD51A00112F49 /* libz.dylib */,
 				D88E8E0B16394B49002207B3 /* ApplicationServices.framework */,
 				D899CF8A162C5EC100112F49 /* Foundation.framework */,
-				D899CF97162C5EC100112F49 /* SenTestingKit.framework */,
+				D8E3C26917E6FF0E007D0020 /* XCTest.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -394,6 +393,7 @@
 				D8B0FD621640A6B000727A70 /* zipzap.h in Headers */,
 				D899CFED162C608300112F49 /* ZZArchive.h in Headers */,
 				D899CFEA162C608300112F49 /* ZZArchiveEntry.h in Headers */,
+				D86B400C18A8A0BA00017A91 /* ZZConstants.h in Headers */,
 				D8366ACE16B1F8B400BC012E /* ZZError.h in Headers */,
 				D899D003162C608300112F49 /* ZZArchiveEntryWriter.h in Headers */,
 				D8ABBF3E18883528002858BE /* ZZAESDecryptInputStream.h in Headers */,

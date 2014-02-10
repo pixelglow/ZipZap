@@ -32,4 +32,5 @@
 
 #import <zipzap/ZZArchive.h>
 #import <zipzap/ZZArchiveEntry.h>
+#import <zipzap/ZZConstants.h>
 #import <zipzap/ZZError.h>
