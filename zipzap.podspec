@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "zipzap"
-  s.version      = "6.0"
+  s.version      = "7.0"
   s.summary      = "zipzap is a zip file I/O library for Mac OS X and iOS."
   s.description  = <<-DESC
 The zip file is an ideal container for compound Objective-C documents. Zip files are widely used and well understood. You can randomly access their parts. The format compresses decently and has extensive operating system and tool support. So we want to make this format an even easier choice for you. Thus, the library features:
