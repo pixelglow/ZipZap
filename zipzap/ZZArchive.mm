@@ -19,6 +19,9 @@
 #import "ZZHeaders.h"
 #import "ZZOldArchiveEntry.h"
 
+static const size_t ENDOFCENTRALDIRECTORY_MAXSEARCH = sizeof(ZZEndOfCentralDirectory) + 0xFFFF;
+static const size_t ENDOFCENTRALDIRECTORY_MINSEARCH = sizeof(ZZEndOfCentralDirectory) - sizeof(ZZEndOfCentralDirectory::signature);
+
 @interface ZZArchive ()
 {
 @protected
@@ -99,10 +102,10 @@
 	
 	// search for the end of directory signature in last 64K of file
 	const uint8_t* beginContent = (const uint8_t*)contents.bytes;
-	const uint8_t* endContent = beginContent + contents.length;	
-	const uint8_t* beginRangeEndOfCentralDirectory = std::max(beginContent, endContent - sizeof(ZZEndOfCentralDirectory) - 0xFFFF);
-	const uint8_t* endRangeEndOfCentralDirectory = std::max(beginContent, endContent - sizeof(ZZEndOfCentralDirectory) + sizeof(ZZEndOfCentralDirectory::signature));
-	uint32_t sign = ZZEndOfCentralDirectory::sign;
+	const uint8_t* endContent = beginContent + contents.length;
+	const uint8_t* beginRangeEndOfCentralDirectory = beginContent + ENDOFCENTRALDIRECTORY_MAXSEARCH < endContent ? endContent - ENDOFCENTRALDIRECTORY_MAXSEARCH : beginContent;
+	const uint8_t* endRangeEndOfCentralDirectory = beginContent + ENDOFCENTRALDIRECTORY_MINSEARCH < endContent ? endContent - ENDOFCENTRALDIRECTORY_MINSEARCH : beginContent;
+	const uint32_t sign = ZZEndOfCentralDirectory::sign;
 	const uint8_t* endOfCentralDirectory = std::find_end(beginRangeEndOfCentralDirectory,
 														 endRangeEndOfCentralDirectory,
 														 (const uint8_t*)&sign,
