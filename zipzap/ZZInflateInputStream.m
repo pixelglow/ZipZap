@@ -36,7 +36,10 @@ static const NSUInteger _bufferLength = 16384; // 16K buffer
 	stream.avail_out = (uInt)inflatedData.length;
 	
 	inflateInit2(&stream, -15);
-	switch (inflate(&stream, Z_FINISH))
+	int result = inflate(&stream, Z_FINISH);
+	inflateEnd(&stream);
+	
+	switch (result)
 	{
 		case Z_STREAM_END:
 			return inflatedData;
