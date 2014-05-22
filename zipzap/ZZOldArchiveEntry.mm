@@ -344,8 +344,8 @@
 		switch (self.compressionMethod)
 		{
 			case ZZCompressionMethod::stored:
-				// unencrypted, stored: just return as-is
-				return [fileData copy];
+				// unencrypted, stored: just return as-is. Make sure to create a new object since [NSData copy] returns the same object on pre-10.9 systems.
+				return [[NSData alloc] initWithBytes:fileData.bytes length:fileData.length];
 			case ZZCompressionMethod::deflated:
 				// unencrypted, deflated: inflate in one go
 				return [ZZInflateInputStream decompressData:fileData
@@ -392,8 +392,8 @@
 	NSData* fileData = [self fileData];
 	
 	if (self.compressionMethod == ZZCompressionMethod::stored && _encryptionMode == ZZEncryptionModeNone)
-		// simple data provider that just wraps the data
-		return CGDataProviderCreateWithCFData((__bridge CFDataRef)[fileData copy]);
+		// simple data provider that just wraps the data.  Make sure to create a new object since [NSData copy] returns the same object on pre-10.9 systems.
+		return CGDataProviderCreateWithCFData((__bridge CFDataRef)[[NSData alloc] initWithBytes:fileData.bytes length:fileData.length]);
 	else
 		return ZZDataProvider::create(^
 									  {
