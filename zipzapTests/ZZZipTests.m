@@ -837,7 +837,6 @@
 											   {
 												   if (error)
 													   *error = [self someError];
-												   NSLog(@"%@", *error);
 												   return (NSData*)nil;
 											   }]];
 }
