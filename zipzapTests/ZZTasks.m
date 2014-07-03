@@ -23,7 +23,9 @@
 	NSTask* zipTask = [[NSTask alloc] init];
 	zipTask.arguments = arguments;
 	zipTask.launchPath = @"/usr/bin/zip";
-	
+	zipTask.standardOutput = [NSFileHandle fileHandleWithNullDevice];
+	zipTask.standardError = [NSFileHandle fileHandleWithNullDevice];
+
 	[zipTask launch];
 	[zipTask waitUntilExit];
 }
@@ -33,7 +35,9 @@
 	NSTask* testZipTask = [[NSTask alloc] init];
 	testZipTask.arguments = @[@"-t", path];
 	testZipTask.launchPath = @"/usr/bin/unzip";
-	
+	testZipTask.standardOutput = [NSFileHandle fileHandleWithNullDevice];
+	testZipTask.standardError = [NSFileHandle fileHandleWithNullDevice];
+
 	[testZipTask launch];
 	[testZipTask waitUntilExit];
 	int testStatus = [testZipTask terminationStatus];
@@ -48,6 +52,7 @@
 	
 	NSPipe* pipe = [NSPipe pipe];
 	unzipTask.standardOutput = pipe;
+	unzipTask.standardError = [NSFileHandle fileHandleWithNullDevice];
 	
 	[unzipTask launch];
 	NSData* extract = [[pipe fileHandleForReading] readDataToEndOfFile];
@@ -64,6 +69,7 @@
 	
 	NSPipe* pipe = [NSPipe pipe];
 	zipInfoTask.standardOutput = pipe;
+	zipInfoTask.standardError = [NSFileHandle fileHandleWithNullDevice];
 	
 	[zipInfoTask launch];
 	NSData* info = [[pipe fileHandleForReading] readDataToEndOfFile];
