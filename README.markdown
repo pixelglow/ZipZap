@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/pixelglow/zipzap.svg)](https://travis-ci.org/pixelglow/zipzap)
+
 **zipzap** is a zip file I/O library for Mac OS X and iOS.
 
 The zip file is an ideal container for compound Objective-C documents. Zip files are widely used and well understood. You can randomly access their parts. The format compresses decently and has extensive operating system and tool support. So we want to make this format an even easier choice for you. Thus, the library features:

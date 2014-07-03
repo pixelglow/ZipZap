@@ -1,0 +1,3 @@
+language: objective-c
+xcode_project: zipzap.xcodeproj
+xcode_scheme: zipzap (OS X)
