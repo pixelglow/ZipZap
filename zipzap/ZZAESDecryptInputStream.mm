@@ -18,7 +18,6 @@ static const uint WINZIP_PBKDF2_ROUNDS = 1000;
 {
 	NSInputStream* _upstream;
 	NSStreamStatus _status;
-	NSError* _error;
 	
 	uint32_t _counterNonce[4];
 	uint8_t _keystream[16];
@@ -27,7 +26,11 @@ static const uint WINZIP_PBKDF2_ROUNDS = 1000;
 	CCCryptorRef _aes;
 }
 
-- (id)initWithStream:(NSInputStream*)upstream password:(NSString*)password header:(uint8_t*)header strength:(ZZAESEncryptionStrength)strength
+- (id)initWithStream:(NSInputStream*)upstream
+			password:(NSString*)password
+			  header:(uint8_t*)header
+			strength:(ZZAESEncryptionStrength)strength
+			   error:(out NSError**)error
 {
 	if ((self = [super init]))
 	{
@@ -66,7 +69,6 @@ static const uint WINZIP_PBKDF2_ROUNDS = 1000;
 		if (*derivedVerifier == *headerVerifier)
 		{
 			_status = NSStreamStatusNotOpen;
-			_error = nil;
 
 			CCCryptorCreate(kCCEncrypt,
 							kCCAlgorithmAES,
@@ -80,9 +82,11 @@ static const uint WINZIP_PBKDF2_ROUNDS = 1000;
 		else
 		{ // Wrong password
 			_status = NSStreamStatusError;
-			_error = [NSError errorWithDomain:ZZErrorDomain code:ZZWrongPassword userInfo:@{}];
-			
 			_aes = NULL;
+
+			if (error)
+				*error = [NSError errorWithDomain:ZZErrorDomain code:ZZWrongPassword userInfo:@{}];
+			return nil;
 		}
 	}
 	return self;
@@ -93,32 +97,22 @@ static const uint WINZIP_PBKDF2_ROUNDS = 1000;
 	return _status;
 }
 
-- (NSError*)streamError
-{
-	return _error;
-}
-
 - (void)open
 {
 	[_upstream open];
 
-	if (!_error)
-		_status = NSStreamStatusOpen;
+	_status = NSStreamStatusOpen;
 }
 
 - (void)close
 {
 	[_upstream close];
 	
-	if (!_error)
-		_status = NSStreamStatusClosed;
+	_status = NSStreamStatusClosed;
 }
 
 - (NSInteger)read:(uint8_t*)buffer maxLength:(NSUInteger)len
 {
-	if (_error)
-		return -1;
-	
 	NSInteger bytesRead = [_upstream read:buffer maxLength:len];
 	
 	// WinZip uses AES in CTR mode with 32-bit counter = 1, 2, 3... appended to nonce = 0

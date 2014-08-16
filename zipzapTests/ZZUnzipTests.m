@@ -350,6 +350,17 @@
 	}
 }
 
+- (void)testExtractingAndAes128DecryptingWrongPassword
+{ // This file was small to begin with, encrypted with AES and Store compression mode
+	ZZArchive* zipFile = [ZZArchive archiveWithContentsOfURL:[[NSBundle bundleForClass:ZZUnzipTests.class] URLForResource:@"small-test-encrypted-aes128" withExtension:@"zip"]];
+
+	ZZArchiveEntry *fileEntry = zipFile.entries[0];
+	NSError* error = nil;
+
+	XCTAssertNil([fileEntry newDataWithPassword:@"ABCDEFGH" error:&error], @"[fileEntry newDataWithPassword:...] should be nil with wrong password");
+	XCTAssertEqual(error.code, ZZWrongPassword, @"[fileEntry newDataWithPassword:...] should set error to ZZWrongPassword");
+}
+
 - (void)testExtractingAndAes128DecryptingSmallZipEntryData
 { // This file was small to begin with, encrypted with AES and Store compression mode
 	ZZArchive* zipFile = [ZZArchive archiveWithContentsOfURL:[[NSBundle bundleForClass:ZZUnzipTests.class] URLForResource:@"small-test-encrypted-aes128" withExtension:@"zip"]];

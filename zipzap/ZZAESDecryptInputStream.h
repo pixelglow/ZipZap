@@ -12,7 +12,11 @@
 
 @interface ZZAESDecryptInputStream : NSInputStream
 
-- (id)initWithStream:(NSInputStream*)upstream password:(NSString*)password header:(uint8_t*)header strength:(ZZAESEncryptionStrength)strength;
+- (id)initWithStream:(NSInputStream*)upstream
+			password:(NSString*)password
+			  header:(uint8_t*)header
+			strength:(ZZAESEncryptionStrength)strength
+			   error:(out NSError**)error;
 
 - (void)open;
 - (void)close;

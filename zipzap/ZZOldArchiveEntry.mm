@@ -27,7 +27,7 @@
 - (NSString*)stringWithBytes:(uint8_t*)bytes length:(NSUInteger)length;
 
 - (BOOL)checkEncryptionAndCompression:(out NSError**)error;
-- (NSInputStream*)streamForData:(NSData*)data withPassword:(NSString*)password;
+- (NSInputStream*)streamForData:(NSData*)data withPassword:(NSString*)password error:(out NSError**)error;
 
 @end
 
@@ -277,7 +277,7 @@
 	return YES;
 }
 
-- (NSInputStream*)streamForData:(NSData*)data withPassword:(NSString*)password
+- (NSInputStream*)streamForData:(NSData*)data withPassword:(NSString*)password error:(out NSError**)error
 {
 	// We need to output an error, becase in AES we have (most of the time) knowledge about the password verification even before starting to decrypt. So we should not supply a stream when we KNOW that the password is wrong.
 	
@@ -299,13 +299,16 @@
 			decryptedStream = [[ZZAESDecryptInputStream alloc] initWithStream:dataStream
 																	 password:password
 																	   header:_localFileHeader->fileData()
-																	 strength:_localFileHeader->extraField<ZZWinZipAESExtraField>()->encryptionStrength];
+																	 strength:_localFileHeader->extraField<ZZWinZipAESExtraField>()->encryptionStrength
+																		error:error];
 			break;
 		default:
 			decryptedStream = nil;
 			break;
 	}
-	
+	if (!decryptedStream)
+		return nil;
+
 	// decompress if needed
 	NSInputStream* decompressedDecryptedStream;
 	switch (self.compressionMethod)
@@ -330,7 +333,7 @@
 		return nil;
 
 	NSData* fileData = [self fileData];
-	return [self streamForData:fileData withPassword:password];
+	return [self streamForData:fileData withPassword:password error:error];
 }
 
 - (NSData*)newDataWithPassword:(NSString*)password error:(out NSError**)error
@@ -355,7 +358,7 @@
 		}
 	else
 	{
-		NSInputStream* stream = [self streamForData:fileData withPassword:password];
+		NSInputStream* stream = [self streamForData:fileData withPassword:password error:error];
 		if (!stream) return nil;
 		
 		NSMutableData* data = [NSMutableData dataWithLength:_centralFileHeader->uncompressedSize];
@@ -398,7 +401,7 @@
 		return ZZDataProvider::create(^
 									  {
 										  // FIXME: How do we handle the error here?
-										  return [self streamForData:fileData withPassword:password];
+										  return [self streamForData:fileData withPassword:password error:nil];
 									  });
 }
 
