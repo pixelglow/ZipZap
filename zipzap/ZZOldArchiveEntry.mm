@@ -291,9 +291,13 @@
 			decryptedStream = dataStream;
 			break;
 		case ZZEncryptionModeStandard:
+			// to check the password: if CRC32 in data descriptor, use lastModFileTime; otherwise use high word of CRC32
 			decryptedStream = [[ZZStandardDecryptInputStream alloc] initWithStream:dataStream
 																		  password:password
-																			header:_localFileHeader->fileData()];
+																			header:_localFileHeader->fileData()
+																			 check:(_centralFileHeader->generalPurposeBitFlag & ZZGeneralPurposeBitFlag::sizeInDataDescriptor) == ZZGeneralPurposeBitFlag::none ? (_centralFileHeader->crc32 >> 16) : _centralFileHeader->lastModFileTime
+																		   version:_centralFileHeader->versionMadeBy
+																			 error:error];
 			break;
 		case ZZEncryptionModeWinZipAES:
 			decryptedStream = [[ZZAESDecryptInputStream alloc] initWithStream:dataStream

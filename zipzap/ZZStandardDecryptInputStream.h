@@ -10,7 +10,12 @@
 
 @interface ZZStandardDecryptInputStream : NSInputStream
 
-- (id)initWithStream:(NSInputStream*)upstream password:(NSString*)password header:(uint8_t*)header;
+- (id)initWithStream:(NSInputStream*)upstream
+			password:(NSString*)password
+			  header:(uint8_t*)header
+			   check:(uint16_t)check
+			 version:(uint8_t)version
+			   error:(out NSError**)error;
 
 - (void)open;
 - (void)close;
