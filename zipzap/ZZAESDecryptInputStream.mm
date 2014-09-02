@@ -84,9 +84,7 @@ static const uint WINZIP_PBKDF2_ROUNDS = 1000;
 			_status = NSStreamStatusError;
 			_aes = NULL;
 
-			if (error)
-				*error = [NSError errorWithDomain:ZZErrorDomain code:ZZWrongPassword userInfo:@{}];
-			return nil;
+			return ZZRaiseErrorNil(error, ZZWrongPassword, @{});
 		}
 	}
 	return self;

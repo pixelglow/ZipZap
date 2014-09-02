@@ -107,7 +107,7 @@ typedef NS_ENUM(NSInteger, ZZErrorCode)
 	ZZWrongPassword
 };
 
-static inline BOOL ZZRaiseError(NSError** error, ZZErrorCode errorCode, NSDictionary* userInfo)
+static inline BOOL ZZRaiseErrorNo(NSError** error, ZZErrorCode errorCode, NSDictionary* userInfo)
 {
 	if (error)
 		*error = [NSError errorWithDomain:ZZErrorDomain
@@ -115,3 +115,13 @@ static inline BOOL ZZRaiseError(NSError** error, ZZErrorCode errorCode, NSDictio
 								 userInfo:userInfo];
 	return NO;
 }
+
+static inline id ZZRaiseErrorNil(NSError** error, ZZErrorCode errorCode, NSDictionary* userInfo)
+{
+	if (error)
+		*error = [NSError errorWithDomain:ZZErrorDomain
+									 code:errorCode
+								 userInfo:userInfo];
+	return nil;
+}
+

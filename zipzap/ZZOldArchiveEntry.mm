@@ -233,7 +233,7 @@
 		|| localCompressedSize != _centralFileHeader->compressedSize
 		|| localUncompressedSize != _centralFileHeader->uncompressedSize
 		|| localEncryptionMode != _encryptionMode)
-		return ZZRaiseError(error, ZZLocalFileReadErrorCode, nil);
+		return ZZRaiseErrorNo(error, ZZLocalFileReadErrorCode, nil);
 	
 	if (_encryptionMode == ZZEncryptionModeStandard)
 	{
@@ -247,7 +247,7 @@
 		crcBytes[0] = ((crcBytes[3] >> 24) & 0xFF);
 		
 		if (crcBytes[2] > 0 || crcBytes[1] > 0 || crcBytes[0] > 0)
-			return ZZRaiseError(error, ZZInvalidCRChecksum, @{});
+			return ZZRaiseErrorNo(error, ZZInvalidCRChecksum, @{});
 	}
 	
 	return YES;
@@ -262,7 +262,7 @@
 		case ZZEncryptionModeWinZipAES:
 			break;
 		default:
-			return ZZRaiseError(error, ZZUnsupportedEncryptionMethod, @{});
+			return ZZRaiseErrorNo(error, ZZUnsupportedEncryptionMethod, @{});
 	}
 	
 	switch (self.compressionMethod)
@@ -271,7 +271,7 @@
 		case ZZCompressionMethod::deflated:
 			break;
 		default:
-			return ZZRaiseError(error, ZZUnsupportedCompressionMethod, @{});
+			return ZZRaiseErrorNo(error, ZZUnsupportedCompressionMethod, @{});
 	}
 	
 	return YES;

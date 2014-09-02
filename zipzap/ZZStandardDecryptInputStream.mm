@@ -53,11 +53,7 @@
 					break;
 			}
 			if (fail)
-			{
-				if (error)
-					*error = [NSError errorWithDomain:ZZErrorDomain code:ZZWrongPassword userInfo:@{}];
-				return nil;
-			}
+				return ZZRaiseErrorNil(error, ZZWrongPassword, @{});
 		}
 	}
 	return self;
