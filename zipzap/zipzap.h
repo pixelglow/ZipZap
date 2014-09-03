@@ -30,7 +30,7 @@
 //  THE POSSIBILITY OF SUCH DAMAGE.
 //
 
-#import <zipzap/ZZArchive.h>
-#import <zipzap/ZZArchiveEntry.h>
-#import <zipzap/ZZConstants.h>
-#import <zipzap/ZZError.h>
+#import "ZZArchive.h"
+#import "ZZArchiveEntry.h"
+#import "ZZConstants.h"
+#import "ZZError.h"
