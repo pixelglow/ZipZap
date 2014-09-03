@@ -41,7 +41,7 @@
 @protocol ZZArchiveEntryWriter;
 
 /**
- * The ZZArchiveEntry class represents an entry in the ZZArchive or ZZMutableArchive instance.
+ * The ZZArchiveEntry class represents an entry in the ZZArchive instance.
  */
 @interface ZZArchiveEntry : NSObject
 

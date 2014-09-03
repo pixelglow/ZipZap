@@ -43,7 +43,7 @@
 	NSURL* _zipFileURL;
 	NSArray* _entryFilePaths;
 	NSString* _extraFilePath;
-	ZZMutableArchive* _zipFile;
+	ZZArchive* _zipFile;
 }
 
 - (NSError*)someError
@@ -78,12 +78,16 @@
 
 - (void)createEmptyFileZip
 {
-	_zipFile = [ZZMutableArchive archiveWithContentsOfURL:_zipFileURL];
+	_zipFile = [[ZZArchive alloc] initWithURL:_zipFileURL
+									  options:@{ ZZOpenOptionsCreateIfMissingKey: @YES }
+										error:nil];
 }
 
 - (void)createEmptyDataZip
 {
-	_zipFile = [ZZMutableArchive archiveWithData:[NSMutableData data]];
+	_zipFile = [[ZZArchive alloc] initWithData:[NSMutableData data]
+									   options:@{ ZZOpenOptionsCreateIfMissingKey: @YES }
+										 error:nil];
 }
 
 - (void)createFullFileZip
@@ -91,7 +95,7 @@
 	[ZZTasks zipFiles:_entryFilePaths
 			   toPath:_zipFileURL.path];
 
-	_zipFile = [ZZMutableArchive archiveWithContentsOfURL:_zipFileURL];
+	_zipFile = [ZZArchive archiveWithURL:_zipFileURL error:nil];
 }
 
 - (void)createFullDataZip
@@ -99,7 +103,7 @@
 	[ZZTasks zipFiles:_entryFilePaths
 			   toPath:_zipFileURL.path];
 	
-	_zipFile = [ZZMutableArchive archiveWithData:[NSMutableData dataWithContentsOfURL:_zipFileURL]];
+	_zipFile = [ZZArchive archiveWithData:[NSMutableData dataWithContentsOfURL:_zipFileURL] error:nil];
 }
 
 - (NSArray*)recordsForZipEntries:(NSArray*)zipEntries

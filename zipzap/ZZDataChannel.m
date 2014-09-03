@@ -45,6 +45,15 @@
 
 - (NSData*)newInput:(out NSError**)error
 {
+	if (_allData.length == 0)
+	{
+		// no data available: consider it as file not found
+		if (error)
+			*error = [NSError errorWithDomain:NSCocoaErrorDomain
+										 code:NSFileReadNoSuchFileError
+									 userInfo:@{}];
+		return nil;
+	}
 	return _allData;
 }
 

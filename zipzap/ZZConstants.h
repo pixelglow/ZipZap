@@ -69,3 +69,13 @@ typedef NS_ENUM(uint8_t, ZZAESEncryptionStrength)
 	 */
 	ZZAESEncryptionStrength256 = 0x03
 };
+
+/**
+ * An NSNumber object that contains the string encoding to use for entry file names and comments. Default is NSUTF8StringEncoding.
+ */
+extern NSString* const ZZOpenOptionsEncodingKey;
+
+/**
+ * An NSNumber object that determines whether to create the archive file if it is missing. Creation occurs during -[ZZArchive updateEntries:error:]. Default is @NO.
+ */
+extern NSString* const ZZOpenOptionsCreateIfMissingKey;

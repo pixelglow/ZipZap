@@ -35,6 +35,8 @@
 		D84A44CF16A0F8B400CF00A9 /* ZZDataChannelOutput.h in Headers */ = {isa = PBXBuildFile; fileRef = D84A44CD16A0F8B400CF00A9 /* ZZDataChannelOutput.h */; };
 		D84A44D016A0F8B400CF00A9 /* ZZDataChannelOutput.m in Sources */ = {isa = PBXBuildFile; fileRef = D84A44CE16A0F8B400CF00A9 /* ZZDataChannelOutput.m */; };
 		D84A44D116A0F8B400CF00A9 /* ZZDataChannelOutput.m in Sources */ = {isa = PBXBuildFile; fileRef = D84A44CE16A0F8B400CF00A9 /* ZZDataChannelOutput.m */; };
+		D85CB4D119B5A91000815A36 /* ZZConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = D85CB4D019B5A91000815A36 /* ZZConstants.m */; };
+		D85CB4D219B5A91000815A36 /* ZZConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = D85CB4D019B5A91000815A36 /* ZZConstants.m */; };
 		D86B400C18A8A0BA00017A91 /* ZZConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B50392518706368002B2B12 /* ZZConstants.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D86B400D18A8A0DA00017A91 /* ZZConstants.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5B50392518706368002B2B12 /* ZZConstants.h */; };
 		D86B400E18A8A0FF00017A91 /* ZZError.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8366ACC16B1F8B400BC012E /* ZZError.h */; };
@@ -146,6 +148,7 @@
 		D84A44AE16A0E8D600CF00A9 /* ZZDataChannel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZZDataChannel.m; sourceTree = "<group>"; };
 		D84A44CD16A0F8B400CF00A9 /* ZZDataChannelOutput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZZDataChannelOutput.h; sourceTree = "<group>"; };
 		D84A44CE16A0F8B400CF00A9 /* ZZDataChannelOutput.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZZDataChannelOutput.m; sourceTree = "<group>"; };
+		D85CB4D019B5A91000815A36 /* ZZConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZZConstants.m; sourceTree = "<group>"; };
 		D88E8DFD16375C66002207B3 /* dog.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = dog.jpg; sourceTree = "<group>"; };
 		D88E8DFE16375C66002207B3 /* dog.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dog.png; sourceTree = "<group>"; };
 		D88E8E05163816FD002207B3 /* ZZOldArchiveEntry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZZOldArchiveEntry.h; sourceTree = "<group>"; };
@@ -239,6 +242,7 @@
 				D899CFD8162C608300112F49 /* ZZArchiveEntry.h */,
 				D899CFD9162C608300112F49 /* ZZArchiveEntry.m */,
 				5B50392518706368002B2B12 /* ZZConstants.h */,
+				D85CB4D019B5A91000815A36 /* ZZConstants.m */,
 				D8366ACC16B1F8B400BC012E /* ZZError.h */,
 				D8366ACD16B1F8B400BC012E /* ZZError.m */,
 			);
@@ -554,6 +558,7 @@
 				D899CFEE162C608300112F49 /* ZZArchive.mm in Sources */,
 				D899CFF4162C608300112F49 /* ZZDeflateOutputStream.m in Sources */,
 				D899CFF7162C608300112F49 /* ZZStoreOutputStream.m in Sources */,
+				D85CB4D119B5A91000815A36 /* ZZConstants.m in Sources */,
 				D899CFFA162C608300112F49 /* ZZOldArchiveEntryWriter.mm in Sources */,
 				D899CFFE162C608300112F49 /* ZZNewArchiveEntry.mm in Sources */,
 				D834256318767E1900E7A559 /* ZZStandardDecryptInputStream.mm in Sources */,
@@ -588,6 +593,7 @@
 				D899CFEF162C608300112F49 /* ZZArchive.mm in Sources */,
 				D899CFF5162C608300112F49 /* ZZDeflateOutputStream.m in Sources */,
 				5BC58CAC18745D22002FAE04 /* ZZStandardCryptoEngine.cpp in Sources */,
+				D85CB4D219B5A91000815A36 /* ZZConstants.m in Sources */,
 				D899CFF8162C608300112F49 /* ZZStoreOutputStream.m in Sources */,
 				D834256418767E1900E7A559 /* ZZStandardDecryptInputStream.mm in Sources */,
 				D899CFFB162C608300112F49 /* ZZOldArchiveEntryWriter.mm in Sources */,

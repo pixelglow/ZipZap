@@ -4,7 +4,7 @@
 
 The zip file is an ideal container for compound Objective-C documents. Zip files are widely used and well understood. You can randomly access their parts. The format compresses decently and has extensive operating system and tool support. So we want to make this format an even easier choice for you. Thus, the library features:
 
-* **Easy-to-use interface**: The public API offers just three classes! Yet you can look through zip files using familiar *NSArray* collections and properties. And you can zip, unzip and rezip zip files through familiar *NSData*, *NSStream* and Image I/O classes.
+* **Easy-to-use interface**: The public API offers just two classes! Yet you can look through zip files using familiar *NSArray* collections and properties. And you can zip, unzip and rezip zip files through familiar *NSData*, *NSStream* and Image I/O classes.
 * **Efficient implementation**: We've optimized zip file reading and writing to reduce virtual memory pressure and disk file thrashing. Depending on how your compound document is organized, updating a single entry can be faster than writing the same data to a separate file.
 * **File format compatibility**: Since *zipzap* closely follows the [zip file format specification](http://www.pkware.com/documents/casestudies/APPNOTE.TXT), it works with most Mac, Linux and Windows zip tools.
 
@@ -37,14 +37,14 @@ Header includes:
 	
 Reading an existing zip file:
 
-	ZZArchive* oldArchive = [ZZArchive archiveWithContentsOfURL:[NSURL fileURLWithPath:@"/tmp/old.zip"]];
+	ZZArchive* oldArchive = [ZZArchive archiveWithURL:[NSURL fileURLWithPath:@"/tmp/old.zip"] error:nil];
 	ZZArchiveEntry* firstArchiveEntry = oldArchive.entries[0];
 	NSLog(@"The first entry's uncompressed size is %lu bytes.", firstArchiveEntry.uncompressedSize);
 	NSLog(@"The first entry's data is: %@.", [firstArchiveEntry newData]);
 	
 Writing a new zip file:
 
-	ZZMutableArchive* newArchive = [ZZMutableArchive archiveWithContentsOfURL:[NSURL fileURLWithPath:@"/tmp/new.zip"]];
+	ZZArchive* newArchive = [ZZArchive archiveWithURL:[NSURL fileURLWithPath:@"/tmp/new.zip"] error:nil];
 	[newArchive updateEntries:
 						 @[
 						 [ZZArchiveEntry archiveEntryWithFileName:@"first.text"
@@ -58,7 +58,7 @@ Writing a new zip file:
 
 Updating an existing zip file:
 
-	ZZMutableArchive* oldArchive = [ZZMutableArchive archiveWithContentsOfURL:[NSURL fileURLWithPath:@"/tmp/old.zip"]];
+	ZZArchive* oldArchive = [ZZArchive archiveWithURL:[NSURL fileURLWithPath:@"/tmp/old.zip"] error:nil];
 	[oldArchive updateEntries:
 	 [oldArchive.entries arrayByAddingObject:
 	  [ZZArchiveEntry archiveEntryWithFileName:@"second.text"

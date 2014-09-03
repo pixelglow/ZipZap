@@ -23,48 +23,69 @@ static const size_t ENDOFCENTRALDIRECTORY_MAXSEARCH = sizeof(ZZEndOfCentralDirec
 static const size_t ENDOFCENTRALDIRECTORY_MINSEARCH = sizeof(ZZEndOfCentralDirectory) - sizeof(ZZEndOfCentralDirectory::signature);
 
 @interface ZZArchive ()
-{
-@protected
-	id<ZZChannel> _channel;
-	NSStringEncoding _encoding;
-	NSData* _contents;
-	NSArray* _entries;
-}
+
+- (id)initWithChannel:(id<ZZChannel>)channel
+			  options:(NSDictionary*)options
+				error:(out NSError**)error;
+
+- (BOOL)loadCanMiss:(BOOL)canMiss error:(out NSError**)error;
 
 @end
 
 @implementation ZZArchive
-
-+ (instancetype)archiveWithContentsOfURL:(NSURL*)URL
 {
-	return [[self alloc] initWithContentsOfURL:URL
-									  encoding:NSUTF8StringEncoding];
+	id<ZZChannel> _channel;
+	NSStringEncoding _encoding;
+}
+
++ (instancetype)archiveWithURL:(NSURL*)URL
+						 error:(out NSError**)error
+{
+	return [[self alloc] initWithChannel:[[ZZFileChannel alloc] initWithURL:URL]
+								 options:nil
+								   error:error];
 }
 
 + (instancetype)archiveWithData:(NSData*)data
+						  error:(out NSError**)error
 {
-	return [[self alloc] initWithData:data
-							 encoding:NSUTF8StringEncoding];
+	return [[self alloc] initWithChannel:[[ZZDataChannel alloc] initWithData:data]
+								 options:nil
+								   error:error];
 }
 
-- (id)initWithContentsOfURL:(NSURL*)URL
-				   encoding:(NSStringEncoding)encoding
+- (id)initWithURL:(NSURL*)URL
+		  options:(NSDictionary*)options
+			error:(out NSError**)error
 {
-	if ((self = [super init]))
-	{
-		_channel = [[ZZFileChannel alloc] initWithURL:URL];
-		_encoding = encoding;
-	}
-	return self;
+	return [self initWithChannel:[[ZZFileChannel alloc] initWithURL:URL]
+						 options:options
+						   error:error];
 }
 
 - (id)initWithData:(NSData*)data
-		  encoding:(NSStringEncoding)encoding
+		   options:(NSDictionary*)options
+			 error:(out NSError**)error
+{
+	return [self initWithChannel:[[ZZDataChannel alloc] initWithData:data]
+						 options:options
+						   error:error];
+}
+
+- (id)initWithChannel:(id<ZZChannel>)channel
+			  options:(NSDictionary*)options
+				error:(out NSError**)error
 {
 	if ((self = [super init]))
 	{
-		_channel = [[ZZDataChannel alloc] initWithData:data];
-		_encoding = encoding;
+		_channel = channel;
+
+		NSNumber* encoding = options[ZZOpenOptionsEncodingKey];
+		_encoding = encoding ? encoding.unsignedIntegerValue : NSUTF8StringEncoding;
+
+		NSNumber* createIfMissing = options[ZZOpenOptionsCreateIfMissingKey];
+		if (![self loadCanMiss:createIfMissing.boolValue error:error])
+			return nil;
 	}
 	return self;
 }
@@ -74,32 +95,23 @@ static const size_t ENDOFCENTRALDIRECTORY_MINSEARCH = sizeof(ZZEndOfCentralDirec
 	return _channel.URL;
 }
 
-- (NSData*)contents
-{
-	// lazily load in contents + refresh entries
-	if (!_contents)
-		[self load:nil];
-	
-	return _contents;
-}
-
-- (NSArray*)entries
-{
-	// lazily load in contents + refresh entries	
-	if (!_contents)
-		[self load:nil];
-	
-	return _entries;
-}
-
-- (BOOL)load:(NSError**)error
+- (BOOL)loadCanMiss:(BOOL)canMiss error:(out NSError**)error
 {
 	// memory-map the contents from the zip file
 	NSError* __autoreleasing readError;
 	NSData* contents = [_channel newInput:&readError];
 	if (!contents)
-		return ZZRaiseErrorNo(error, ZZOpenReadErrorCode, @{NSUnderlyingErrorKey : readError});
-	
+	{
+		if (canMiss && readError.code == NSFileReadNoSuchFileError && [readError.domain isEqualToString:NSCocoaErrorDomain])
+		{
+			_contents = nil;
+			_entries = nil;
+			return YES;
+		}
+		else
+			return ZZRaiseErrorNo(error, ZZOpenReadErrorCode, @{NSUnderlyingErrorKey : readError});
+	}
+
 	// search for the end of directory signature in last 64K of file
 	const uint8_t* beginContent = (const uint8_t*)contents.bytes;
 	const uint8_t* endContent = beginContent + contents.length;
@@ -160,22 +172,13 @@ static const size_t ENDOFCENTRALDIRECTORY_MINSEARCH = sizeof(ZZEndOfCentralDirec
 	
 	// having successfully negotiated the new contents + entries, replace in one go
 	_contents = contents;
-	_entries = [NSArray arrayWithArray:entries];
+	_entries = entries;
 	return YES;
 }
 
-@end
-
-@implementation ZZMutableArchive
-
 - (BOOL)updateEntries:(NSArray*)newEntries
-				error:(NSError**)error
+				error:(out NSError**)error
 {
-	// NOTE: we want to avoid loading at all when entries are being overwritten, even in the face of lazy loading:
-	// consider that nil _contents implies that no valid entries have been loaded, and newEntries cannot possibly contain any of our old entries
-	// therefore, if _contents are nil, we don't need to lazily load them in since these newEntries are meant to totally overwrite the archive
-	// or, if _contents are non-nil, the contents have already been loaded and we also don't need to lazily load them in
-
 	// determine how many entries to skip, where initial old and new entries match
 	NSUInteger oldEntriesCount = _entries.count;
 	NSUInteger newEntriesCount = newEntries.count;
@@ -270,11 +273,8 @@ static const size_t ENDOFCENTRALDIRECTORY_MINSEARCH = sizeof(ZZEndOfCentralDirec
 									error:&underlyingError])
 			return ZZRaiseErrorNo(error, ZZReplaceWriteErrorCode, @{NSUnderlyingErrorKey : underlyingError});
 	
-	// clear entries + content
-	_contents = nil;
-	_entries = nil;
-	
-	return YES;
+	// reload entries + content
+	return [self loadCanMiss:NO error:error];
 }
 
 @end

@@ -39,7 +39,8 @@
 	[ZZTasks zipFiles:_entryFilePaths
 			   toPath:_zipFileURL.path];
 	
-	_zipFile = [ZZArchive archiveWithContentsOfURL:_zipFileURL];
+	_zipFile = [ZZArchive archiveWithURL:_zipFileURL
+								   error:nil];
 }
 
 - (void)tearDown
@@ -195,7 +196,8 @@
 - (void)testZipFromDataConsistentWithZipFromURL
 {
 	NSData* rawData = [NSData dataWithContentsOfURL:_zipFileURL];
-	ZZArchive* zipFileFromData = [[ZZArchive alloc] initWithData:rawData encoding:NSUTF8StringEncoding];
+	ZZArchive* zipFileFromData = [ZZArchive archiveWithData:rawData
+													  error:nil];
     
 	XCTAssertEqual(_zipFile.entries.count,
 				   zipFileFromData.entries.count,
@@ -304,7 +306,8 @@
 
 - (void)testExtractingAndStandardDecryptingWrongPassword
 { // This file was small to begin with, encrypted with Standard and Store compression mode
-	ZZArchive* zipFile = [ZZArchive archiveWithContentsOfURL:[[NSBundle bundleForClass:ZZUnzipTests.class] URLForResource:@"small-test-encrypted-standard" withExtension:@"zip"]];
+	ZZArchive* zipFile = [ZZArchive archiveWithURL:[[NSBundle bundleForClass:ZZUnzipTests.class] URLForResource:@"small-test-encrypted-standard" withExtension:@"zip"]
+											 error:nil];
 
 	ZZArchiveEntry *fileEntry = zipFile.entries[0];
 	NSError* error = nil;
@@ -315,7 +318,8 @@
 
 - (void)testExtractingAndStandardDecryptingSmallZipEntryData
 { // This file was small to begin with, encrypted with Standard and Store compression mode
-	ZZArchive* zipFile = [ZZArchive archiveWithContentsOfURL:[[NSBundle bundleForClass:ZZUnzipTests.class] URLForResource:@"small-test-encrypted-standard" withExtension:@"zip"]];
+	ZZArchive* zipFile = [ZZArchive archiveWithURL:[[NSBundle bundleForClass:ZZUnzipTests.class] URLForResource:@"small-test-encrypted-standard" withExtension:@"zip"]
+											 error:nil];
 	
 	ZZArchiveEntry *fileEntry = zipFile.entries[0];
 	
@@ -326,7 +330,8 @@
 
 - (void)testExtractingAndStandardDecryptingLargeZipEntryData
 { // This file was large to begin with, encrypted with Standard and Deflate compression mode
-	ZZArchive* zipFile = [ZZArchive archiveWithContentsOfURL:[[NSBundle bundleForClass:ZZUnzipTests.class] URLForResource:@"large-test-encrypted-standard" withExtension:@"zip"]];
+	ZZArchive* zipFile = [ZZArchive archiveWithURL:[[NSBundle bundleForClass:ZZUnzipTests.class] URLForResource:@"large-test-encrypted-standard" withExtension:@"zip"]
+											 error:nil];
 	
 	ZZArchiveEntry *fileEntry = zipFile.entries[0];
 	
@@ -363,7 +368,8 @@
 
 - (void)testExtractingAndAes128DecryptingWrongPassword
 { // This file was small to begin with, encrypted with AES and Store compression mode
-	ZZArchive* zipFile = [ZZArchive archiveWithContentsOfURL:[[NSBundle bundleForClass:ZZUnzipTests.class] URLForResource:@"small-test-encrypted-aes128" withExtension:@"zip"]];
+	ZZArchive* zipFile = [ZZArchive archiveWithURL:[[NSBundle bundleForClass:ZZUnzipTests.class] URLForResource:@"small-test-encrypted-aes128" withExtension:@"zip"]
+											 error:nil];
 
 	ZZArchiveEntry *fileEntry = zipFile.entries[0];
 	NSError* error = nil;
@@ -374,7 +380,8 @@
 
 - (void)testExtractingAndAes128DecryptingSmallZipEntryData
 { // This file was small to begin with, encrypted with AES and Store compression mode
-	ZZArchive* zipFile = [ZZArchive archiveWithContentsOfURL:[[NSBundle bundleForClass:ZZUnzipTests.class] URLForResource:@"small-test-encrypted-aes128" withExtension:@"zip"]];
+	ZZArchive* zipFile = [ZZArchive archiveWithURL:[[NSBundle bundleForClass:ZZUnzipTests.class] URLForResource:@"small-test-encrypted-aes128" withExtension:@"zip"]
+											 error:nil];
 	
 	ZZArchiveEntry *fileEntry = zipFile.entries[0];
 	
@@ -385,7 +392,8 @@
 
 - (void)testExtractingAndAes128DecryptingLargeZipEntryData
 { // This file was large to begin with, encrypted with AES and Deflate compression mode
-	ZZArchive* zipFile = [ZZArchive archiveWithContentsOfURL:[[NSBundle bundleForClass:ZZUnzipTests.class] URLForResource:@"large-test-encrypted-aes128" withExtension:@"zip"]];
+	ZZArchive* zipFile = [ZZArchive archiveWithURL:[[NSBundle bundleForClass:ZZUnzipTests.class] URLForResource:@"large-test-encrypted-aes128" withExtension:@"zip"]
+											 error:nil];
 	
 	ZZArchiveEntry *fileEntry = zipFile.entries[0];
 	
@@ -422,7 +430,8 @@
 
 - (void)testExtractingAndAes192DecryptingSmallZipEntryData
 { // This file was small to begin with, encrypted with AES and Store compression mode
-	ZZArchive* zipFile = [ZZArchive archiveWithContentsOfURL:[[NSBundle bundleForClass:ZZUnzipTests.class] URLForResource:@"small-test-encrypted-aes192" withExtension:@"zip"]];
+	ZZArchive* zipFile = [ZZArchive archiveWithURL:[[NSBundle bundleForClass:ZZUnzipTests.class] URLForResource:@"small-test-encrypted-aes192" withExtension:@"zip"]
+											 error:nil];
 	
 	ZZArchiveEntry *fileEntry = zipFile.entries[0];
 	
@@ -433,7 +442,8 @@
 
 - (void)testExtractingAndAes192DecryptingLargeZipEntryData
 { // This file was large to begin with, encrypted with AES and Deflate compression mode
-	ZZArchive* zipFile = [ZZArchive archiveWithContentsOfURL:[[NSBundle bundleForClass:ZZUnzipTests.class] URLForResource:@"large-test-encrypted-aes192" withExtension:@"zip"]];
+	ZZArchive* zipFile = [ZZArchive archiveWithURL:[[NSBundle bundleForClass:ZZUnzipTests.class] URLForResource:@"large-test-encrypted-aes192" withExtension:@"zip"]
+											 error:nil];
 	
 	ZZArchiveEntry *fileEntry = zipFile.entries[0];
 	
@@ -470,7 +480,8 @@
 
 - (void)testExtractingAndAes256DecryptingSmallZipEntryData
 { // This file was small to begin with, encrypted with AES and Store compression mode
-	ZZArchive* zipFile = [ZZArchive archiveWithContentsOfURL:[[NSBundle bundleForClass:ZZUnzipTests.class] URLForResource:@"small-test-encrypted-aes256" withExtension:@"zip"]];
+	ZZArchive* zipFile = [ZZArchive archiveWithURL:[[NSBundle bundleForClass:ZZUnzipTests.class] URLForResource:@"small-test-encrypted-aes256" withExtension:@"zip"]
+											 error:nil];
 	
 	ZZArchiveEntry *fileEntry = zipFile.entries[0];
 	
@@ -481,7 +492,8 @@
 
 - (void)testExtractingAndAes256DecryptingLargeZipEntryData
 { // This file was large to begin with, encrypted with AES and Deflate compression mode
-	ZZArchive* zipFile = [ZZArchive archiveWithContentsOfURL:[[NSBundle bundleForClass:ZZUnzipTests.class] URLForResource:@"large-test-encrypted-aes256" withExtension:@"zip"]];
+	ZZArchive* zipFile = [ZZArchive archiveWithURL:[[NSBundle bundleForClass:ZZUnzipTests.class] URLForResource:@"large-test-encrypted-aes256" withExtension:@"zip"]
+											 error:nil];
 	
 	ZZArchiveEntry *fileEntry = zipFile.entries[0];
 	
