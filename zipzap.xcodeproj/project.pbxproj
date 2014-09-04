@@ -14,6 +14,7 @@
 		5BC58CA718745940002FAE04 /* small-test-encrypted-standard.zip in Resources */ = {isa = PBXBuildFile; fileRef = 5BC58CA518745940002FAE04 /* small-test-encrypted-standard.zip */; };
 		5BC58CAC18745D22002FAE04 /* ZZStandardCryptoEngine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B50392E187069E4002B2B12 /* ZZStandardCryptoEngine.cpp */; };
 		D810EBCF164B19DA00200834 /* 拉链.txt in Resources */ = {isa = PBXBuildFile; fileRef = D810EBCE164B19DA00200834 /* 拉链.txt */; };
+		D81DD92C19B761E100325687 /* ZZDecryptTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D81DD92B19B761E100325687 /* ZZDecryptTests.m */; };
 		D83425601876747200E7A559 /* ZZInflateInputStream.m in Sources */ = {isa = PBXBuildFile; fileRef = D834255F1876747200E7A559 /* ZZInflateInputStream.m */; };
 		D83425611876747200E7A559 /* ZZInflateInputStream.m in Sources */ = {isa = PBXBuildFile; fileRef = D834255F1876747200E7A559 /* ZZInflateInputStream.m */; };
 		D834256318767E1900E7A559 /* ZZStandardDecryptInputStream.mm in Sources */ = {isa = PBXBuildFile; fileRef = D834256218767E1900E7A559 /* ZZStandardDecryptInputStream.mm */; };
@@ -87,6 +88,11 @@
 		D8B0FD661640A77F00727A70 /* zipzap.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8B0FD611640A6B000727A70 /* zipzap.h */; };
 		D8B0FD671640A77F00727A70 /* ZZArchive.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D899CFDA162C608300112F49 /* ZZArchive.h */; };
 		D8B0FD681640A77F00727A70 /* ZZArchiveEntry.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D899CFD8162C608300112F49 /* ZZArchiveEntry.h */; };
+		D8B83A7719B7CBB400CF72B6 /* ZZZipNewTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D8B83A7619B7CBB400CF72B6 /* ZZZipNewTests.m */; };
+		D8B83A7D19B7D39200CF72B6 /* ZZZipOldTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D8B83A7C19B7D39200CF72B6 /* ZZZipOldTests.m */; };
+		D8B83A8319B7DEC400CF72B6 /* ZZChannelTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D8B83A8219B7DEC400CF72B6 /* ZZChannelTests.m */; };
+		D8B83A8519B7DEDE00CF72B6 /* ZZFileChannelTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D8B83A8419B7DEDE00CF72B6 /* ZZFileChannelTests.m */; };
+		D8B83A8A19B7F7DF00CF72B6 /* ZZDataChannelTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D8B83A8919B7F7DF00CF72B6 /* ZZDataChannelTests.m */; };
 		D8E366F0188832C0009F3008 /* large-test-encrypted-aes128.zip in Resources */ = {isa = PBXBuildFile; fileRef = D8E366EA188832C0009F3008 /* large-test-encrypted-aes128.zip */; };
 		D8E366F1188832C0009F3008 /* large-test-encrypted-aes192.zip in Resources */ = {isa = PBXBuildFile; fileRef = D8E366EB188832C0009F3008 /* large-test-encrypted-aes192.zip */; };
 		D8E366F2188832C0009F3008 /* large-test-encrypted-aes256.zip in Resources */ = {isa = PBXBuildFile; fileRef = D8E366EC188832C0009F3008 /* large-test-encrypted-aes256.zip */; };
@@ -132,6 +138,8 @@
 		5BC58CA518745940002FAE04 /* small-test-encrypted-standard.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = "small-test-encrypted-standard.zip"; sourceTree = "<group>"; };
 		D804E4C8187645FE00289404 /* ZZDataProvider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZZDataProvider.h; sourceTree = "<group>"; };
 		D810EBCE164B19DA00200834 /* 拉链.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "拉链.txt"; sourceTree = "<group>"; };
+		D81DD92A19B761E100325687 /* ZZDecryptTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZZDecryptTests.h; sourceTree = "<group>"; };
+		D81DD92B19B761E100325687 /* ZZDecryptTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZZDecryptTests.m; sourceTree = "<group>"; };
 		D81DF41E1871471E00501A61 /* ZZScopeGuard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZZScopeGuard.h; sourceTree = "<group>"; };
 		D834255F1876747200E7A559 /* ZZInflateInputStream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZZInflateInputStream.m; sourceTree = "<group>"; };
 		D834256218767E1900E7A559 /* ZZStandardDecryptInputStream.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ZZStandardDecryptInputStream.mm; sourceTree = "<group>"; };
@@ -194,6 +202,16 @@
 		D8ABBF3D18883528002858BE /* ZZAESDecryptInputStream.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ZZAESDecryptInputStream.mm; sourceTree = "<group>"; };
 		D8B0FD611640A6B000727A70 /* zipzap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zipzap.h; sourceTree = "<group>"; };
 		D8B83A8D19B8101B00CF72B6 /* zipzap.podspec.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = zipzap.podspec.json; sourceTree = "<group>"; };
+		D8B83A7619B7CBB400CF72B6 /* ZZZipNewTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZZZipNewTests.m; sourceTree = "<group>"; };
+		D8B83A7819B7CBD000CF72B6 /* ZZZipNewTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ZZZipNewTests.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		D8B83A7C19B7D39200CF72B6 /* ZZZipOldTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZZZipOldTests.m; sourceTree = "<group>"; };
+		D8B83A7E19B7D3A700CF72B6 /* ZZZipOldTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZZZipOldTests.h; sourceTree = "<group>"; };
+		D8B83A8219B7DEC400CF72B6 /* ZZChannelTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZZChannelTests.m; sourceTree = "<group>"; };
+		D8B83A8419B7DEDE00CF72B6 /* ZZFileChannelTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZZFileChannelTests.m; sourceTree = "<group>"; };
+		D8B83A8619B7DEF700CF72B6 /* ZZFileChannelTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZZFileChannelTests.h; sourceTree = "<group>"; };
+		D8B83A8719B7DF9E00CF72B6 /* ZZChannelTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZZChannelTests.h; sourceTree = "<group>"; };
+		D8B83A8819B7F7DF00CF72B6 /* ZZDataChannelTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZZDataChannelTests.h; sourceTree = "<group>"; };
+		D8B83A8919B7F7DF00CF72B6 /* ZZDataChannelTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZZDataChannelTests.m; sourceTree = "<group>"; };
 		D8E366EA188832C0009F3008 /* large-test-encrypted-aes128.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = "large-test-encrypted-aes128.zip"; sourceTree = "<group>"; };
 		D8E366EB188832C0009F3008 /* large-test-encrypted-aes192.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = "large-test-encrypted-aes192.zip"; sourceTree = "<group>"; };
 		D8E366EC188832C0009F3008 /* large-test-encrypted-aes256.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = "large-test-encrypted-aes256.zip"; sourceTree = "<group>"; };
@@ -364,10 +382,22 @@
 		D899CF9D162C5EC100112F49 /* zipzapTests */ = {
 			isa = PBXGroup;
 			children = (
+				D8B83A8719B7DF9E00CF72B6 /* ZZChannelTests.h */,
+				D8B83A8219B7DEC400CF72B6 /* ZZChannelTests.m */,
+				D8B83A8819B7F7DF00CF72B6 /* ZZDataChannelTests.h */,
+				D8B83A8919B7F7DF00CF72B6 /* ZZDataChannelTests.m */,
+				D81DD92A19B761E100325687 /* ZZDecryptTests.h */,
+				D81DD92B19B761E100325687 /* ZZDecryptTests.m */,
+				D8B83A8619B7DEF700CF72B6 /* ZZFileChannelTests.h */,
+				D8B83A8419B7DEDE00CF72B6 /* ZZFileChannelTests.m */,
 				D899D0221631888000112F49 /* ZZTasks.h */,
 				D899D0231631888000112F49 /* ZZTasks.m */,
 				D899D018162CCF9700112F49 /* ZZUnzipTests.h */,
 				D899D019162CCF9700112F49 /* ZZUnzipTests.m */,
+				D8B83A7819B7CBD000CF72B6 /* ZZZipNewTests.h */,
+				D8B83A7619B7CBB400CF72B6 /* ZZZipNewTests.m */,
+				D8B83A7E19B7D3A700CF72B6 /* ZZZipOldTests.h */,
+				D8B83A7C19B7D39200CF72B6 /* ZZZipOldTests.m */,
 				D899D01F162F6C9700112F49 /* ZZZipTests.h */,
 				D899D020162F6C9700112F49 /* ZZZipTests.m */,
 				5BC58CA318745940002FAE04 /* assets */,
@@ -578,9 +608,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D8B83A8A19B7F7DF00CF72B6 /* ZZDataChannelTests.m in Sources */,
+				D8B83A7719B7CBB400CF72B6 /* ZZZipNewTests.m in Sources */,
 				D899D01A162CCF9700112F49 /* ZZUnzipTests.m in Sources */,
+				D81DD92C19B761E100325687 /* ZZDecryptTests.m in Sources */,
+				D8B83A8319B7DEC400CF72B6 /* ZZChannelTests.m in Sources */,
 				D899D021162F6C9700112F49 /* ZZZipTests.m in Sources */,
 				D899D0241631888100112F49 /* ZZTasks.m in Sources */,
+				D8B83A7D19B7D39200CF72B6 /* ZZZipOldTests.m in Sources */,
+				D8B83A8519B7DEDE00CF72B6 /* ZZFileChannelTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
