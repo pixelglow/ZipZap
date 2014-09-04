@@ -31,15 +31,41 @@
 
 typedef NS_ENUM(NSInteger, ZZEncryptionMode)
 {
+	/**
+	 * No encryption.
+	 */
 	ZZEncryptionModeNone,
+
+	/**
+	 * Standard PKZIP encryption.
+	 */
 	ZZEncryptionModeStandard,
+
+	/**
+	 * Strong PKZIP encryption. Currently not supported.
+	 */
 	ZZEncryptionModeStrong,
+
+	/**
+	 * WinZip encryption using AES.
+	 */
 	ZZEncryptionModeWinZipAES
 };
 
 typedef NS_ENUM(uint8_t, ZZAESEncryptionStrength)
 {
+	/**
+	 * Use 128-bit AES for encryption.
+	 */
 	ZZAESEncryptionStrength128 = 0x01,
+
+	/**
+	 * Use 192-bit AES for encryption.
+	 */
 	ZZAESEncryptionStrength192 = 0x02,
+
+	/**
+	 * Use 256-bit AES for encryption.
+	 */
 	ZZAESEncryptionStrength256 = 0x03
 };

@@ -32,13 +32,16 @@
 
 #import <Foundation/Foundation.h>
 
+/**
+ * The domain of zipzap errors.
+ */
 extern NSString* const ZZErrorDomain;
 
+/**
+ * The index of the erroneous entry.
+ */
 extern NSString* const ZZEntryIndexKey;
 
-/**
- * Error codes for NSError.
- */
 typedef NS_ENUM(NSInteger, ZZErrorCode)
 {
 	/**
@@ -102,7 +105,7 @@ typedef NS_ENUM(NSInteger, ZZErrorCode)
 	ZZInvalidCRChecksum,
     
 	/**
-	 * The wrong key was passed in (don't count on this; we cannot always detect that the problem is indeed a wrong password. in most "wrong password" cases we will raise a CRC error.)
+	 * The wrong key was passed in.
 	 */
 	ZZWrongPassword
 };

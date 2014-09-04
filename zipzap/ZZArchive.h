@@ -49,7 +49,7 @@
 @property (readonly, nonatomic) NSData* contents;
 
 /**
- * The array of <ZZArchiveEntry> entries within this archive.
+ * The array of ZZArchiveEntry entries within this archive.
  */
 @property (readonly, nonatomic) NSArray* entries;
 
@@ -96,7 +96,7 @@
 /**
  * Loads the contents and entries from the source. Any old entries will then be considered invalid.
  *
- * Whenever you access <entries> or <contents>, the receiver will load them as needed.
+ * Whenever you access entries or contents, the receiver will load them as needed.
  * You only need to call this method to force a reload from source, or to check for errors when loading.
  *
  * @param error The error information when an error occurs. Pass in nil if you do not want error information.
