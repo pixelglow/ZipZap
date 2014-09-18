@@ -42,7 +42,7 @@ static const size_t ENDOFCENTRALDIRECTORY_MINSEARCH = sizeof(ZZEndOfCentralDirec
 						 error:(out NSError**)error
 {
 	return [[self alloc] initWithChannel:[[ZZFileChannel alloc] initWithURL:URL]
-								 options:nil
+								 options:@{ ZZOpenOptionsCreateIfMissingKey: @YES }
 								   error:error];
 }
 
