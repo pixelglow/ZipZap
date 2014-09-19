@@ -39,8 +39,8 @@ Reading an existing zip file:
 
 	ZZArchive* oldArchive = [ZZArchive archiveWithURL:[NSURL fileURLWithPath:@"/tmp/old.zip"] error:nil];
 	ZZArchiveEntry* firstArchiveEntry = oldArchive.entries[0];
-	NSLog(@"The first entry's uncompressed size is %lu bytes.", firstArchiveEntry.uncompressedSize);
-	NSLog(@"The first entry's data is: %@.", [firstArchiveEntry newData]);
+	NSLog(@"The first entry's uncompressed size is %lu bytes.", (unsigned long)firstArchiveEntry.uncompressedSize);
+	NSLog(@"The first entry's data is: %@.", [firstArchiveEntry newDataWithError:nil]);
 	
 Writing a new zip file:
 
