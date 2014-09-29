@@ -81,7 +81,7 @@ Require
   * *ApplicationServices.framework* (Mac OS X) or *ImageIO.framework* (iOS)
   * *Foundation.framework*
   * *libz.dylib*
-* **Run**: Mac OS X 10.7 (Lion) or iOS 5.0 and later.
+* **Run**: Mac OS X 10.8 (Mountain Lion) or iOS 6.0 and later.
 
 Support
 -------
