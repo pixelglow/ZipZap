@@ -132,7 +132,7 @@
 	dateComponents.month = (_centralFileHeader->lastModFileDate & 0x1E0) >> 5;
 	dateComponents.year = ((_centralFileHeader->lastModFileDate & 0xFE00) >> 9) + 1980;
 	
-	return [[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar] dateFromComponents:dateComponents];
+	return [[[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian] dateFromComponents:dateComponents];
 }
 
 - (NSUInteger)crc32

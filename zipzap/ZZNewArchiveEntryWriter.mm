@@ -107,9 +107,9 @@ namespace ZZDataConsumer
 		centralFileHeader->compressionMethod = localFileHeader->compressionMethod = compressionLevel ? ZZCompressionMethod::deflated : ZZCompressionMethod::stored;
 		
 		// convert last modified Foundation date into MS-DOS time + date
-		NSCalendar* gregorianCalendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
-		NSDateComponents* lastModifiedComponents = [gregorianCalendar components:NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit
-													| NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit
+		NSCalendar* gregorianCalendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+		NSDateComponents* lastModifiedComponents = [gregorianCalendar components:NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay
+													| NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond
 																		fromDate:lastModified];
 		centralFileHeader->lastModFileTime = localFileHeader->lastModFileTime = lastModifiedComponents.second >> 1 | lastModifiedComponents.minute << 5 | lastModifiedComponents.hour << 11;
 		centralFileHeader->lastModFileDate = localFileHeader->lastModFileDate = lastModifiedComponents.day | lastModifiedComponents.month << 5 | (lastModifiedComponents.year - 1980) << 9;
