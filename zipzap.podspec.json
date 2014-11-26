@@ -24,13 +24,18 @@
   "libraries": [
     "z"
   ],
-  "xcconfig": {
-    "CLANG_CXX_LANGUAGE_STANDARD": "c++11",
-    "CLANG_CXX_LIBRARY": "libc++",
-    "GCC_ENABLE_OBJC_EXCEPTIONS": "NO",
-    "OTHER_CPLUSPLUSFLAGS": "-fno-exceptions"
-  },
-  "source_files": "zipzap/*.{h,m,mm,cpp}",
+  "subspecs": [
+    {
+      "name": "objc",
+      "compiler_flags": "-fno-objc-exceptions",
+      "source_files": "zipzap/*.{h,m}"
+    },
+    {
+      "name": "objc++",
+      "compiler_flags": "-fno-objc-exceptions -fno-exceptions -std=c++11 -stdlib=libc++",
+      "source_files": "zipzap/*.{mm,cpp}"
+    }
+  ],
   "public_header_files": ["zipzap/zipzap.h", "zipzap/ZZArchive.h", "zipzap/ZZArchiveEntry.h", "zipzap/ZZConstants.h", "zipzap/ZZError.h"],
   "ios": {
     "frameworks": [
