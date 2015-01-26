@@ -104,36 +104,20 @@
 							 @"Zip entry #%lu compression method must match new entry compressed.",
 							 (unsigned long)index);
 		
-		NSDateComponents* dateComponents = [[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar]
-											components: NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit
-											| NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit
-											fromDate:nextNewEntry[@"lastModified"]];
-		XCTAssertEqual(dateComponents.year,
-					   [[nextZipInfo[7] substringWithRange:NSMakeRange(0, 4)] integerValue],
-					   @"Zip entry #%lu last modified year must match the new entry last modified year.",
-					   (unsigned long)index);
-		XCTAssertEqual(dateComponents.month,
-					   [[nextZipInfo[7] substringWithRange:NSMakeRange(4, 2)] integerValue],
-					   @"Zip entry #%lu last modified month must match the new entry last modified month.",
-					   (unsigned long)index);
-		XCTAssertEqual(dateComponents.day,
-					   [[nextZipInfo[7] substringWithRange:NSMakeRange(6, 2)] integerValue],
-					   @"Zip entry #%lu last modified day must match the new entry last modified day.",
-					   (unsigned long)index);
-		XCTAssertEqual(dateComponents.hour,
-					   [[nextZipInfo[7] substringWithRange:NSMakeRange(9, 2)] integerValue],
-					   @"Zip entry #%lu last modified hour must match the new entry last modified hour.",
-					   (unsigned long)index);
-		XCTAssertEqual(dateComponents.minute,
-					   [[nextZipInfo[7] substringWithRange:NSMakeRange(11, 2)] integerValue],
-					   @"Zip entry #%lu last modified minute must match the new entry last modified minute.",
-					   (unsigned long)index);
-		XCTAssertEqualWithAccuracy(dateComponents.second,
-								   [[nextZipInfo[7] substringWithRange:NSMakeRange(13, 2)] integerValue],
-								   1,
-								   @"Zip entry #%lu last modified second must match the new entry last modified second.",
+		NSDateComponents* actualLastModifiedComponents = [[NSDateComponents alloc] init];
+		actualLastModifiedComponents.year = [[nextZipInfo[7] substringWithRange:NSMakeRange(0, 4)] integerValue];
+		actualLastModifiedComponents.month = [[nextZipInfo[7] substringWithRange:NSMakeRange(4, 2)] integerValue];
+		actualLastModifiedComponents.day = [[nextZipInfo[7] substringWithRange:NSMakeRange(6, 2)] integerValue];
+		actualLastModifiedComponents.hour = [[nextZipInfo[7] substringWithRange:NSMakeRange(9, 2)] integerValue];
+		actualLastModifiedComponents.minute = [[nextZipInfo[7] substringWithRange:NSMakeRange(11, 2)] integerValue];
+		actualLastModifiedComponents.second = [[nextZipInfo[7] substringWithRange:NSMakeRange(13, 2)] integerValue];
+		NSDate* actualLastModified = [[[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian] dateFromComponents:actualLastModifiedComponents];
+		
+		XCTAssertEqualWithAccuracy([nextNewEntry[@"lastModified"] timeIntervalSinceReferenceDate],
+								   actualLastModified.timeIntervalSinceReferenceDate,
+								   2,
+								   @"Zip entry #%lu last modified date must be within 2s of the new entry last modified date.",
 								   (unsigned long)index);
-
 
 		XCTAssertEqualObjects(nextZipInfo[8],
 							 nextNewEntry[@"fileName"],

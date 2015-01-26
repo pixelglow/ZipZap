@@ -107,58 +107,20 @@
 		
 		XCTAssertTrue([nextEntry check:nil], @"zipFile.entries[%lu] should check correctly.", (unsigned long)index);
 		
-		NSDateComponents* dateComponents = [[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar]
-											components: NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit
-											| NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit
-											fromDate:nextEntry.lastModified];
-		XCTAssertEqual(dateComponents.year,
-					   [[nextInfo[7] substringWithRange:NSMakeRange(0, 4)] integerValue],
-					   @"zipFile.entries[%lu].lastModified year must match the actual zip entry last modified year.",
-					   (unsigned long)index);
-		XCTAssertEqual(dateComponents.month,
-					   [[nextInfo[7] substringWithRange:NSMakeRange(4, 2)] integerValue],
-					   @"zipFile.entries[%lu].lastModified month must match the actual zip entry last modified month.",
-					   (unsigned long)index);
-		XCTAssertEqual(dateComponents.day,
-					   [[nextInfo[7] substringWithRange:NSMakeRange(6, 2)] integerValue],
-					   @"zipFile.entries[%lu].lastModified day must match the actual zip entry last modified day.",
-					   (unsigned long)index);
-		XCTAssertEqual(dateComponents.hour,
-					   [[nextInfo[7] substringWithRange:NSMakeRange(9, 2)] integerValue],
-					   @"zipFile.entries[%lu].lastModified hour must match the actual zip entry last modified hour.",
-					   (unsigned long)index);
-		XCTAssertEqual(dateComponents.minute,
-					   [[nextInfo[7] substringWithRange:NSMakeRange(11, 2)] integerValue],
-					   @"zipFile.entries[%lu].lastModified minute must match the actual zip entry last modified minute.",
-					   (unsigned long)index);
-		XCTAssertEqualWithAccuracy(dateComponents.second,
-								   [[nextInfo[7] substringWithRange:NSMakeRange(13, 2)] integerValue],
-								   1,
-								   @"zipFile.entries[%lu].lastModified second must match the actual zip entry last modified second.",
+		NSDateComponents* actualLastModifiedComponents = [[NSDateComponents alloc] init];
+		actualLastModifiedComponents.year = [[nextInfo[7] substringWithRange:NSMakeRange(0, 4)] integerValue];
+		actualLastModifiedComponents.month = [[nextInfo[7] substringWithRange:NSMakeRange(4, 2)] integerValue];
+		actualLastModifiedComponents.day = [[nextInfo[7] substringWithRange:NSMakeRange(6, 2)] integerValue];
+		actualLastModifiedComponents.hour = [[nextInfo[7] substringWithRange:NSMakeRange(9, 2)] integerValue];
+		actualLastModifiedComponents.minute = [[nextInfo[7] substringWithRange:NSMakeRange(11, 2)] integerValue];
+		actualLastModifiedComponents.second = [[nextInfo[7] substringWithRange:NSMakeRange(13, 2)] integerValue];
+		NSDate* actualLastModified = [[[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian] dateFromComponents:actualLastModifiedComponents];
+		
+		XCTAssertEqualWithAccuracy(nextEntry.lastModified.timeIntervalSinceReferenceDate,
+								   actualLastModified.timeIntervalSinceReferenceDate,
+								   0.001,
+								   @"zipFile.entries[%lu].lastModified date must be within 0.001s of the actual zip entry last modified date.",
 								   (unsigned long)index);
-				
-		char nextModeString[12];
-		strmode(nextEntry.fileMode, nextModeString);
-		nextModeString[10] = '\0';	// only want the first 10 chars of the parsed mode
-		XCTAssertEqualObjects([NSString stringWithUTF8String:nextModeString],
-							 nextInfo[0],
-							 @"zipFile.entries[%lu].fileMode must match the actual zip entry file mode.",
-							 (unsigned long)index);
-		
-		XCTAssertEqual(nextEntry.uncompressedSize,
-					   (NSUInteger)[nextInfo[3] integerValue],
-					   @"zipFile.entries[%lu].uncompressedSize must match the actual zip entry uncompressed size.",
-					   (unsigned long)index);
-		
-		XCTAssertEqual(nextEntry.compressedSize,
-					   (NSUInteger)[nextInfo[5] integerValue],
-					   @"zipFile.entries[%lu].compressedSize must match the actual zip entry compressed size.",
-					   (unsigned long)index);
-		
-		XCTAssertEqualObjects(nextEntry.fileName,
-							 nextInfo[8],
-							 @"zipFile.entries[%lu].fileName must match the actual zip entry file name.",
-							 (unsigned long)index);
 	}
 
 }
