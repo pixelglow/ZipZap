@@ -111,7 +111,7 @@ namespace ZZDataConsumer
 		NSDateComponents* lastModifiedComponents = [gregorianCalendar components:NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay
 													| NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond
 																		fromDate:lastModified];
-		centralFileHeader->lastModFileTime = localFileHeader->lastModFileTime = lastModifiedComponents.second >> 1 | lastModifiedComponents.minute << 5 | lastModifiedComponents.hour << 11;
+		centralFileHeader->lastModFileTime = localFileHeader->lastModFileTime = (lastModifiedComponents.second + 1) >> 1 | lastModifiedComponents.minute << 5 | lastModifiedComponents.hour << 11;
 		centralFileHeader->lastModFileDate = localFileHeader->lastModFileDate = lastModifiedComponents.day | lastModifiedComponents.month << 5 | (lastModifiedComponents.year - 1980) << 9;
 		
 		// crc32, compressed size and uncompressed size are zero; real values will be computed and written in data descriptor

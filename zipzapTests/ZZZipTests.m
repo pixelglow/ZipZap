@@ -111,12 +111,13 @@
 		actualLastModifiedComponents.hour = [[nextZipInfo[7] substringWithRange:NSMakeRange(9, 2)] integerValue];
 		actualLastModifiedComponents.minute = [[nextZipInfo[7] substringWithRange:NSMakeRange(11, 2)] integerValue];
 		actualLastModifiedComponents.second = [[nextZipInfo[7] substringWithRange:NSMakeRange(13, 2)] integerValue];
+		actualLastModifiedComponents.nanosecond = 0;
 		NSDate* actualLastModified = [[[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian] dateFromComponents:actualLastModifiedComponents];
 		
 		XCTAssertEqualWithAccuracy([nextNewEntry[@"lastModified"] timeIntervalSinceReferenceDate],
 								   actualLastModified.timeIntervalSinceReferenceDate,
-								   2,
-								   @"Zip entry #%lu last modified date must be within 2s of the new entry last modified date.",
+								   1,
+								   @"Zip entry #%lu last modified date must be within 1s of the new entry last modified date.",
 								   (unsigned long)index);
 
 		XCTAssertEqualObjects(nextZipInfo[8],

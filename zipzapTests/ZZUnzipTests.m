@@ -118,8 +118,8 @@
 		
 		XCTAssertEqualWithAccuracy(nextEntry.lastModified.timeIntervalSinceReferenceDate,
 								   actualLastModified.timeIntervalSinceReferenceDate,
-								   0.001,
-								   @"zipFile.entries[%lu].lastModified date must be within 0.001s of the actual zip entry last modified date.",
+								   1,
+								   @"zipFile.entries[%lu].lastModified date must be within 1s of the actual zip entry last modified date.",
 								   (unsigned long)index);
 	}
 
