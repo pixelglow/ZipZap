@@ -15,7 +15,7 @@
 @property (readonly, nonatomic) uint32_t crc32;
 @property (readonly, nonatomic) uint32_t size;
 
-- (id)initWithChannelOutput:(id<ZZChannelOutput>)channelOutput;
+- (instancetype)initWithChannelOutput:(id<ZZChannelOutput>)channelOutput;
 
 - (NSStreamStatus)streamStatus;
 - (NSError*)streamError;

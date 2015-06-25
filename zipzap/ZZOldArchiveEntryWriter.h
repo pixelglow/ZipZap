@@ -12,9 +12,9 @@
 
 @interface ZZOldArchiveEntryWriter : NSObject <ZZArchiveEntryWriter>
 
-- (id)initWithCentralFileHeader:(struct ZZCentralFileHeader*)centralFileHeader
-				localFileHeader:(struct ZZLocalFileHeader*)localFileHeader
-			shouldSkipLocalFile:(BOOL)shouldSkipLocalFile;
+- (instancetype)initWithCentralFileHeader:(struct ZZCentralFileHeader*)centralFileHeader
+						  localFileHeader:(struct ZZLocalFileHeader*)localFileHeader
+					  shouldSkipLocalFile:(BOOL)shouldSkipLocalFile NS_DESIGNATED_INITIALIZER;
 
 - (uint32_t)offsetToLocalFileEnd;
 - (BOOL)writeLocalFileToChannelOutput:(id<ZZChannelOutput>)channelOutput

@@ -25,7 +25,8 @@ static const uInt _flushLength = 1024;
 
 @synthesize crc32 = _crc32;
 
-- (id)initWithChannelOutput:(id<ZZChannelOutput>)channelOutput compressionLevel:(NSUInteger)compressionLevel
+- (instancetype)initWithChannelOutput:(id<ZZChannelOutput>)channelOutput
+					 compressionLevel:(NSUInteger)compressionLevel
 {
 	if ((self = [super init]))
 	{

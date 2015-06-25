@@ -14,7 +14,7 @@
 	uint32_t _offset;
 }
 
-- (id)initWithData:(NSMutableData*)data
+- (instancetype)initWithData:(NSMutableData*)data
 {
 	if ((self = [super init]))
 	{

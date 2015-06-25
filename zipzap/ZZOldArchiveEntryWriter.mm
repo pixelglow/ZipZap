@@ -17,9 +17,9 @@
 	NSData* _localFile;
 }
 
-- (id)initWithCentralFileHeader:(struct ZZCentralFileHeader*)centralFileHeader
-				localFileHeader:(struct ZZLocalFileHeader*)localFileHeader
-			shouldSkipLocalFile:(BOOL)shouldSkipLocalFile
+- (instancetype)initWithCentralFileHeader:(struct ZZCentralFileHeader*)centralFileHeader
+						  localFileHeader:(struct ZZLocalFileHeader*)localFileHeader
+					  shouldSkipLocalFile:(BOOL)shouldSkipLocalFile
 {
 	if ((self = [super init]))
 	{

@@ -13,7 +13,7 @@
 + (NSData*)decompressData:(NSData*)data
 	 withUncompressedSize:(NSUInteger)uncompressedSize;
 
-- (id)initWithStream:(NSInputStream*)upstream;
+- (instancetype)initWithStream:(NSInputStream*)upstream;
 
 - (NSStreamStatus)streamStatus;
 - (NSError*)streamError;

@@ -12,7 +12,7 @@
 
 @interface ZZDataChannelOutput : NSObject <ZZChannelOutput>
 
-- (id)initWithData:(NSMutableData*)data;
+- (instancetype)initWithData:(NSMutableData*)data NS_DESIGNATED_INITIALIZER;
 
 - (uint32_t)offset;
 - (BOOL)seekToOffset:(uint32_t)offset

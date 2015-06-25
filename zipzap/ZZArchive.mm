@@ -24,9 +24,9 @@ static const size_t ENDOFCENTRALDIRECTORY_MINSEARCH = sizeof(ZZEndOfCentralDirec
 
 @interface ZZArchive ()
 
-- (id)initWithChannel:(id<ZZChannel>)channel
-			  options:(NSDictionary*)options
-				error:(out NSError**)error;
+- (instancetype)initWithChannel:(id<ZZChannel>)channel
+						options:(NSDictionary*)options
+						  error:(out NSError**)error NS_DESIGNATED_INITIALIZER;
 
 - (BOOL)loadCanMiss:(BOOL)canMiss error:(out NSError**)error;
 
@@ -54,27 +54,27 @@ static const size_t ENDOFCENTRALDIRECTORY_MINSEARCH = sizeof(ZZEndOfCentralDirec
 								   error:error];
 }
 
-- (id)initWithURL:(NSURL*)URL
-		  options:(NSDictionary*)options
-			error:(out NSError**)error
+- (instancetype)initWithURL:(NSURL*)URL
+					options:(NSDictionary*)options
+					  error:(out NSError**)error
 {
 	return [self initWithChannel:[[ZZFileChannel alloc] initWithURL:URL]
 						 options:options
 						   error:error];
 }
 
-- (id)initWithData:(NSData*)data
-		   options:(NSDictionary*)options
-			 error:(out NSError**)error
+- (instancetype)initWithData:(NSData*)data
+					 options:(NSDictionary*)options
+					   error:(out NSError**)error
 {
 	return [self initWithChannel:[[ZZDataChannel alloc] initWithData:data]
 						 options:options
 						   error:error];
 }
 
-- (id)initWithChannel:(id<ZZChannel>)channel
-			  options:(NSDictionary*)options
-				error:(out NSError**)error
+- (instancetype)initWithChannel:(id<ZZChannel>)channel
+						options:(NSDictionary*)options
+						  error:(out NSError**)error
 {
 	if ((self = [super init]))
 	{

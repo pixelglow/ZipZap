@@ -72,12 +72,12 @@
 					   dataConsumerBlock:(BOOL(^)(CGDataConsumerRef dataConsumer, NSError** error))dataConsumerBlock
 {
 	return [[ZZNewArchiveEntry alloc] initWithFileName:fileName
-										  fileMode:fileMode
-									  lastModified:lastModified
-								  compressionLevel:compressionLevel
-										 dataBlock:dataBlock
-									   streamBlock:streamBlock
-								 dataConsumerBlock:dataConsumerBlock];
+											  fileMode:fileMode
+										  lastModified:lastModified
+									  compressionLevel:compressionLevel
+											 dataBlock:dataBlock
+										   streamBlock:streamBlock
+									 dataConsumerBlock:dataConsumerBlock];
 }
 
 - (BOOL)compressed

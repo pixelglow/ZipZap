@@ -23,7 +23,7 @@
 @synthesize crc32 = _crc32;
 @synthesize size = _size;
 
-- (id)initWithChannelOutput:(id<ZZChannelOutput>)channelOutput
+- (instancetype)initWithChannelOutput:(id<ZZChannelOutput>)channelOutput
 {
 	if ((self = [super init]))
 	{

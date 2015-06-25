@@ -16,8 +16,8 @@
 @property (readonly, nonatomic) uint32_t compressedSize;
 @property (readonly, nonatomic) uint32_t uncompressedSize;
 
-- (id)initWithChannelOutput:(id<ZZChannelOutput>)channelOutput
-		   compressionLevel:(NSUInteger)compressionLevel;
+- (instancetype)initWithChannelOutput:(id<ZZChannelOutput>)channelOutput
+					 compressionLevel:(NSUInteger)compressionLevel;
 
 - (NSStreamStatus)streamStatus;
 - (NSError*)streamError;

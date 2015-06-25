@@ -13,7 +13,7 @@
 	int _fileDescriptor;
 }
 
-- (id)initWithFileDescriptor:(int)fileDescriptor
+- (instancetype)initWithFileDescriptor:(int)fileDescriptor
 {
 	if ((self = [super init]))
 		_fileDescriptor = fileDescriptor;

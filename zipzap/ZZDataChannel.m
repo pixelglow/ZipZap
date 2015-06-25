@@ -14,7 +14,7 @@
 	NSData* _allData;
 }
 
-- (id)initWithData:(NSData*)data
+- (instancetype)initWithData:(NSData*)data
 {
 	if ((self = [super init]))
 		_allData = data;

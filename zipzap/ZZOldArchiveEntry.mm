@@ -39,9 +39,9 @@
 	ZZEncryptionMode _encryptionMode;
 }
 
-- (id)initWithCentralFileHeader:(struct ZZCentralFileHeader*)centralFileHeader
-				localFileHeader:(struct ZZLocalFileHeader*)localFileHeader
-					   encoding:(NSStringEncoding)encoding
+- (instancetype)initWithCentralFileHeader:(struct ZZCentralFileHeader*)centralFileHeader
+						  localFileHeader:(struct ZZLocalFileHeader*)localFileHeader
+								 encoding:(NSStringEncoding)encoding
 {
 	if ((self = [super init]))
 	{

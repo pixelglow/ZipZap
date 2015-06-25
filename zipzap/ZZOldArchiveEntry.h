@@ -29,8 +29,8 @@
 @property (readonly, nonatomic) mode_t fileMode;
 @property (readonly, nonatomic) NSString* fileName;
 
-- (id)initWithCentralFileHeader:(struct ZZCentralFileHeader*)centralFileHeader
-				localFileHeader:(struct ZZLocalFileHeader*)localFileHeader
-					   encoding:(NSStringEncoding)encoding;
+- (instancetype)initWithCentralFileHeader:(struct ZZCentralFileHeader*)centralFileHeader
+						  localFileHeader:(struct ZZLocalFileHeader*)localFileHeader
+								 encoding:(NSStringEncoding)encoding NS_DESIGNATED_INITIALIZER;
 
 @end

@@ -85,9 +85,9 @@
  * @param error The error information when an error occurs. Pass in nil if you do not want error information.
  * @return The initialized archive. Returns nil if the archive cannot be initialized.
  */
-- (id)initWithURL:(NSURL*)URL
-		  options:(NSDictionary*)options
-			error:(out NSError**)error;
+- (instancetype)initWithURL:(NSURL*)URL
+					options:(NSDictionary*)options
+					  error:(out NSError**)error;
 
 /**
  * Initializes a new archive with the raw zip file data given.
@@ -97,9 +97,9 @@
  * @param error The error information when an error occurs. Pass in nil if you do not want error information.
  * @return The initialized archive. Returns nil if the archive cannot be initialized.
  */
-- (id)initWithData:(NSData*)data
-		   options:(NSDictionary*)options
-			 error:(out NSError**)error;
+- (instancetype)initWithData:(NSData*)data
+					 options:(NSDictionary*)options
+					   error:(out NSError**)error;
 
 /**
  * Updates the entries and writes them to the source.

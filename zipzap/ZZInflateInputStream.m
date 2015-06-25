@@ -49,7 +49,7 @@ static const NSUInteger _bufferLength = 16384; // 16K buffer
 	}
 }
 
-- (id)initWithStream:(NSInputStream*)upstream
+- (instancetype)initWithStream:(NSInputStream*)upstream
 {
 	if ((self = [super init]))
 	{
