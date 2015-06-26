@@ -46,11 +46,10 @@
 		D87BA1B31B3D5B2900ED7EB3 /* lorem-ipsum.txt in Resources */ = {isa = PBXBuildFile; fileRef = D87BA1AD1B3D5B2900ED7EB3 /* lorem-ipsum.txt */; };
 		D87BA1B41B3D5B2900ED7EB3 /* pangram.txt in Resources */ = {isa = PBXBuildFile; fileRef = D87BA1AE1B3D5B2900ED7EB3 /* pangram.txt */; };
 		D87BA1B51B3D5B2900ED7EB3 /* 拉链.txt in Resources */ = {isa = PBXBuildFile; fileRef = D87BA1AF1B3D5B2900ED7EB3 /* 拉链.txt */; };
+		D87BA1F21B3D6A8300ED7EB3 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D87BA1F11B3D6A8300ED7EB3 /* libz.dylib */; };
 		D88E8E07163816FD002207B3 /* ZZOldArchiveEntry.h in Headers */ = {isa = PBXBuildFile; fileRef = D88E8E05163816FD002207B3 /* ZZOldArchiveEntry.h */; };
 		D88E8E08163816FD002207B3 /* ZZOldArchiveEntry.mm in Sources */ = {isa = PBXBuildFile; fileRef = D88E8E06163816FD002207B3 /* ZZOldArchiveEntry.mm */; };
 		D88E8E09163816FD002207B3 /* ZZOldArchiveEntry.mm in Sources */ = {isa = PBXBuildFile; fileRef = D88E8E06163816FD002207B3 /* ZZOldArchiveEntry.mm */; };
-		D88E8E0A16394A24002207B3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D899CF8A162C5EC100112F49 /* Foundation.framework */; };
-		D88E8E0C16394B49002207B3 /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D88E8E0B16394B49002207B3 /* ApplicationServices.framework */; };
 		D899CF9C162C5EC100112F49 /* libZipZap.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D899CF82162C5EC100112F49 /* libZipZap.a */; };
 		D899CFA2162C5EC100112F49 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D899CFA0162C5EC100112F49 /* InfoPlist.strings */; };
 		D899CFEA162C608300112F49 /* ZZArchiveEntry.h in Headers */ = {isa = PBXBuildFile; fileRef = D899CFD8162C608300112F49 /* ZZArchiveEntry.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -78,7 +77,6 @@
 		D899D002162C608300112F49 /* ZZNewArchiveEntryWriter.mm in Sources */ = {isa = PBXBuildFile; fileRef = D899CFE8162C608300112F49 /* ZZNewArchiveEntryWriter.mm */; };
 		D899D003162C608300112F49 /* ZZArchiveEntryWriter.h in Headers */ = {isa = PBXBuildFile; fileRef = D899CFE9162C608300112F49 /* ZZArchiveEntryWriter.h */; };
 		D899D01A162CCF9700112F49 /* ZZUnzipTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D899D019162CCF9700112F49 /* ZZUnzipTests.m */; };
-		D899D01C162CD51A00112F49 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D899D01B162CD51A00112F49 /* libz.dylib */; };
 		D899D021162F6C9700112F49 /* ZZZipTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D899D020162F6C9700112F49 /* ZZZipTests.m */; };
 		D899D0241631888100112F49 /* ZZTasks.m in Sources */ = {isa = PBXBuildFile; fileRef = D899D0231631888000112F49 /* ZZTasks.m */; };
 		D8ABBF3E18883528002858BE /* ZZAESDecryptInputStream.h in Headers */ = {isa = PBXBuildFile; fileRef = D8ABBF3C18883528002858BE /* ZZAESDecryptInputStream.h */; };
@@ -99,7 +97,6 @@
 		D8E366F3188832C0009F3008 /* small-test-encrypted-aes128.zip in Resources */ = {isa = PBXBuildFile; fileRef = D8E366ED188832C0009F3008 /* small-test-encrypted-aes128.zip */; };
 		D8E366F4188832C0009F3008 /* small-test-encrypted-aes192.zip in Resources */ = {isa = PBXBuildFile; fileRef = D8E366EE188832C0009F3008 /* small-test-encrypted-aes192.zip */; };
 		D8E366F5188832C0009F3008 /* small-test-encrypted-aes256.zip in Resources */ = {isa = PBXBuildFile; fileRef = D8E366EF188832C0009F3008 /* small-test-encrypted-aes256.zip */; };
-		D8E3C26A17E6FF0E007D0020 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8E3C26917E6FF0E007D0020 /* XCTest.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -162,12 +159,10 @@
 		D87BA1AD1B3D5B2900ED7EB3 /* lorem-ipsum.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "lorem-ipsum.txt"; sourceTree = "<group>"; };
 		D87BA1AE1B3D5B2900ED7EB3 /* pangram.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = pangram.txt; sourceTree = "<group>"; };
 		D87BA1AF1B3D5B2900ED7EB3 /* 拉链.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "拉链.txt"; sourceTree = "<group>"; };
+		D87BA1F11B3D6A8300ED7EB3 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		D88E8E05163816FD002207B3 /* ZZOldArchiveEntry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZZOldArchiveEntry.h; sourceTree = "<group>"; };
 		D88E8E06163816FD002207B3 /* ZZOldArchiveEntry.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ZZOldArchiveEntry.mm; sourceTree = "<group>"; };
-		D88E8E0B16394B49002207B3 /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/ApplicationServices.framework; sourceTree = DEVELOPER_DIR; };
 		D899CF82162C5EC100112F49 /* libZipZap.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libZipZap.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		D899CF8A162C5EC100112F49 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		D899CF8D162C5EC100112F49 /* ZipZap-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ZipZap-Prefix.pch"; sourceTree = "<group>"; };
 		D899CF96162C5EC100112F49 /* ZipZapTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ZipZapTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D899CF9F162C5EC100112F49 /* ZipZapTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ZipZapTests-Info.plist"; sourceTree = "<group>"; };
 		D899CFA1162C5EC100112F49 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -191,7 +186,6 @@
 		D899CFE9162C608300112F49 /* ZZArchiveEntryWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZZArchiveEntryWriter.h; sourceTree = "<group>"; };
 		D899D018162CCF9700112F49 /* ZZUnzipTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZZUnzipTests.h; sourceTree = "<group>"; };
 		D899D019162CCF9700112F49 /* ZZUnzipTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZZUnzipTests.m; sourceTree = "<group>"; };
-		D899D01B162CD51A00112F49 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/usr/lib/libz.dylib; sourceTree = DEVELOPER_DIR; };
 		D899D01F162F6C9700112F49 /* ZZZipTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZZZipTests.h; sourceTree = "<group>"; };
 		D899D020162F6C9700112F49 /* ZZZipTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZZZipTests.m; sourceTree = "<group>"; };
 		D899D0221631888000112F49 /* ZZTasks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZZTasks.h; sourceTree = "<group>"; };
@@ -218,7 +212,6 @@
 		D8E366ED188832C0009F3008 /* small-test-encrypted-aes128.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = "small-test-encrypted-aes128.zip"; sourceTree = "<group>"; };
 		D8E366EE188832C0009F3008 /* small-test-encrypted-aes192.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = "small-test-encrypted-aes192.zip"; sourceTree = "<group>"; };
 		D8E366EF188832C0009F3008 /* small-test-encrypted-aes256.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = "small-test-encrypted-aes256.zip"; sourceTree = "<group>"; };
-		D8E3C26917E6FF0E007D0020 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -233,11 +226,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D88E8E0C16394B49002207B3 /* ApplicationServices.framework in Frameworks */,
-				D88E8E0A16394A24002207B3 /* Foundation.framework in Frameworks */,
-				D899D01C162CD51A00112F49 /* libz.dylib in Frameworks */,
+				D87BA1F21B3D6A8300ED7EB3 /* libz.dylib in Frameworks */,
 				D899CF9C162C5EC100112F49 /* libZipZap.a in Frameworks */,
-				D8E3C26A17E6FF0E007D0020 /* XCTest.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -359,10 +349,7 @@
 		D899CF84162C5EC100112F49 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				D899D01B162CD51A00112F49 /* libz.dylib */,
-				D88E8E0B16394B49002207B3 /* ApplicationServices.framework */,
-				D899CF8A162C5EC100112F49 /* Foundation.framework */,
-				D8E3C26917E6FF0E007D0020 /* XCTest.framework */,
+				D87BA1F11B3D6A8300ED7EB3 /* libz.dylib */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -372,17 +359,8 @@
 			children = (
 				2757532D16AEE58D00388503 /* Public */,
 				2757532E16AEE59F00388503 /* Private */,
-				D899CF8C162C5EC100112F49 /* Supporting Files */,
 			);
 			path = ZipZap;
-			sourceTree = "<group>";
-		};
-		D899CF8C162C5EC100112F49 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				D899CF8D162C5EC100112F49 /* ZipZap-Prefix.pch */,
-			);
-			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		D899CF9D162C5EC100112F49 /* ZipZapTests */ = {
@@ -673,6 +651,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
@@ -710,6 +689,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
@@ -746,8 +726,6 @@
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
 				GCC_ENABLE_OBJC_EXCEPTIONS = NO;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "ZipZap/ZipZap-Prefix.pch";
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"-fno-exceptions",
@@ -762,8 +740,6 @@
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
 				GCC_ENABLE_OBJC_EXCEPTIONS = NO;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "ZipZap/ZipZap-Prefix.pch";
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"-fno-exceptions",
@@ -777,13 +753,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-					"$(DEVELOPER_DIR)/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks",
-				);
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "ZipZap/ZipZap-Prefix.pch";
 				HEADER_SEARCH_PATHS = ../ZipZap;
 				INFOPLIST_FILE = "ZipZapTests/ZipZapTests-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../Frameworks @loader_path/../Frameworks";
@@ -796,13 +766,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-					"$(DEVELOPER_DIR)/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks",
-				);
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "ZipZap/ZipZap-Prefix.pch";
 				HEADER_SEARCH_PATHS = ../ZipZap;
 				INFOPLIST_FILE = "ZipZapTests/ZipZapTests-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../Frameworks @loader_path/../Frameworks";
@@ -815,8 +779,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_ENABLE_OBJC_EXCEPTIONS = NO;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "ZipZap/ZipZap-Prefix.pch";
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"-fno-exceptions",
@@ -832,8 +794,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_ENABLE_OBJC_EXCEPTIONS = NO;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "ZipZap/ZipZap-Prefix.pch";
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"-fno-exceptions",

@@ -6,6 +6,8 @@
 //
 //
 
+#include <zlib.h>
+
 #include <ImageIO/ImageIO.h>
 
 #import <ZipZap/ZipZap.h>
