@@ -5,29 +5,22 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleExecutable</key>
-	<string>${EXECUTABLE_NAME}</string>
+	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.pixelglow.${PRODUCT_NAME:rfc1034identifier}</string>
+	<string>com.pixelglow.$(PRODUCT_NAME:rfc1034identifier)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
 	<string>$(PRODUCT_NAME)</string>
 	<key>CFBundlePackageType</key>
-	<string>BNDL</string>
+	<string>FMWK</string>
 	<key>CFBundleShortVersionString</key>
 	<string>8.0.3</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
-	<key>ZZTestFiles</key>
-	<array>
-		<string>li-europan-lingues.txt</string>
-		<string>lorem-ipsum.txt</string>
-		<string>pangram.txt</string>
-		<string>拉链.txt</string>
-		<string>dog.png</string>
-		<string>dog.jpg</string>
-	</array>
+	<key>NSPrincipalClass</key>
+	<string></string>
 </dict>
 </plist>

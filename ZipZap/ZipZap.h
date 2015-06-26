@@ -30,7 +30,16 @@
 //  THE POSSIBILITY OF SUCH DAMAGE.
 //
 
+#import <Foundation/Foundation.h>
+
 #import "ZZArchive.h"
 #import "ZZArchiveEntry.h"
 #import "ZZConstants.h"
 #import "ZZError.h"
+
+//! Project version number for ZipZap.
+FOUNDATION_EXPORT double ZipZapVersionNumber;
+
+//! Project version string for ZipZap.
+FOUNDATION_EXPORT const unsigned char ZipZapVersionString[];
+
