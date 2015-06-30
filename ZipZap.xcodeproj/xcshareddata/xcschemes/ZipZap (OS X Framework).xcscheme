@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "D899CF81162C5EC100112F49"
-               BuildableName = "libZipZap.a"
-               BlueprintName = "ZipZap (OS X)"
+               BlueprintIdentifier = "D8D140D21B423B1100C411B0"
+               BuildableName = "ZipZap.framework"
+               BlueprintName = "ZipZap (OS X Framework)"
                ReferencedContainer = "container:ZipZap.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -28,16 +28,6 @@
       shouldUseLaunchSchemeArgsEnv = "YES"
       buildConfiguration = "Debug">
       <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "D899CF95162C5EC100112F49"
-               BuildableName = "ZipZapTests.xctest"
-               BlueprintName = "ZipZapTests"
-               ReferencedContainer = "container:ZipZap.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
@@ -52,9 +42,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "D899CF81162C5EC100112F49"
-            BuildableName = "libZipZap.a"
-            BlueprintName = "ZipZap (OS X)"
+            BlueprintIdentifier = "D8D140D21B423B1100C411B0"
+            BuildableName = "ZipZap.framework"
+            BlueprintName = "ZipZap (OS X Framework)"
             ReferencedContainer = "container:ZipZap.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -67,6 +57,15 @@
       useCustomWorkingDirectory = "NO"
       buildConfiguration = "Release"
       debugDocumentVersioning = "YES">
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "D8D140D21B423B1100C411B0"
+            BuildableName = "ZipZap.framework"
+            BlueprintName = "ZipZap (OS X Framework)"
+            ReferencedContainer = "container:ZipZap.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">

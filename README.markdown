@@ -15,7 +15,7 @@ As an independent project:
 
 * In the Terminal, run `git clone https://github.com/pixelglow/ZipZap.git`.
 * Within the *ZipZap* directory, open the *ZipZap.xcodeproj* Xcode project.
-* In the Xcode project, select either the *ZipZap (iOS Framework)*, *ZipZap (iOS Static Library)*, *ZipZap (OS X)* scheme from the drop down.
+* In the Xcode project, select either the *ZipZap (iOS Framework)*, *ZipZap (iOS Static Library)*, *ZipZap (OS X Framework)* or *ZipZap (OS X Static Library)*  scheme from the drop down.
 * You can now build, test (Mac OS X only) or analyze with the selected scheme.
 * The built libraries and test cases are in a subdirectory of *~/Library/Developer/Xcode/DerivedData*.
 
