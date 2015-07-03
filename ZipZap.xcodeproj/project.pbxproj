@@ -256,7 +256,7 @@
 		D8B83A8719B7DF9E00CF72B6 /* ZZChannelTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZZChannelTests.h; sourceTree = "<group>"; };
 		D8B83A8819B7F7DF00CF72B6 /* ZZDataChannelTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZZDataChannelTests.h; sourceTree = "<group>"; };
 		D8B83A8919B7F7DF00CF72B6 /* ZZDataChannelTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZZDataChannelTests.m; sourceTree = "<group>"; };
-		D8B83A8D19B8101B00CF72B6 /* ZipZap.podspec.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = ZipZap.podspec.json; sourceTree = "<group>"; };
+		D8B83A8D19B8101B00CF72B6 /* zipzap.podspec.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = zipzap.podspec.json; sourceTree = "<group>"; };
 		D8D140D31B423B1100C411B0 /* ZipZap.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ZipZap.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8E366EA188832C0009F3008 /* large-test-encrypted-aes128.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = "large-test-encrypted-aes128.zip"; sourceTree = "<group>"; };
 		D8E366EB188832C0009F3008 /* large-test-encrypted-aes192.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = "large-test-encrypted-aes192.zip"; sourceTree = "<group>"; };
@@ -405,7 +405,7 @@
 				D84247E4196535B700B62453 /* .travis.yml */,
 				D8A32673163C2240008606AC /* LICENSE.text */,
 				D8A32627163BFF3D008606AC /* README.markdown */,
-				D8B83A8D19B8101B00CF72B6 /* ZipZap.podspec.json */,
+				D8B83A8D19B8101B00CF72B6 /* zipzap.podspec.json */,
 			);
 			indentWidth = 4;
 			sourceTree = "<group>";
