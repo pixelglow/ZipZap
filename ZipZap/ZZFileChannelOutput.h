@@ -14,6 +14,8 @@
 
 @property (nonatomic) uint32_t offset;
 
+- (instancetype)init NS_UNAVAILABLE;
+
 - (instancetype)initWithFileDescriptor:(int)fileDescriptor NS_DESIGNATED_INITIALIZER;
 
 - (uint32_t)offset;

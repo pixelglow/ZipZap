@@ -12,6 +12,8 @@
 
 @interface ZZDataChannelOutput : NSObject <ZZChannelOutput>
 
+- (instancetype)init NS_UNAVAILABLE;
+
 - (instancetype)initWithData:(NSMutableData*)data NS_DESIGNATED_INITIALIZER;
 
 - (uint32_t)offset;

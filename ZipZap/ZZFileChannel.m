@@ -15,6 +15,12 @@
 	NSURL* _URL;
 }
 
+-(instancetype) init
+{
+	[self doesNotRecognizeSelector:_cmd];
+	return nil;
+}
+
 - (instancetype)initWithURL:(NSURL*)URL
 {
 	if ((self = [super init]))

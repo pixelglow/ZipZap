@@ -13,6 +13,12 @@
 	int _fileDescriptor;
 }
 
+-(instancetype) init
+{
+	[self doesNotRecognizeSelector:_cmd];
+	return nil;
+}
+
 - (instancetype)initWithFileDescriptor:(int)fileDescriptor
 {
 	if ((self = [super init]))
