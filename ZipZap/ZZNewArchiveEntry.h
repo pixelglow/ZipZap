@@ -23,6 +23,8 @@
 @property (readonly, nonatomic) mode_t fileMode;
 @property (readonly, nonatomic) NSString* fileName;
 
+- (instancetype)init NS_UNAVAILABLE;
+
 - (instancetype)initWithFileName:(NSString*)fileName
 						fileMode:(mode_t)fileMode
 					lastModified:(NSDate*)lastModified

@@ -78,6 +78,11 @@
 						  error:(out NSError**)error;
 
 /**
+ * This initializer should never be used.
+ */
+- (instancetype)init NS_UNAVAILABLE;
+
+/**
  * Initializes a new archive with the zip file at the given file URL.
  *
  * @param URL The file URL of the zip file.

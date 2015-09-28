@@ -29,6 +29,8 @@
 @property (readonly, nonatomic) mode_t fileMode;
 @property (readonly, nonatomic) NSString* fileName;
 
+- (instancetype)init NS_UNAVAILABLE;
+
 - (instancetype)initWithCentralFileHeader:(struct ZZCentralFileHeader*)centralFileHeader
 						  localFileHeader:(struct ZZLocalFileHeader*)localFileHeader
 								 encoding:(NSStringEncoding)encoding NS_DESIGNATED_INITIALIZER;

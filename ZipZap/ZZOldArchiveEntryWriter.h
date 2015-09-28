@@ -12,6 +12,8 @@
 
 @interface ZZOldArchiveEntryWriter : NSObject <ZZArchiveEntryWriter>
 
+- (instancetype)init NS_UNAVAILABLE;
+
 - (instancetype)initWithCentralFileHeader:(struct ZZCentralFileHeader*)centralFileHeader
 						  localFileHeader:(struct ZZLocalFileHeader*)localFileHeader
 					  shouldSkipLocalFile:(BOOL)shouldSkipLocalFile NS_DESIGNATED_INITIALIZER;

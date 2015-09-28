@@ -18,6 +18,8 @@
 
 @interface ZZNewArchiveEntryWriter : NSObject <ZZArchiveEntryWriter>
 
+- (instancetype)init NS_UNAVAILABLE;
+
 - (instancetype)initWithFileName:(NSString*)fileName
 						fileMode:(mode_t)fileMode
 					lastModified:(NSDate*)lastModified

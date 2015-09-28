@@ -14,6 +14,8 @@
 
 @property (readonly, nonatomic) NSURL* URL;
 
+- (instancetype)init NS_UNAVAILABLE;
+
 - (instancetype)initWithURL:(NSURL*)URL NS_DESIGNATED_INITIALIZER;
 
 - (instancetype)temporaryChannel:(out NSError**)error;
