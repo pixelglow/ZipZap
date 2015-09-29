@@ -3,7 +3,7 @@
 //  ZipZap
 //
 //  Created by Glen Low on 3/01/14.
-//
+//  Copyright (c) 2014, Pixelglow Software. All rights reserved.
 //
 
 #include <new>

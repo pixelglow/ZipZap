@@ -2,8 +2,8 @@
 //  ZZStandardCryptoEngine.h
 //  ZipZap
 //
-//  Created by Daniel Cohen Gindi on 12/29/13.
-//
+//  Created by Daniel Cohen Gindi on 29/12/13.
+//  Copyright (c) 2013, Pixelglow Software. All rights reserved.
 //
 
 class ZZStandardCryptoEngine

@@ -3,7 +3,7 @@
 //  ZipZap
 //
 //  Created by Glen Low on 19/10/12.
-//
+//  Copyright (c) 2012, Pixelglow Software. All rights reserved.
 //
 
 #import "ZZTasks.h"
