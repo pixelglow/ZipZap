@@ -204,7 +204,7 @@ NS_ASSUME_NONNULL_BEGIN
  * @param error A pointer to a variable that will contain the error if any.
  * @return The new data provider: nil for new entries.
  */
-- (CGDataProviderRef)newDataProviderWithError:(NSError**)error;
+- (nullable CGDataProviderRef)newDataProviderWithError:(NSError**)error;
 
 /**
  * Creates a data provider to represent the entry file.
@@ -213,7 +213,7 @@ NS_ASSUME_NONNULL_BEGIN
  * @param error A pointer to a variable that will contain the error if any.
  * @return The new data provider: nil for new entries.
  */
-- (CGDataProviderRef)newDataProviderWithPassword:(nullable NSString*)password error:(NSError**)error;
+- (nullable CGDataProviderRef)newDataProviderWithPassword:(nullable NSString*)password error:(NSError**)error;
 
 - (id<ZZArchiveEntryWriter>)newWriterCanSkipLocalFile:(BOOL)canSkipLocalFile;
 

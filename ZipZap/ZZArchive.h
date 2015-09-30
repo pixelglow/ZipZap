@@ -123,7 +123,7 @@ NS_ASSUME_NONNULL_BEGIN
  * @return Whether the update was successful or not.
  *
  */
-- (BOOL)updateEntries:(NSArray*)newEntries
+- (BOOL)updateEntries:(NSArray<ZZArchiveEntry*>*)newEntries
 				error:(out NSError**)error;
 
 @end

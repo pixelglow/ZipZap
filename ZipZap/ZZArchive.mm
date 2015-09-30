@@ -146,7 +146,7 @@ static const size_t ENDOFCENTRALDIRECTORY_MINSEARCH = sizeof(ZZEndOfCentralDirec
 	// add an entry for each central header in the sequence
 	ZZCentralFileHeader* nextCentralFileHeader = (ZZCentralFileHeader*)(beginContent
 																		+ endOfCentralDirectoryRecord->offsetOfStartOfCentralDirectoryWithRespectToTheStartingDiskNumber);
-	NSMutableArray* entries = [NSMutableArray array];
+	NSMutableArray<ZZArchiveEntry*>* entries = [NSMutableArray array];
 	for (NSUInteger index = 0; index < endOfCentralDirectoryRecord->totalNumberOfEntriesInTheCentralDirectory; ++index)
 	{
 		// sanity check:
@@ -176,7 +176,7 @@ static const size_t ENDOFCENTRALDIRECTORY_MINSEARCH = sizeof(ZZEndOfCentralDirec
 	return YES;
 }
 
-- (BOOL)updateEntries:(NSArray*)newEntries
+- (BOOL)updateEntries:(NSArray<ZZArchiveEntry*>*)newEntries
 				error:(out NSError**)error
 {
 	// determine how many entries to skip, where initial old and new entries match
@@ -188,7 +188,7 @@ static const size_t ENDOFCENTRALDIRECTORY_MINSEARCH = sizeof(ZZEndOfCentralDirec
 			break;
 	
 	// get an entry writer for each new entry
-	NSMutableArray* newEntryWriters = [NSMutableArray array];
+	NSMutableArray<id<ZZArchiveEntryWriter>>* newEntryWriters = [NSMutableArray array];
     
     [newEntries enumerateObjectsUsingBlock:^(ZZArchiveEntry *anEntry, NSUInteger index, BOOL* stop)
      {
