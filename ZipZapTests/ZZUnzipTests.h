@@ -8,6 +8,8 @@
 
 #import <XCTest/XCTest.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface ZZUnzipTests : XCTestCase
 
 - (void)setUp;
@@ -24,3 +26,5 @@
 - (void)testExtractingZipEntryDataProviderImage;
 
 @end
+
+NS_ASSUME_NONNULL_END

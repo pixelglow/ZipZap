@@ -10,6 +10,8 @@
 
 @protocol ZZChannelOutput;
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface ZZStoreOutputStream : NSOutputStream
 
 @property (readonly, nonatomic) uint32_t crc32;
@@ -18,7 +20,7 @@
 - (instancetype)initWithChannelOutput:(id<ZZChannelOutput>)channelOutput;
 
 - (NSStreamStatus)streamStatus;
-- (NSError*)streamError;
+- (nullable NSError*)streamError;
 
 - (void)open;
 - (void)close;
@@ -27,3 +29,5 @@
 - (BOOL)hasSpaceAvailable;
 
 @end
+
+NS_ASSUME_NONNULL_END

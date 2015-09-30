@@ -8,6 +8,8 @@
 
 #import <XCTest/XCTest.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface ZZChannelTests : XCTestCase
 
 - (void)checkInputForOldChannel:(id<ZZChannel>)goodChannel toMatchData:(NSData*)matchData;
@@ -20,3 +22,5 @@
 - (void)checkOutputTruncateForNewChannel:(id<ZZChannel>)newChannel data:(NSData*)data offset:(uint32_t)offset;
 
 @end
+
+NS_ASSUME_NONNULL_END

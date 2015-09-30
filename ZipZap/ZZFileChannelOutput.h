@@ -10,6 +10,8 @@
 
 #import "ZZChannelOutput.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface ZZFileChannelOutput : NSObject <ZZChannelOutput>
 
 @property (nonatomic) uint32_t offset;
@@ -30,3 +32,5 @@
 - (void)close;
 
 @end
+
+NS_ASSUME_NONNULL_END

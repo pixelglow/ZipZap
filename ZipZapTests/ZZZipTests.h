@@ -8,6 +8,8 @@
 
 #import <XCTest/XCTest.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface ZZZipTests : XCTestCase
 
 - (void)setUp;
@@ -18,6 +20,8 @@
 - (NSData*)dataAtFilePath:(NSString*)filePath;
 - (NSArray*)recordsForZipEntries:(NSArray*)zipEntries;
 - (void)checkZipEntryRecords:(NSArray*)newEntryRecords
-				checkerBlock:(NSData*(^)(NSString* fileName))checkerBlock;
+				checkerBlock:(nullable NSData*(^)(NSString* fileName))checkerBlock;
 
 @end
+
+NS_ASSUME_NONNULL_END

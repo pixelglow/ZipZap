@@ -40,6 +40,8 @@
 
 @protocol ZZArchiveEntryWriter;
 
+NS_ASSUME_NONNULL_BEGIN
+
 /**
  * The ZZArchiveEntry class represents an entry in the ZZArchive instance.
  */
@@ -107,7 +109,7 @@
  */
 + (instancetype)archiveEntryWithFileName:(NSString*)fileName
 								compress:(BOOL)compress
-							   dataBlock:(NSData*(^)(NSError** error))dataBlock;
+							   dataBlock:(NSData* _Nullable(^)(NSError** error))dataBlock;
 
 /**
  * Creates a new file entry from a data-consuming callback.
@@ -147,9 +149,9 @@
 								fileMode:(mode_t)fileMode
 							lastModified:(NSDate*)lastModified
 						compressionLevel:(NSInteger)compressionLevel
-							   dataBlock:(NSData*(^)(NSError** error))dataBlock
-							 streamBlock:(BOOL(^)(NSOutputStream* stream, NSError** error))streamBlock
-					   dataConsumerBlock:(BOOL(^)(CGDataConsumerRef dataConsumer, NSError** error))dataConsumerBlock;
+							   dataBlock:(nullable NSData* _Nullable(^)(NSError** error))dataBlock
+							 streamBlock:(nullable BOOL(^)(NSOutputStream* stream, NSError** error))streamBlock
+					   dataConsumerBlock:(nullable BOOL(^)(CGDataConsumerRef dataConsumer, NSError** error))dataConsumerBlock;
 
 /**
  * Checks whether the entry file is consistent.
@@ -168,7 +170,7 @@
  * @param error A pointer to a variable that will contain the error if any.
  * @return The new stream: nil for new entries.
  */
-- (NSInputStream*)newStreamWithError:(NSError**)error;
+- (nullable NSInputStream*)newStreamWithError:(NSError**)error;
 
 /**
  * Creates a stream to represent the entry file.
@@ -177,7 +179,7 @@
  * @param error A pointer to a variable that will contain the error if any.
  * @return The new stream: nil for new entries.
  */
-- (NSInputStream*)newStreamWithPassword:(NSString*)password error:(NSError**)error;
+- (nullable NSInputStream*)newStreamWithPassword:(nullable NSString*)password error:(NSError**)error;
 
 /**
  * Creates data to represent the entry file.
@@ -185,7 +187,7 @@
  * @param error A pointer to a variable that will contain the error if any.
  * @return The new data: nil for new entries.
  */
-- (NSData*)newDataWithError:(NSError**)error;
+- (nullable NSData*)newDataWithError:(NSError**)error;
 
 /**
  * Creates data to represent the entry file.
@@ -194,7 +196,7 @@
  * @param error A pointer to a variable that will contain the error if any.
  * @return The new data: nil for new entries.
  */
-- (NSData*)newDataWithPassword:(NSString*)password error:(NSError**)error;
+- (nullable NSData*)newDataWithPassword:(nullable NSString*)password error:(NSError**)error;
 
 /**
  * Creates a data provider to represent the entry file.
@@ -211,8 +213,10 @@
  * @param error A pointer to a variable that will contain the error if any.
  * @return The new data provider: nil for new entries.
  */
-- (CGDataProviderRef)newDataProviderWithPassword:(NSString*)password error:(NSError**)error;
+- (CGDataProviderRef)newDataProviderWithPassword:(nullable NSString*)password error:(NSError**)error;
 
 - (id<ZZArchiveEntryWriter>)newWriterCanSkipLocalFile:(BOOL)canSkipLocalFile;
 
 @end
+
+NS_ASSUME_NONNULL_END

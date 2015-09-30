@@ -10,6 +10,8 @@
 
 #import "ZZChannelOutput.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface ZZDataChannelOutput : NSObject <ZZChannelOutput>
 
 - (instancetype)init NS_UNAVAILABLE;
@@ -27,3 +29,5 @@
 - (void)close;
 
 @end
+
+NS_ASSUME_NONNULL_END

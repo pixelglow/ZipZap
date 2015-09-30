@@ -10,16 +10,20 @@
 
 @protocol ZZChannelOutput;
 
+NS_ASSUME_NONNULL_BEGIN
+
 @protocol ZZChannel
 
-@property (readonly, nonatomic) NSURL* URL;
+@property (readonly, nullable, nonatomic) NSURL* URL;
 
-- (instancetype)temporaryChannel:(out NSError**)error;
+- (nullable instancetype)temporaryChannel:(out NSError**)error;
 - (BOOL)replaceWithChannel:(id<ZZChannel>)channel
 					 error:(out NSError**)error;
 - (void)removeAsTemporary;
 
-- (NSData*)newInput:(out NSError**)error;
-- (id<ZZChannelOutput>)newOutput:(out NSError**)error;
+- (nullable NSData*)newInput:(out NSError**)error;
+- (nullable id<ZZChannelOutput>)newOutput:(out NSError**)error;
 
 @end
+
+NS_ASSUME_NONNULL_END

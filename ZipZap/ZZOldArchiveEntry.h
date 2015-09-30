@@ -18,6 +18,8 @@
 #import "ZZArchiveEntry.h"
 #import "ZZHeaders.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface ZZOldArchiveEntry : ZZArchiveEntry
 
 @property (readonly, nonatomic) BOOL compressed;
@@ -36,3 +38,5 @@
 								 encoding:(NSStringEncoding)encoding NS_DESIGNATED_INITIALIZER;
 
 @end
+
+NS_ASSUME_NONNULL_END

@@ -33,6 +33,10 @@
 #import <Foundation/Foundation.h>
 #import "ZZConstants.h"
 
+@class ZZArchiveEntry;
+
+NS_ASSUME_NONNULL_BEGIN
+
 /**
  * The ZZArchive class represents a zip file for reading only.
  */
@@ -41,7 +45,7 @@
 /**
  * The URL representing this archive.
  */
-@property (readonly, nonatomic) NSURL* URL;
+@property (readonly, nullable, nonatomic) NSURL* URL;
 
 /**
  * The uninterpreted contents of this archive.
@@ -51,7 +55,7 @@
 /**
  * The array of ZZArchiveEntry entries within this archive.
  */
-@property (readonly, nonatomic) NSArray* entries;
+@property (readonly, nonatomic) NSArray<ZZArchiveEntry*>* entries;
 
 /**
  * Creates a new archive with the zip file at the given file URL.
@@ -62,8 +66,8 @@
  * @param error The error information when an error occurs. Pass in nil if you do not want error information.
  * @return The initialized archive. Returns nil if the archive cannot be initialized.
  */
-+ (instancetype)archiveWithURL:(NSURL*)URL
-						 error:(out NSError**)error;
++ (nullable instancetype)archiveWithURL:(NSURL*)URL
+								  error:(out NSError**)error;
 
 /**
  * Creates a new archive with the raw zip file data given.
@@ -74,8 +78,8 @@
  * @param error The error information when an error occurs. Pass in nil if you do not want error information.
  * @return The initialized archive. Returns nil if the archive cannot be initialized.
  */
-+ (instancetype)archiveWithData:(NSData*)data
-						  error:(out NSError**)error;
++ (nullable instancetype)archiveWithData:(NSData*)data
+								   error:(out NSError**)error;
 
 /**
  * This initializer should never be used.
@@ -90,9 +94,9 @@
  * @param error The error information when an error occurs. Pass in nil if you do not want error information.
  * @return The initialized archive. Returns nil if the archive cannot be initialized.
  */
-- (instancetype)initWithURL:(NSURL*)URL
-					options:(NSDictionary*)options
-					  error:(out NSError**)error;
+- (nullable instancetype)initWithURL:(NSURL*)URL
+							 options:(nullable NSDictionary*)options
+							   error:(out NSError**)error;
 
 /**
  * Initializes a new archive with the raw zip file data given.
@@ -102,9 +106,9 @@
  * @param error The error information when an error occurs. Pass in nil if you do not want error information.
  * @return The initialized archive. Returns nil if the archive cannot be initialized.
  */
-- (instancetype)initWithData:(NSData*)data
-					 options:(NSDictionary*)options
-					   error:(out NSError**)error;
+- (nullable instancetype)initWithData:(NSData*)data
+							  options:(nullable NSDictionary*)options
+								error:(out NSError**)error;
 
 /**
  * Updates the entries and writes them to the source.
@@ -123,3 +127,5 @@
 				error:(out NSError**)error;
 
 @end
+
+NS_ASSUME_NONNULL_END

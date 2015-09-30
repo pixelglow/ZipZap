@@ -8,6 +8,8 @@
 
 #import <XCTest/XCTest.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface ZZDecryptTests : XCTestCase
 
 - (void)testExtractingAndStandardDecryptingSmallZipEntryData;
@@ -20,3 +22,5 @@
 - (void)testExtractingAndAes256DecryptingLargeZipEntryData;
 
 @end
+
+NS_ASSUME_NONNULL_END

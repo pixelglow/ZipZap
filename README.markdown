@@ -80,7 +80,7 @@ API references: [References](http://pixelglow.github.io/ZipZap/api/index.html)
 Require
 -------
 
-* **Build**: Xcode 6 and later.
+* **Build**: Xcode 7 and later.
 * **Link**: Only system libraries; no third-party libraries needed.
   * *ApplicationServices.framework* (Mac OS X) or *ImageIO.framework* (iOS)
   * *Foundation.framework*

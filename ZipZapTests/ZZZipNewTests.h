@@ -8,6 +8,8 @@
 
 #import "ZZZipTests.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface ZZZipNewTests : ZZZipTests
 
 - (void)setUp;
@@ -37,3 +39,5 @@
 - (void)testCreatingZipEntriesWithUncompressedBadDataConsumerWriteNone;
 
 @end
+
+NS_ASSUME_NONNULL_END

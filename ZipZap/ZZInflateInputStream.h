@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface ZZInflateInputStream : NSInputStream
 
 + (NSData*)decompressData:(NSData*)data
@@ -16,13 +18,15 @@
 - (instancetype)initWithStream:(NSInputStream*)upstream;
 
 - (NSStreamStatus)streamStatus;
-- (NSError*)streamError;
+- (nullable NSError*)streamError;
 
 - (void)open;
 - (void)close;
 
 - (NSInteger)read:(uint8_t*)buffer maxLength:(NSUInteger)len;
-- (BOOL)getBuffer:(uint8_t**)buffer length:(NSUInteger*)len;
+- (BOOL)getBuffer:(uint8_t* _Nullable* _Nonnull)buffer length:(NSUInteger*)len;
 - (BOOL)hasBytesAvailable;
 
 @end
+
+NS_ASSUME_NONNULL_END

@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @protocol ZZChannelOutput
 
 - (uint32_t)offset;
@@ -21,3 +23,5 @@
 - (void)close;
 
 @end
+
+NS_ASSUME_NONNULL_END

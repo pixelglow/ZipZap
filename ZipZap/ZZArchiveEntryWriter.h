@@ -10,6 +10,8 @@
 
 @protocol ZZChannelOutput;
 
+NS_ASSUME_NONNULL_BEGIN
+
 @protocol ZZArchiveEntryWriter
 
 - (uint32_t)offsetToLocalFileEnd;
@@ -19,3 +21,5 @@
 - (BOOL)writeCentralFileHeaderToChannelOutput:(id<ZZChannelOutput>)channelOutput
 										error:(out NSError**)error;
 @end
+
+NS_ASSUME_NONNULL_END

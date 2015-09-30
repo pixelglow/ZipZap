@@ -10,6 +10,8 @@
 
 @protocol ZZChannelOutput;
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface ZZDeflateOutputStream : NSOutputStream
 
 @property (readonly, nonatomic) uint32_t crc32;
@@ -20,7 +22,7 @@
 					 compressionLevel:(NSUInteger)compressionLevel;
 
 - (NSStreamStatus)streamStatus;
-- (NSError*)streamError;
+- (nullable NSError*)streamError;
 
 - (void)open;
 - (void)close;
@@ -29,3 +31,5 @@
 - (BOOL)hasSpaceAvailable;
 
 @end
+
+NS_ASSUME_NONNULL_END
