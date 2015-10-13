@@ -88,6 +88,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (readonly, nonatomic) NSString* fileName;
 
 /**
+ * The file name of the entry as array of bytes
+ */
+@property (readonly, nonatomic) NSData* rawFileName;
+
+/**
  * Creates a new file entry from a streaming callback.
  *
  * @param fileName The file name for the entry.

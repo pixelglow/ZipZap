@@ -30,6 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (readonly, nonatomic) NSUInteger uncompressedSize;
 @property (readonly, nonatomic) mode_t fileMode;
 @property (readonly, nonatomic) NSString* fileName;
+@property (readonly, nonatomic) NSData* rawFileName;
 
 - (instancetype)init NS_UNAVAILABLE;
 

@@ -120,6 +120,11 @@
 	return nil;
 }
 
+- (NSData*)rawFileName
+{
+	return nil;
+}
+
 - (NSInputStream*)newStreamWithError:(NSError**)error
 {
 	return [self newStreamWithPassword:nil error:error];

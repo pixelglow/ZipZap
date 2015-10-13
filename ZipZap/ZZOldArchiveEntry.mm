@@ -175,6 +175,11 @@
 						  length:_centralFileHeader->fileNameLength];
 }
 
+- (NSData*)rawFileName
+{
+	return [NSData dataWithBytes:_centralFileHeader->fileName() length:_centralFileHeader->fileNameLength];
+}
+
 - (BOOL)check:(out NSError**)error
 {
 	// descriptor fields either from local file header or data descriptor
