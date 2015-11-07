@@ -57,7 +57,8 @@
 		 @"fileMode": @(zipEntry.fileMode),
 		 @"compressed": @(zipEntry.compressed),
 		 @"lastModified": zipEntry.lastModified,
-		 @"fileName": zipEntry.fileName
+		 @"fileName": [zipEntry fileNameWithEncoding:NSUTF8StringEncoding],
+		 @"rawFileName": zipEntry.rawFileName
 		 }];
 	return records;
 }
@@ -124,7 +125,11 @@
 							 nextNewEntry[@"fileName"],
 							 @"Zip entry #%lu file name must match new entry file name.",
 							 (unsigned long)index);
-		
+
+		XCTAssertEqualObjects([nextZipInfo[8] dataUsingEncoding:NSUTF8StringEncoding],
+							  nextNewEntry[@"rawFileName"],
+							  @"Zip entry #%lu raw file name must match new entry raw file name.",
+							  (unsigned long)index);
 		
 		if (checkerBlock)
 		{

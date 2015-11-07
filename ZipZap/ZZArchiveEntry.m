@@ -117,12 +117,17 @@
 
 - (NSString*)fileName
 {
-	return nil;
+	return [self fileNameWithEncoding:self.encoding];
 }
 
 - (NSData*)rawFileName
 {
 	return nil;
+}
+
+- (NSStringEncoding)encoding
+{
+	return (NSStringEncoding)0;
 }
 
 - (NSInputStream*)newStreamWithError:(NSError**)error
@@ -138,6 +143,11 @@
 - (BOOL)check:(NSError**)error
 {
 	return YES;
+}
+
+- (NSString*)fileNameWithEncoding:(NSStringEncoding)encoding
+{
+	return nil;
 }
 
 - (NSData*)newDataWithError:(NSError**)error

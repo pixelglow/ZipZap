@@ -29,14 +29,15 @@ NS_ASSUME_NONNULL_BEGIN
 @property (readonly, nonatomic) NSUInteger compressedSize;
 @property (readonly, nonatomic) NSUInteger uncompressedSize;
 @property (readonly, nonatomic) mode_t fileMode;
-@property (readonly, nonatomic) NSString* fileName;
 @property (readonly, nonatomic) NSData* rawFileName;
+@property (readonly, nonatomic) NSStringEncoding encoding;
 
 - (instancetype)init NS_UNAVAILABLE;
 
 - (instancetype)initWithCentralFileHeader:(struct ZZCentralFileHeader*)centralFileHeader
-						  localFileHeader:(struct ZZLocalFileHeader*)localFileHeader
-								 encoding:(NSStringEncoding)encoding NS_DESIGNATED_INITIALIZER;
+						  localFileHeader:(struct ZZLocalFileHeader*)localFileHeader NS_DESIGNATED_INITIALIZER;
+
+- (NSString*)fileNameWithEncoding:(NSStringEncoding)encoding;
 
 @end
 

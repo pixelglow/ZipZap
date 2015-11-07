@@ -42,7 +42,7 @@ enum class ZZGeneralPurposeBitFlag: uint16_t
 	superFastCompression = (1 << 1) | (1 << 2),
 	sizeInDataDescriptor = 1 << 3,
 	encryptionStrong = 1 << 6,
-	fileNameUTF8Encoded = 1 << 11
+	languageEncoding = 1 << 11
 };
 
 inline ZZGeneralPurposeBitFlag operator|(ZZGeneralPurposeBitFlag lhs, ZZGeneralPurposeBitFlag rhs)

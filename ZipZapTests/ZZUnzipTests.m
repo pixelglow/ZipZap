@@ -138,11 +138,16 @@
 		ZZArchiveEntry* nextEntry = _zipFile.entries[index];
 		NSString* nextEntryFilePath = _entryFilePaths[index];
 		
-		XCTAssertEqualObjects(nextEntry.fileName,
+		XCTAssertEqualObjects([nextEntry fileNameWithEncoding:NSUTF8StringEncoding],
 							 nextEntryFilePath,
 							 @"zipFile.entries[%lu].fileName must match the original file name.",
 							 (unsigned long)index);
-		
+
+		XCTAssertEqualObjects([nextEntry rawFileName],
+							  [nextEntryFilePath dataUsingEncoding:NSUTF8StringEncoding],
+							  @"zipFile.entries[%lu].rawFileName must match the original raw file name.",
+							  (unsigned long)index);
+
 		NSData* fileData = [self dataAtFilePath:nextEntryFilePath];
 		XCTAssertEqual(nextEntry.crc32,
 					   crc32(0, (const Bytef*)fileData.bytes, (uInt)fileData.length),

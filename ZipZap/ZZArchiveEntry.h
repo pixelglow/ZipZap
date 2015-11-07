@@ -83,7 +83,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (readonly, nonatomic) mode_t fileMode;
 
 /**
- * The file name of the entry.
+ * The file name of the entry. Encoding is either CP-437 or UTF-8, depending on the EFS flag of the general purpose bit flags.
  */
 @property (readonly, nonatomic) NSString* fileName;
 
@@ -91,6 +91,11 @@ NS_ASSUME_NONNULL_BEGIN
  * The file name of the entry as array of bytes
  */
 @property (readonly, nonatomic) NSData* rawFileName;
+
+/**
+ * The encoding of filename and comment fields, according to the EFS flag of the general purpose bit flags.
+ */
+@property (readonly, nonatomic) NSStringEncoding encoding;
 
 /**
  * Creates a new file entry from a streaming callback.
@@ -168,6 +173,13 @@ NS_ASSUME_NONNULL_BEGIN
  * @return Whether entry file is consistent or not.
  */
 - (BOOL)check:(out NSError**)error;
+
+/**
+ * The file name of the entry with the given encoding.
+ *
+ * @param encoding The encoding for the filename.
+ */
+- (NSString*)fileNameWithEncoding:(NSStringEncoding)encoding;
 
 /**
  * Creates a stream to represent the entry file.

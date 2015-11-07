@@ -24,7 +24,6 @@
 @interface ZZOldArchiveEntry ()
 
 - (NSData*)fileData;
-- (NSString*)stringWithBytes:(uint8_t*)bytes length:(NSUInteger)length;
 
 - (BOOL)checkEncryptionAndCompression:(out NSError**)error;
 - (NSInputStream*)streamForData:(NSData*)data withPassword:(NSString*)password error:(out NSError**)error;
@@ -35,19 +34,16 @@
 {
 	ZZCentralFileHeader* _centralFileHeader;
 	ZZLocalFileHeader* _localFileHeader;
-	NSStringEncoding _encoding;
 	ZZEncryptionMode _encryptionMode;
 }
 
 - (instancetype)initWithCentralFileHeader:(struct ZZCentralFileHeader*)centralFileHeader
 						  localFileHeader:(struct ZZLocalFileHeader*)localFileHeader
-								 encoding:(NSStringEncoding)encoding
 {
 	if ((self = [super init]))
 	{
 		_centralFileHeader = centralFileHeader;
 		_localFileHeader = localFileHeader;
-		_encoding = encoding;
 		
 		if ((_centralFileHeader->generalPurposeBitFlag & ZZGeneralPurposeBitFlag::encrypted) != ZZGeneralPurposeBitFlag::none)
 		{
@@ -89,14 +85,6 @@
 	}
 
 	return [NSData dataWithBytesNoCopy:dataStart length:dataLength freeWhenDone:NO];
-}
-
-- (NSString*)stringWithBytes:(uint8_t*)bytes length:(NSUInteger)length
-{
-	// if EFS bit is set, use UTF-8; otherwise use fallback encoding
-	return [[NSString alloc] initWithBytes:bytes
-									length:length
-								  encoding:(_centralFileHeader->generalPurposeBitFlag & ZZGeneralPurposeBitFlag::fileNameUTF8Encoded) == ZZGeneralPurposeBitFlag::none ? _encoding :NSUTF8StringEncoding];
 }
 
 - (ZZCompressionMethod)compressionMethod
@@ -169,15 +157,17 @@
 	}
 }
 
-- (NSString*)fileName
+- (NSData*)rawFileName
 {
-	return [self stringWithBytes:_centralFileHeader->fileName()
+	return [NSData dataWithBytes:_centralFileHeader->fileName()
 						  length:_centralFileHeader->fileNameLength];
 }
 
-- (NSData*)rawFileName
+- (NSStringEncoding)encoding
 {
-	return [NSData dataWithBytes:_centralFileHeader->fileName() length:_centralFileHeader->fileNameLength];
+	return (_centralFileHeader->generalPurposeBitFlag & ZZGeneralPurposeBitFlag::languageEncoding) == ZZGeneralPurposeBitFlag::none ?
+		CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingDOSLatinUS) : // CP-437
+		NSUTF8StringEncoding; // UTF-8
 }
 
 - (BOOL)check:(out NSError**)error
@@ -256,6 +246,13 @@
 	}
 	
 	return YES;
+}
+
+- (NSString*)fileNameWithEncoding:(NSStringEncoding)encoding
+{
+	return [[NSString alloc] initWithBytes:_centralFileHeader->fileName()
+									length:_centralFileHeader->fileNameLength
+								  encoding:encoding];
 }
 
 - (BOOL)checkEncryptionAndCompression:(out NSError**)error

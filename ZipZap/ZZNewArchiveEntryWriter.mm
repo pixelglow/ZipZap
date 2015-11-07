@@ -102,7 +102,7 @@ namespace ZZDataConsumer
 				compressionFlag = ZZGeneralPurposeBitFlag::maximumCompression;
 				break;
 		}
-		centralFileHeader->generalPurposeBitFlag = localFileHeader->generalPurposeBitFlag = compressionFlag | ZZGeneralPurposeBitFlag::sizeInDataDescriptor | ZZGeneralPurposeBitFlag::fileNameUTF8Encoded;
+		centralFileHeader->generalPurposeBitFlag = localFileHeader->generalPurposeBitFlag = compressionFlag | ZZGeneralPurposeBitFlag::sizeInDataDescriptor | ZZGeneralPurposeBitFlag::languageEncoding;
 
 		centralFileHeader->compressionMethod = localFileHeader->compressionMethod = compressionLevel ? ZZCompressionMethod::deflated : ZZCompressionMethod::stored;
 		

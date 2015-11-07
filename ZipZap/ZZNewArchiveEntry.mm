@@ -56,9 +56,14 @@
 	return _fileMode;
 }
 
-- (NSString*)fileName
+- (NSData*)rawFileName
 {
-	return _fileName;
+	return [_fileName dataUsingEncoding:NSUTF8StringEncoding];
+}
+
+- (NSStringEncoding)encoding
+{
+	return NSUTF8StringEncoding;
 }
 
 - (id<ZZArchiveEntryWriter>)newWriterCanSkipLocalFile:(BOOL)canSkipLocalFile
@@ -70,6 +75,11 @@
 											   dataBlock:_dataBlock
 											 streamBlock:_streamBlock
 									   dataConsumerBlock:_dataConsumerBlock];
+}
+
+- (NSString*)fileNameWithEncoding:(NSStringEncoding)encoding
+{
+	return _fileName;
 }
 
 @end

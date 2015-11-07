@@ -35,7 +35,6 @@ static const size_t ENDOFCENTRALDIRECTORY_MINSEARCH = sizeof(ZZEndOfCentralDirec
 @implementation ZZArchive
 {
 	id<ZZChannel> _channel;
-	NSStringEncoding _encoding;
 }
 
 + (instancetype)archiveWithURL:(NSURL*)URL
@@ -79,9 +78,6 @@ static const size_t ENDOFCENTRALDIRECTORY_MINSEARCH = sizeof(ZZEndOfCentralDirec
 	if ((self = [super init]))
 	{
 		_channel = channel;
-
-		NSNumber* encoding = options[ZZOpenOptionsEncodingKey];
-		_encoding = encoding ? encoding.unsignedIntegerValue : NSUTF8StringEncoding;
 
 		NSNumber* createIfMissing = options[ZZOpenOptionsCreateIfMissingKey];
 		if (![self loadCanMiss:createIfMissing.boolValue error:error])
@@ -164,8 +160,7 @@ static const size_t ENDOFCENTRALDIRECTORY_MINSEARCH = sizeof(ZZEndOfCentralDirec
 																	  + nextCentralFileHeader->relativeOffsetOfLocalHeader);
 		
 		[entries addObject:[[ZZOldArchiveEntry alloc] initWithCentralFileHeader:nextCentralFileHeader
-																localFileHeader:nextLocalFileHeader
-																	   encoding:_encoding]];
+																localFileHeader:nextLocalFileHeader]];
 		
 		nextCentralFileHeader = nextCentralFileHeader->nextCentralFileHeader();
 	}

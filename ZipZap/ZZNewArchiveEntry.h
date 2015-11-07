@@ -23,7 +23,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (readonly, nonatomic) BOOL compressed;
 @property (readonly, nonatomic) NSDate* lastModified;
 @property (readonly, nonatomic) mode_t fileMode;
-@property (readonly, nonatomic) NSString* fileName;
+@property (readonly, nonatomic) NSData* rawFileName;
+@property (readonly, nonatomic) NSStringEncoding encoding;
 
 - (instancetype)init NS_UNAVAILABLE;
 
@@ -34,6 +35,8 @@ NS_ASSUME_NONNULL_BEGIN
 					   dataBlock:(nullable NSData* _Nullable(^)(NSError** error))dataBlock
 					 streamBlock:(nullable BOOL(^)(NSOutputStream* stream, NSError** error))streamBlock
 			   dataConsumerBlock:(nullable BOOL(^)(CGDataConsumerRef dataConsumer, NSError** error))dataConsumerBlock NS_DESIGNATED_INITIALIZER;
+
+- (NSString*)fileNameWithEncoding:(NSStringEncoding)encoding;
 
 @end
 

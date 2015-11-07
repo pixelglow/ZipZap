@@ -8,6 +8,4 @@
 
 #import "ZZConstants.h"
 
-NSString* const ZZOpenOptionsEncodingKey = @"ZZOpenOptionsEncodingKey";
-
 NSString* const ZZOpenOptionsCreateIfMissingKey = @"ZZOpenOptionsCreateIfMissingKey";
