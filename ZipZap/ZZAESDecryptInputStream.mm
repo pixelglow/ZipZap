@@ -95,6 +95,11 @@ static const uint WINZIP_PBKDF2_ROUNDS = 1000;
 	return _status;
 }
 
+- (NSError*)streamError
+{
+	return nil;
+}
+
 - (void)open
 {
 	[_upstream open];
