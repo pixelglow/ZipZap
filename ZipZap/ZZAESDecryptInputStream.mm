@@ -17,7 +17,6 @@ static const uint WINZIP_PBKDF2_ROUNDS = 1000;
 @implementation ZZAESDecryptInputStream
 {
 	NSInputStream* _upstream;
-	NSStreamStatus _status;
 	
 	uint32_t _counterNonce[4];
 	uint8_t _keystream[16];
@@ -67,9 +66,6 @@ static const uint WINZIP_PBKDF2_ROUNDS = 1000;
 		// NSData *macKey = [NSData dataWithBytes:((char *)_key.bytes + keyLength) length:macLength]; // TODO: Use for authentication
 		
 		if (*derivedVerifier == *headerVerifier)
-		{
-			_status = NSStreamStatusNotOpen;
-
 			CCCryptorCreate(kCCEncrypt,
 							kCCAlgorithmAES,
 							kCCOptionECBMode,
@@ -77,11 +73,8 @@ static const uint WINZIP_PBKDF2_ROUNDS = 1000;
 							keyLength,
 							NULL,
 							&_aes);
-			
-		}
 		else
 		{ // Wrong password
-			_status = NSStreamStatusError;
 			_aes = NULL;
 
 			return ZZRaiseErrorNil(error, ZZWrongPassword, @{});
@@ -92,21 +85,22 @@ static const uint WINZIP_PBKDF2_ROUNDS = 1000;
 
 - (NSStreamStatus)streamStatus
 {
-	return _status;
+	return _upstream.streamStatus;
+}
+
+- (NSError*)streamError
+{
+	return _upstream.streamError;
 }
 
 - (void)open
 {
 	[_upstream open];
-
-	_status = NSStreamStatusOpen;
 }
 
 - (void)close
 {
 	[_upstream close];
-	
-	_status = NSStreamStatusClosed;
 }
 
 - (NSInteger)read:(uint8_t*)buffer maxLength:(NSUInteger)len

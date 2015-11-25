@@ -23,6 +23,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)open;
 - (void)close;
 
+- (NSStreamStatus)streamStatus;
+- (NSError*)streamError;
+
 - (NSInteger)read:(uint8_t*)buffer maxLength:(NSUInteger)len;
 - (BOOL)getBuffer:(uint8_t* _Nullable* _Nonnull)buffer length:(NSUInteger*)len;
 - (BOOL)hasBytesAvailable;

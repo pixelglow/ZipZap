@@ -13,7 +13,6 @@
 @implementation ZZStandardDecryptInputStream
 {
 	NSInputStream* _upstream;
-	NSStreamStatus _status;
 	ZZStandardCryptoEngine _crypto;
 }
 
@@ -27,7 +26,6 @@
 	if ((self = [super init]))
 	{
 		_upstream = upstream;
-		_status = NSStreamStatusNotOpen;
 
 		_crypto.initKeys((unsigned char*)password.UTF8String);
 
@@ -61,24 +59,22 @@
 
 - (NSStreamStatus)streamStatus
 {
-	return _status;
+	return _upstream.streamStatus;
 }
 
 - (NSError*)streamError
 {
-	return nil;
+	return _upstream.streamError;
 }
 
 - (void)open
 {
 	[_upstream open];
-	_status = NSStreamStatusOpen;	
 }
 
 - (void)close
 {
 	[_upstream close];
-	_status = NSStreamStatusClosed;
 }
 
 - (NSInteger)read:(uint8_t*)buffer maxLength:(NSUInteger)len
