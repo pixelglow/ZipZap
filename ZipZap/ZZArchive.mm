@@ -153,7 +153,9 @@ static const size_t ENDOFCENTRALDIRECTORY_MINSEARCH = sizeof(ZZEndOfCentralDirec
 			|| nextCentralFileHeader->diskNumberStart != 0
 			// local file occurs before first central file header, and has enough minimal space for at least local file
 			|| nextCentralFileHeader->relativeOffsetOfLocalHeader + sizeof(ZZLocalFileHeader)
-				> endOfCentralDirectoryRecord->offsetOfStartOfCentralDirectoryWithRespectToTheStartingDiskNumber)
+				> endOfCentralDirectoryRecord->offsetOfStartOfCentralDirectoryWithRespectToTheStartingDiskNumber
+			// next central file header in sequence is within the central directory
+			|| (const uint8_t*)nextCentralFileHeader->nextCentralFileHeader() > endOfCentralDirectory)
 			return ZZRaiseErrorNo(error, ZZCentralFileHeaderReadErrorCode, @{ZZEntryIndexKey : @(index)});
 								
 		ZZLocalFileHeader* nextLocalFileHeader = (ZZLocalFileHeader*)(beginContent
