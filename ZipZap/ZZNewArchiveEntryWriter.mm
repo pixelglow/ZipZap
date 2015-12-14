@@ -10,10 +10,11 @@
 
 #import "ZZChannelOutput.h"
 #import "ZZDeflateOutputStream.h"
-#import "ZZScopeGuard.h"
-#import "ZZNewArchiveEntryWriter.h"
-#import "ZZStoreOutputStream.h"
+#import "ZZError.h"
 #import "ZZHeaders.h"
+#import "ZZNewArchiveEntryWriter.h"
+#import "ZZScopeGuard.h"
+#import "ZZStoreOutputStream.h"
 
 namespace ZZDataConsumer
 {
@@ -187,95 +188,54 @@ namespace ZZDataConsumer
 	ZZDataDescriptor dataDescriptor;
 	dataDescriptor.signature = ZZDataDescriptor::sign;
 	
-	if (_compressionLevel)
 	{
-		// use of one the blocks to write to a stream that deflates directly to the output file handle
-		ZZDeflateOutputStream* outputStream = [[ZZDeflateOutputStream alloc] initWithChannelOutput:channelOutput
-																				  compressionLevel:_compressionLevel];
-		{
-			[outputStream open];
-			ZZScopeGuard outputStreamCloser(^{[outputStream close];});
-			
-			if (_dataBlock)
-			{
-				NSError* err = nil;
-				BOOL bad = YES;
-				@autoreleasepool
-				{
-					NSData* data = _dataBlock(&err);
-					if (data)
-					{
-						const uint8_t* bytes;
-						NSUInteger bytesToWrite;
-						NSUInteger bytesWritten;
-						for (bytes = (const uint8_t*)data.bytes, bytesToWrite = data.length;
-							 bytesToWrite > 0;
-							 bytes += bytesWritten, bytesToWrite -= bytesWritten)
-							bytesWritten = [outputStream write:bytes maxLength:bytesToWrite];
-						
-						bad = NO;
-					}
-				}
-				if (bad)
-				{
-					*error = err;
-					return NO;
-				}
-				
-			}
-			else if (_streamBlock)
-			{
-				if (!_streamBlock(outputStream, error))
-					return NO;
-			}
-			else if (_dataConsumerBlock)
-			{
-				CGDataConsumerRef dataConsumer = CGDataConsumerCreate((__bridge void*)outputStream, &ZZDataConsumer::callbacks);
-				ZZScopeGuard dataConsumerReleaser(^{CGDataConsumerRelease(dataConsumer);});
+		// if any of the blocks don't set the error, ensure we return an error anyway
+		ZZScopeGuard errorChecker(^
+								  {
+									  if (error && !*error)
+										  *error = [NSError errorWithDomain:ZZErrorDomain
+																	   code:ZZBlockFailedWithoutError
+																   userInfo:nil];
+								  });
 
-				if (!_dataConsumerBlock(dataConsumer, error))
-					return NO;
-			}
-		}
-		
-		dataDescriptor.crc32 = outputStream.crc32;
-		dataDescriptor.compressedSize = outputStream.compressedSize;
-		dataDescriptor.uncompressedSize = outputStream.uncompressedSize;
-	}
-	else
-	{
-		if (_dataBlock)
+		if (_compressionLevel)
 		{
-			NSError* err = nil;
-			BOOL bad = YES;
-			@autoreleasepool
-			{
-				// if data block, write the data directly to output file handle
-				NSData* data = _dataBlock(&err);
-				if (data && [channelOutput writeData:data error:&err])
-				{
-					dataDescriptor.compressedSize = dataDescriptor.uncompressedSize = (uint32_t)data.length;
-					dataDescriptor.crc32 = (uint32_t)crc32(0, (const Bytef*)data.bytes, dataDescriptor.uncompressedSize);
-					bad = NO;
-				}
-			}
-			
-			if (bad)
-			{
-				*error = err;
-				return NO;
-			}
-		}
-		else
-		{
-			// if stream block, data consumer block or no block, use to write to a stream that just outputs to the output file handle
-			ZZStoreOutputStream* outputStream = [[ZZStoreOutputStream alloc] initWithChannelOutput:channelOutput];
-			
+			// use of one the blocks to write to a stream that deflates directly to the output file handle
+			ZZDeflateOutputStream* outputStream = [[ZZDeflateOutputStream alloc] initWithChannelOutput:channelOutput
+																					  compressionLevel:_compressionLevel];
 			{
 				[outputStream open];
 				ZZScopeGuard outputStreamCloser(^{[outputStream close];});
 				
-				if (_streamBlock)
+				
+				if (_dataBlock)
+				{
+					NSError* err = nil;
+					BOOL bad = YES;
+					@autoreleasepool
+					{
+						NSData* data = _dataBlock(&err);
+						if (data)
+						{
+							const uint8_t* bytes;
+							NSUInteger bytesToWrite;
+							NSUInteger bytesWritten;
+							for (bytes = (const uint8_t*)data.bytes, bytesToWrite = data.length;
+								 bytesToWrite > 0;
+								 bytes += bytesWritten, bytesToWrite -= bytesWritten)
+								bytesWritten = [outputStream write:bytes maxLength:bytesToWrite];
+							
+							bad = NO;
+						}
+					}
+					if (bad)
+					{
+						*error = err;
+						return NO;
+					}
+					
+				}
+				else if (_streamBlock)
 				{
 					if (!_streamBlock(outputStream, error))
 						return NO;
@@ -284,17 +244,69 @@ namespace ZZDataConsumer
 				{
 					CGDataConsumerRef dataConsumer = CGDataConsumerCreate((__bridge void*)outputStream, &ZZDataConsumer::callbacks);
 					ZZScopeGuard dataConsumerReleaser(^{CGDataConsumerRelease(dataConsumer);});
-					
+
 					if (!_dataConsumerBlock(dataConsumer, error))
 						return NO;
 				}
 			}
 			
 			dataDescriptor.crc32 = outputStream.crc32;
-			dataDescriptor.compressedSize = dataDescriptor.uncompressedSize = outputStream.size;
+			dataDescriptor.compressedSize = outputStream.compressedSize;
+			dataDescriptor.uncompressedSize = outputStream.uncompressedSize;
+		}
+		else
+		{
+			if (_dataBlock)
+			{
+				NSError* err = nil;
+				BOOL bad = YES;
+				@autoreleasepool
+				{
+					// if data block, write the data directly to output file handle
+					NSData* data = _dataBlock(&err);
+					if (data && [channelOutput writeData:data error:&err])
+					{
+						dataDescriptor.compressedSize = dataDescriptor.uncompressedSize = (uint32_t)data.length;
+						dataDescriptor.crc32 = (uint32_t)crc32(0, (const Bytef*)data.bytes, dataDescriptor.uncompressedSize);
+						bad = NO;
+					}
+				}
+				
+				if (bad)
+				{
+					*error = err;
+					return NO;
+				}
+			}
+			else
+			{
+				// if stream block, data consumer block or no block, use to write to a stream that just outputs to the output file handle
+				ZZStoreOutputStream* outputStream = [[ZZStoreOutputStream alloc] initWithChannelOutput:channelOutput];
+				
+				{
+					[outputStream open];
+					ZZScopeGuard outputStreamCloser(^{[outputStream close];});
+					
+					if (_streamBlock)
+					{
+						if (!_streamBlock(outputStream, error))
+							return NO;
+					}
+					else if (_dataConsumerBlock)
+					{
+						CGDataConsumerRef dataConsumer = CGDataConsumerCreate((__bridge void*)outputStream, &ZZDataConsumer::callbacks);
+						ZZScopeGuard dataConsumerReleaser(^{CGDataConsumerRelease(dataConsumer);});
+						
+						if (!_dataConsumerBlock(dataConsumer, error))
+							return NO;
+					}
+				}
+				
+				dataDescriptor.crc32 = outputStream.crc32;
+				dataDescriptor.compressedSize = dataDescriptor.uncompressedSize = outputStream.size;
+			}
 		}
 	}
-	
 	// save the crc32, compressedSize, uncompressedSize, then write out the data descriptor
 	centralFileHeader->crc32 = dataDescriptor.crc32;
 	centralFileHeader->compressedSize = dataDescriptor.compressedSize;

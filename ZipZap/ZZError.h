@@ -107,7 +107,13 @@ typedef NS_ENUM(NSInteger, ZZErrorCode)
 	/**
 	 * The wrong key was passed in.
 	 */
-	ZZWrongPassword
+	ZZWrongPassword,
+	
+	/**
+	 * The data, stream or data consumer block failed but did not set the error.
+	 * This will be set on the underlying error of the local file write.
+	 */
+	ZZBlockFailedWithoutError
 };
 
 static inline BOOL ZZRaiseErrorNo(NSError** error, ZZErrorCode errorCode, NSDictionary* userInfo)

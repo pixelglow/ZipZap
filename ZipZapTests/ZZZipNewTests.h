@@ -38,6 +38,13 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)testCreatingZipEntriesWithCompressedBadDataConsumerWriteNone;
 - (void)testCreatingZipEntriesWithUncompressedBadDataConsumerWriteNone;
 
+- (void)testCreatingZipEntriesWithCompressedBadDataWithoutError;
+- (void)testCreatingZipEntriesWithUncompressedBadDataWithoutError;
+- (void)testCreatingZipEntriesWithCompressedBadStreamWithoutError;
+- (void)testCreatingZipEntriesWithUncompressedBadStreamWithoutError;
+- (void)testCreatingZipEntriesWithCompressedBadDataConsumerWithoutError;
+- (void)testCreatingZipEntriesWithUncompressedBadDataConsumerWithoutError;
+
 @end
 
 NS_ASSUME_NONNULL_END

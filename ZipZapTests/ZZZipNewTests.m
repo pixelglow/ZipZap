@@ -186,6 +186,41 @@
 						  @"Error underlying error should be same as passed-in error.");
 }
 
+- (void)checkCreatingZipEntriesWithBadEntryWithoutError:(ZZArchiveEntry*)badEntry
+{
+	NSMutableArray* newEntries = [NSMutableArray array];
+	for (NSString* entryFilePath in _entryFilePaths)
+		[newEntries addObject:[ZZArchiveEntry archiveEntryWithFileName:entryFilePath
+															  compress:YES
+															 dataBlock:^(NSError** error){ return [self dataAtFilePath:entryFilePath]; }]];
+	
+	NSUInteger insertIndex = newEntries.count / 2;
+	[newEntries insertObject:badEntry atIndex:insertIndex];
+	
+	NSError* __autoreleasing error;
+	XCTAssertFalse([_zipFile updateEntries:newEntries error:&error],
+				   @"Updating entries with bad entry should fail.");
+	XCTAssertNotNil(error,
+					@"Error object should be set.");
+	XCTAssertEqualObjects(error.domain,
+						  ZZErrorDomain,
+						  @"Error domain should be in ZipZap.");
+	XCTAssertEqual((ZZErrorCode)error.code,
+				   ZZLocalFileWriteErrorCode,
+				   @"Error code should be bad local file write.");
+	XCTAssertEqual([error.userInfo[ZZEntryIndexKey] unsignedIntegerValue],
+				   insertIndex,
+				   @"Error entry index should be bad entry index.");
+	
+	NSError* underlyingError = (NSError*)error.userInfo[NSUnderlyingErrorKey];
+	XCTAssertEqualObjects(underlyingError.domain,
+						  ZZErrorDomain,
+						  @"Error underlying error domain should be in ZipZap.");
+	XCTAssertEqual(underlyingError.code,
+				   ZZBlockFailedWithoutError,
+				   @"Error underlying error code should be block failed without error.");
+
+}
 
 - (void)testCreatingZipWithNoEntries
 {
@@ -339,6 +374,67 @@
 												   *error = [self someError];
 											   return NO;
 										   }]];
+}
+
+- (void)testCreatingZipEntriesWithCompressedBadDataWithoutError
+{
+	[self checkCreatingZipEntriesWithBadEntryWithoutError:[ZZArchiveEntry archiveEntryWithFileName:@"bad"
+																			  compress:YES
+																			 dataBlock:^(NSError** error)
+														   {
+															   return (NSData*)nil;
+														   }]];
+}
+
+- (void)testCreatingZipEntriesWithUncompressedBadDataWithoutError
+{
+	[self checkCreatingZipEntriesWithBadEntryWithoutError:[ZZArchiveEntry archiveEntryWithFileName:@"bad"
+																			  compress:NO
+																			 dataBlock:^(NSError** error)
+														   {
+															   return (NSData*)nil;
+														   }]];
+}
+
+- (void)testCreatingZipEntriesWithCompressedBadStreamWithoutError
+{
+	[self checkCreatingZipEntriesWithBadEntryWithoutError:[ZZArchiveEntry archiveEntryWithFileName:@"bad"
+																			  compress:YES
+																		   streamBlock:^(NSOutputStream* stream, NSError** error)
+														   {
+															   return NO;
+														   }]];
+
+}
+
+- (void)testCreatingZipEntriesWithUncompressedBadStreamWithoutError
+{
+	[self checkCreatingZipEntriesWithBadEntryWithoutError:[ZZArchiveEntry archiveEntryWithFileName:@"bad"
+																			  compress:NO
+																		   streamBlock:^(NSOutputStream* stream, NSError** error)
+														   {
+															   return NO;
+														   }]];
+}
+
+- (void)testCreatingZipEntriesWithCompressedBadDataConsumerWithoutError
+{
+	[self checkCreatingZipEntriesWithBadEntryWithoutError:[ZZArchiveEntry archiveEntryWithFileName:@"bad"
+																			  compress:YES
+																	 dataConsumerBlock:^(CGDataConsumerRef dataConsumer, NSError** error)
+														   {
+															   return NO;
+														   }]];
+}
+
+- (void)testCreatingZipEntriesWithUncompressedBadDataConsumerWithoutError
+{
+	[self checkCreatingZipEntriesWithBadEntryWithoutError:[ZZArchiveEntry archiveEntryWithFileName:@"bad"
+																			  compress:NO
+																	 dataConsumerBlock:^(CGDataConsumerRef dataConsumer, NSError** error)
+														   {
+															   return NO;
+														   }]];
 }
 
 @end
