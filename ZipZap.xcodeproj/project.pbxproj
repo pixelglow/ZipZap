@@ -1090,6 +1090,7 @@
 				PRODUCT_NAME = ZipZap;
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
+				STRIP_INSTALLED_PRODUCT = NO;
 			};
 			name = Debug;
 		};
@@ -1105,6 +1106,7 @@
 				PRODUCT_NAME = ZipZap;
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
+				STRIP_INSTALLED_PRODUCT = NO;
 			};
 			name = Release;
 		};
@@ -1251,6 +1253,7 @@
 				);
 				PRODUCT_NAME = ZipZap;
 				SDKROOT = macosx;
+				STRIP_INSTALLED_PRODUCT = NO;
 			};
 			name = Debug;
 		};
@@ -1265,6 +1268,7 @@
 				);
 				PRODUCT_NAME = ZipZap;
 				SDKROOT = macosx;
+				STRIP_INSTALLED_PRODUCT = NO;
 			};
 			name = Release;
 		};
@@ -1308,6 +1312,7 @@
 				PRODUCT_NAME = ZipZap;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
+				STRIP_INSTALLED_PRODUCT = NO;
 			};
 			name = Debug;
 		};
@@ -1323,6 +1328,7 @@
 				PRODUCT_NAME = ZipZap;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
+				STRIP_INSTALLED_PRODUCT = NO;
 			};
 			name = Release;
 		};
