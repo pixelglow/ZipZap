@@ -18,10 +18,12 @@ public:
 		keys[0] = 305419896;
 		keys[1] = 591751049;
 		keys[2] = 878082192;
-		while (*password)
-		{
-			updateKeys((*password) & 0xff);
-			password++;
+		if (password) {
+			while (*password)
+			{
+				updateKeys((*password) & 0xff);
+				password++;
+			}
 		}
 	}
 

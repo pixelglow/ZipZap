@@ -24,6 +24,18 @@
 	XCTAssertEqual(error.code, ZZWrongPassword, @"[fileEntry newDataWithPassword:...] should set error to ZZWrongPassword");
 }
 
+- (void)testExtractingAndStandardDecryptingNilPassword
+{ // This file was small to begin with, encrypted with Standard and Store compression mode
+	ZZArchive* zipFile = [ZZArchive archiveWithURL:[[NSBundle bundleForClass:self.class] URLForResource:@"small-test-encrypted-standard" withExtension:@"zip"]
+											 error:nil];
+	
+	ZZArchiveEntry *fileEntry = zipFile.entries[0];
+	NSError* error = nil;
+	
+	XCTAssertNil([fileEntry newDataWithPassword:nil error:&error], @"[fileEntry newDataWithPassword:...] should be nil with wrong password");
+	XCTAssertEqual(error.code, ZZWrongPassword, @"[fileEntry newDataWithPassword:...] should set error to ZZWrongPassword");
+}
+
 - (void)testExtractingAndStandardDecryptingSmallZipEntryData
 { // This file was small to begin with, encrypted with Standard and Store compression mode
 	ZZArchive* zipFile = [ZZArchive archiveWithURL:[[NSBundle bundleForClass:self.class] URLForResource:@"small-test-encrypted-standard" withExtension:@"zip"]
