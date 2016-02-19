@@ -103,7 +103,10 @@ namespace ZZDataConsumer
 				compressionFlag = ZZGeneralPurposeBitFlag::maximumCompression;
 				break;
 		}
-		centralFileHeader->generalPurposeBitFlag = localFileHeader->generalPurposeBitFlag = compressionFlag | ZZGeneralPurposeBitFlag::sizeInDataDescriptor | ZZGeneralPurposeBitFlag::languageEncoding;
+		
+		// use data descriptor for crc + size if any blocks provided
+		ZZGeneralPurposeBitFlag sizeInDataDescriptorFlag = dataBlock || streamBlock || dataConsumerBlock ? ZZGeneralPurposeBitFlag::sizeInDataDescriptor : ZZGeneralPurposeBitFlag::none;
+		centralFileHeader->generalPurposeBitFlag = localFileHeader->generalPurposeBitFlag = compressionFlag | sizeInDataDescriptorFlag | ZZGeneralPurposeBitFlag::languageEncoding;
 
 		centralFileHeader->compressionMethod = localFileHeader->compressionMethod = compressionLevel ? ZZCompressionMethod::deflated : ZZCompressionMethod::stored;
 		
@@ -187,7 +190,9 @@ namespace ZZDataConsumer
 	
 	ZZDataDescriptor dataDescriptor;
 	dataDescriptor.signature = ZZDataDescriptor::sign;
-	
+	dataDescriptor.crc32 = 0;
+	dataDescriptor.compressedSize = dataDescriptor.uncompressedSize = 0;
+
 	{
 		// if any of the blocks don't set the error, ensure we return an error anyway
 		ZZScopeGuard errorChecker(^
@@ -307,11 +312,12 @@ namespace ZZDataConsumer
 			}
 		}
 	}
-	// save the crc32, compressedSize, uncompressedSize, then write out the data descriptor
+	// save the crc32, compressedSize, uncompressedSize, then write out the data descriptor if any blocks provided
 	centralFileHeader->crc32 = dataDescriptor.crc32;
 	centralFileHeader->compressedSize = dataDescriptor.compressedSize;
 	centralFileHeader->uncompressedSize = dataDescriptor.uncompressedSize;
-	if (![channelOutput writeData:[NSData dataWithBytesNoCopy:&dataDescriptor
+	if ((_dataBlock || _streamBlock || _dataConsumerBlock) &&
+		![channelOutput writeData:[NSData dataWithBytesNoCopy:&dataDescriptor
 													   length:sizeof(dataDescriptor)
 												 freeWhenDone:NO]
 							error:error])
