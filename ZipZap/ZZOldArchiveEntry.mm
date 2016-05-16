@@ -24,9 +24,8 @@
 @interface ZZOldArchiveEntry ()
 
 - (NSData*)fileData;
-
-- (BOOL)checkEncryptionAndCompression:(out NSError**)error;
 - (NSInputStream*)streamForData:(NSData*)data withPassword:(NSString*)password error:(out NSError**)error;
+- (BOOL)check:(out NSError**)error;
 
 @end
 
@@ -47,7 +46,7 @@
 		
 		if ((_centralFileHeader->generalPurposeBitFlag & ZZGeneralPurposeBitFlag::encrypted) != ZZGeneralPurposeBitFlag::none)
 		{
-			ZZWinZipAESExtraField *winZipAESRecord = _centralFileHeader->extraField<ZZWinZipAESExtraField>();
+			ZZWinZipAESExtraField* winZipAESRecord = _centralFileHeader->extraField<ZZWinZipAESExtraField>();
 			if (winZipAESRecord)
 				_encryptionMode = ZZEncryptionModeWinZipAES;
 			else if ((_centralFileHeader->generalPurposeBitFlag & ZZGeneralPurposeBitFlag::encryptionStrong) != ZZGeneralPurposeBitFlag::none)
@@ -91,7 +90,7 @@
 {
     if (_encryptionMode == ZZEncryptionModeWinZipAES)
 	{
-		ZZWinZipAESExtraField *winZipAESRecord = _centralFileHeader->extraField<ZZWinZipAESExtraField>();
+		ZZWinZipAESExtraField* winZipAESRecord = _centralFileHeader->extraField<ZZWinZipAESExtraField>();
 		if (winZipAESRecord)
 			return winZipAESRecord->compressionMethod;
 	}
@@ -172,6 +171,60 @@
 
 - (BOOL)check:(out NSError**)error
 {
+	if (![self checkEncryptionAndCompressionMode:error])
+		return NO;
+	
+	if (![self checkLocalHeader:error]) {
+		return NO;
+	}
+	
+	if (![self checkLocalEncryptionMode:error]) {
+		return NO;
+	}
+	
+	if (![self checkCRC:error]) {
+		return NO;
+	}
+	
+	return YES;
+}
+
+- (BOOL)checkEncryptionAndCompressionMode:(out NSError**)error
+{
+	return [self checkEncryptionMode:error] && [self checkCompressionMode:error];
+}
+
+- (BOOL)checkEncryptionMode:(out NSError**)error
+{
+	switch (_encryptionMode)
+	{
+		case ZZEncryptionModeNone:
+		case ZZEncryptionModeStandard:
+		case ZZEncryptionModeWinZipAES:
+			break;
+		default:
+			return ZZRaiseErrorNo(error, ZZUnsupportedEncryptionMethod, @{});
+	}
+	return YES;
+}
+
+- (BOOL)checkCompressionMode:(out NSError**)error
+{
+	switch (self.compressionMethod)
+	{
+		case ZZCompressionMethod::stored:
+		case ZZCompressionMethod::deflated:
+			break;
+		default:
+			return ZZRaiseErrorNo(error, ZZUnsupportedCompressionMethod, @{});
+	}
+	
+	return YES;
+}
+
+
+- (BOOL)checkLocalHeader:(out NSError**)error
+{
 	// descriptor fields either from local file header or data descriptor
 	uint32_t dataDescriptorSignature;
 	uint32_t localCrc32;
@@ -193,12 +246,36 @@
 		localUncompressedSize = dataDescriptor->uncompressedSize;
 	}
 	
-	// figure out local encryption mode
+	
+	// sanity check:
+	if (
+		// correct signature
+		_localFileHeader->signature != ZZLocalFileHeader::sign
+		// general fields in local and central headers match
+		|| _localFileHeader->versionNeededToExtract != _centralFileHeader->versionNeededToExtract
+		|| _localFileHeader->generalPurposeBitFlag != _centralFileHeader->generalPurposeBitFlag
+		|| _localFileHeader->compressionMethod != _centralFileHeader->compressionMethod
+		|| _localFileHeader->lastModFileDate != _centralFileHeader->lastModFileDate
+		|| _localFileHeader->lastModFileTime != _centralFileHeader->lastModFileTime
+		|| _localFileHeader->fileNameLength != _centralFileHeader->fileNameLength
+		// file name in local and central headers match
+		|| memcmp(_localFileHeader->fileName(), _centralFileHeader->fileName(), _localFileHeader->fileNameLength) != 0
+		// descriptor fields in local and central headers match
+		|| dataDescriptorSignature != ZZDataDescriptor::sign
+		|| localCrc32 != _centralFileHeader->crc32
+		|| localCompressedSize != _centralFileHeader->compressedSize
+		|| localUncompressedSize != _centralFileHeader->uncompressedSize)
+		return ZZRaiseErrorNo(error, ZZLocalFileReadErrorCode, nil);
+	
+	return YES;
+}
+
+- (BOOL)checkLocalEncryptionMode:(out NSError**)error
+{
 	ZZEncryptionMode localEncryptionMode;
 	if ((_localFileHeader->generalPurposeBitFlag & ZZGeneralPurposeBitFlag::encrypted) != ZZGeneralPurposeBitFlag::none)
 	{
-		ZZWinZipAESExtraField *winZipAESRecord = _localFileHeader->extraField<ZZWinZipAESExtraField>();
-		
+		ZZWinZipAESExtraField* winZipAESRecord = _localFileHeader->extraField<ZZWinZipAESExtraField>();
 		if (winZipAESRecord)
 			localEncryptionMode = ZZEncryptionModeWinZipAES;
 		else if ((_localFileHeader->generalPurposeBitFlag & ZZGeneralPurposeBitFlag::encryptionStrong) != ZZGeneralPurposeBitFlag::none)
@@ -209,40 +286,26 @@
 	else
 		localEncryptionMode = ZZEncryptionModeNone;
 	
-	// sanity check:
-	if (
-		// correct signature
-		_localFileHeader->signature != ZZLocalFileHeader::sign
-		// general fields in local and central headers match
-		|| _localFileHeader->versionNeededToExtract != _centralFileHeader->versionNeededToExtract
-		|| _localFileHeader->generalPurposeBitFlag != _centralFileHeader->generalPurposeBitFlag
-		|| _localFileHeader->compressionMethod != self.compressionMethod
-		|| _localFileHeader->lastModFileDate != _centralFileHeader->lastModFileDate
-		|| _localFileHeader->lastModFileTime != _centralFileHeader->lastModFileTime
-		|| _localFileHeader->fileNameLength != _centralFileHeader->fileNameLength
-		// file name in local and central headers match
-		|| memcmp(_localFileHeader->fileName(), _centralFileHeader->fileName(), _localFileHeader->fileNameLength) != 0
-		// descriptor fields in local and central headers match
-		|| dataDescriptorSignature != ZZDataDescriptor::sign
-		|| localCrc32 != _centralFileHeader->crc32
-		|| localCompressedSize != _centralFileHeader->compressedSize
-		|| localUncompressedSize != _centralFileHeader->uncompressedSize
-		|| localEncryptionMode != _encryptionMode)
+	if (localEncryptionMode != _encryptionMode) {
 		return ZZRaiseErrorNo(error, ZZLocalFileReadErrorCode, nil);
-	
+	}
+	return YES;
+}
+
+- (BOOL)checkCRC:(out NSError**)error
+{
 	if (_encryptionMode == ZZEncryptionModeStandard)
 	{
 		// validate encrypted CRC (?)
 		unsigned char crcBytes[4];
 		memcpy(&crcBytes[0], &_centralFileHeader->crc32, 4);
-		
 		crcBytes[3] = (crcBytes[3] & 0xFF);
 		crcBytes[2] = ((crcBytes[3] >> 8) & 0xFF);
 		crcBytes[1] = ((crcBytes[3] >> 16) & 0xFF);
 		crcBytes[0] = ((crcBytes[3] >> 24) & 0xFF);
-		
-		if (crcBytes[2] > 0 || crcBytes[1] > 0 || crcBytes[0] > 0)
+		if (crcBytes[2] > 0 || crcBytes[1] > 0 || crcBytes[0] > 0) {
 			return ZZRaiseErrorNo(error, ZZInvalidCRChecksum, @{});
+		}
 	}
 	
 	return YES;
@@ -253,30 +316,6 @@
 	return [[NSString alloc] initWithBytes:_centralFileHeader->fileName()
 									length:_centralFileHeader->fileNameLength
 								  encoding:encoding];
-}
-
-- (BOOL)checkEncryptionAndCompression:(out NSError**)error
-{
-	switch (_encryptionMode)
-	{
-		case ZZEncryptionModeNone:
-		case ZZEncryptionModeStandard:
-		case ZZEncryptionModeWinZipAES:
-			break;
-		default:
-			return ZZRaiseErrorNo(error, ZZUnsupportedEncryptionMethod, @{});
-	}
-	
-	switch (self.compressionMethod)
-	{
-		case ZZCompressionMethod::stored:
-		case ZZCompressionMethod::deflated:
-			break;
-		default:
-			return ZZRaiseErrorNo(error, ZZUnsupportedCompressionMethod, @{});
-	}
-	
-	return YES;
 }
 
 - (NSInputStream*)streamForData:(NSData*)data withPassword:(NSString*)password error:(out NSError**)error
@@ -335,16 +374,16 @@
 
 - (NSInputStream*)newStreamWithPassword:(NSString*)password error:(out NSError**)error
 {
-	if (![self checkEncryptionAndCompression:error])
+	if (![self check:error])
 		return nil;
-
+	
 	NSData* fileData = [self fileData];
 	return [self streamForData:fileData withPassword:password error:error];
 }
 
 - (NSData*)newDataWithPassword:(NSString*)password error:(out NSError**)error
 {
-	if (![self checkEncryptionAndCompression:error])
+	if (![self check:error])
 		return nil;
 	
 	NSData* fileData = [self fileData];
@@ -395,7 +434,7 @@
 
 - (CGDataProviderRef)newDataProviderWithPassword:(NSString*)password error:(out NSError**)error
 {
-	if (![self checkEncryptionAndCompression:error])
+	if (![self check:error])
 		return nil;
 
 	NSData* fileData = [self fileData];
