@@ -74,7 +74,7 @@
 	}
 	else if (_encryptionMode == ZZEncryptionModeWinZipAES)
 	{
-		ZZWinZipAESExtraField *winZipAESRecord = _localFileHeader->extraField<ZZWinZipAESExtraField>();
+		ZZWinZipAESExtraField* winZipAESRecord = _localFileHeader->extraField<ZZWinZipAESExtraField>();
 		if (winZipAESRecord)
 		{
 			size_t saltLength = getSaltLength(winZipAESRecord->encryptionStrength);
@@ -171,27 +171,23 @@
 
 - (BOOL)check:(out NSError**)error
 {
-	if (![self checkEncryptionAndCompressionMode:error])
+	if (![self checkEncryptionMode:error])
 		return NO;
 	
-	if (![self checkLocalHeader:error]) {
+	if (![self checkCompressionMode:error])
 		return NO;
-	}
-	
-	if (![self checkLocalEncryptionMode:error]) {
-		return NO;
-	}
-	
-	if (![self checkCRC:error]) {
-		return NO;
-	}
-	
-	return YES;
-}
 
-- (BOOL)checkEncryptionAndCompressionMode:(out NSError**)error
-{
-	return [self checkEncryptionMode:error] && [self checkCompressionMode:error];
+	
+	if (![self checkLocalHeader:error])
+		return NO;
+	
+	if (![self checkLocalEncryptionMode:error])
+		return NO;
+	
+	if (![self checkCRC:error])
+		return NO;
+
+	return YES;
 }
 
 - (BOOL)checkEncryptionMode:(out NSError**)error
@@ -306,7 +302,7 @@
 		{
 			case ZZWinZipAESExtraField::version_AE2:
 				if (_centralFileHeader->crc32 != 0)
-			return ZZRaiseErrorNo(error, ZZInvalidCRChecksum, @{});
+					return ZZRaiseErrorNo(error, ZZInvalidCRChecksum, @{});
 				else
 					return YES;
 				break;
