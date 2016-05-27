@@ -26,6 +26,11 @@
 - (NSData*)fileData;
 - (NSInputStream*)streamForData:(NSData*)data withPassword:(NSString*)password error:(out NSError**)error;
 - (BOOL)check:(out NSError**)error;
+- (BOOL)checkEncryptionMode:(out NSError**)error;
+- (BOOL)checkCompressionMode:(out NSError**)error;
+- (BOOL)checkLocalHeader:(out NSError**)error;
+- (BOOL)checkLocalEncryptionMode:(out NSError**)error;
+- (BOOL)checkCRC:(out NSError**)error;
 
 @end
 
