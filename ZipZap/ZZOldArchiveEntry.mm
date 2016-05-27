@@ -296,18 +296,25 @@
 {
 	if (_encryptionMode == ZZEncryptionModeStandard)
 	{
-		// validate encrypted CRC (?)
-		unsigned char crcBytes[4];
-		memcpy(&crcBytes[0], &_centralFileHeader->crc32, 4);
-		crcBytes[3] = (crcBytes[3] & 0xFF);
-		crcBytes[2] = ((crcBytes[3] >> 8) & 0xFF);
-		crcBytes[1] = ((crcBytes[3] >> 16) & 0xFF);
-		crcBytes[0] = ((crcBytes[3] >> 24) & 0xFF);
-		if (crcBytes[2] > 0 || crcBytes[1] > 0 || crcBytes[0] > 0) {
-			return ZZRaiseErrorNo(error, ZZInvalidCRChecksum, @{});
-		}
+		return YES;
 	}
 	
+	if (_encryptionMode == ZZEncryptionModeWinZipAES)
+	{
+		ZZWinZipAESExtraField* winZipAESRecord = _centralFileHeader->extraField<ZZWinZipAESExtraField>();
+		switch(winZipAESRecord->versionNumber)
+		{
+			case ZZWinZipAESExtraField::version_AE2:
+				if (_centralFileHeader->crc32 != 0)
+			return ZZRaiseErrorNo(error, ZZInvalidCRChecksum, @{});
+				else
+					return YES;
+				break;
+			case ZZWinZipAESExtraField::version_AE1:
+				return YES;
+				break;
+		}
+	}
 	return YES;
 }
 
