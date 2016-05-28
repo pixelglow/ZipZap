@@ -14,6 +14,7 @@
 		5BC58CA718745940002FAE04 /* small-test-encrypted-standard.zip in Resources */ = {isa = PBXBuildFile; fileRef = 5BC58CA518745940002FAE04 /* small-test-encrypted-standard.zip */; };
 		5BC58CAC18745D22002FAE04 /* ZZStandardCryptoEngine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B50392E187069E4002B2B12 /* ZZStandardCryptoEngine.cpp */; };
 		5C61FD201CDBBC1A00208C18 /* small-test-encrypted-aes256-corrupted.zip in Resources */ = {isa = PBXBuildFile; fileRef = 5C61FD1F1CDBBC1A00208C18 /* small-test-encrypted-aes256-corrupted.zip */; };
+		5CD91DA71CF9973A000F6B09 /* small-test-encrypted-aes256-corrupted.zip in Resources */ = {isa = PBXBuildFile; fileRef = 5CD91DA61CF9973A000F6B09 /* small-test-encrypted-aes256-corrupted.zip */; };
 		BF8624AD1BB7495200C12EEE /* ZZAESDecryptInputStream.mm in Sources */ = {isa = PBXBuildFile; fileRef = D8ABBF3D18883528002858BE /* ZZAESDecryptInputStream.mm */; };
 		BF8624AE1BB7495200C12EEE /* ZZArchive.mm in Sources */ = {isa = PBXBuildFile; fileRef = D899CFDB162C608300112F49 /* ZZArchive.mm */; };
 		BF8624AF1BB7495200C12EEE /* ZZArchiveEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = D899CFD9162C608300112F49 /* ZZArchiveEntry.m */; };
@@ -244,6 +245,7 @@
 		5BC58CA418745940002FAE04 /* large-test-encrypted-standard.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = "large-test-encrypted-standard.zip"; sourceTree = "<group>"; };
 		5BC58CA518745940002FAE04 /* small-test-encrypted-standard.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = "small-test-encrypted-standard.zip"; sourceTree = "<group>"; };
 		5C61FD1F1CDBBC1A00208C18 /* small-test-encrypted-aes256-corrupted.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = "small-test-encrypted-aes256-corrupted.zip"; sourceTree = "<group>"; };
+		5CD91DA61CF9973A000F6B09 /* small-test-encrypted-aes256-corrupted.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = "small-test-encrypted-aes256-corrupted.zip"; sourceTree = "<group>"; };
 		BF8624CB1BB7495200C12EEE /* ZipZap.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ZipZap.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BF8624EF1BB74B1F00C12EEE /* libZipZap.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libZipZap.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		D804E4C8187645FE00289404 /* ZZDataProvider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZZDataProvider.h; sourceTree = "<group>"; };
@@ -452,6 +454,7 @@
 				D87BA1AA1B3D5B2900ED7EB3 /* dog.jpg */,
 				D87BA1AB1B3D5B2900ED7EB3 /* dog.png */,
 				D8E366EA188832C0009F3008 /* large-test-encrypted-aes128.zip */,
+				5CD91DA61CF9973A000F6B09 /* small-test-encrypted-aes256-corrupted.zip */,
 				D8E366EB188832C0009F3008 /* large-test-encrypted-aes192.zip */,
 				D8E366EC188832C0009F3008 /* large-test-encrypted-aes256.zip */,
 				5BC58CA418745940002FAE04 /* large-test-encrypted-standard.zip */,
@@ -823,6 +826,7 @@
 				5BC58CA718745940002FAE04 /* small-test-encrypted-standard.zip in Resources */,
 				D87BA1B51B3D5B2900ED7EB3 /* 拉链.txt in Resources */,
 				D8E366F1188832C0009F3008 /* large-test-encrypted-aes192.zip in Resources */,
+				5CD91DA71CF9973A000F6B09 /* small-test-encrypted-aes256-corrupted.zip in Resources */,
 				D87BA1B01B3D5B2900ED7EB3 /* dog.jpg in Resources */,
 				D8E366F3188832C0009F3008 /* small-test-encrypted-aes128.zip in Resources */,
 				D87BA1B31B3D5B2900ED7EB3 /* lorem-ipsum.txt in Resources */,
