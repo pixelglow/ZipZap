@@ -15,7 +15,8 @@
   "documentation_url": "http://pixelglow.github.io/ZipZap/api/",
   "platforms": {
     "ios": "7.0",
-    "osx": "10.9"
+    "osx": "10.9",
+    "watchos": "3.0"
   },
   "requires_arc": true,
   "frameworks": [
