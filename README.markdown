@@ -32,46 +32,50 @@ Use
 ---
 
 Header includes:
-
-	#import <ZipZap/ZipZap.h>
+```objective-c
+#import <ZipZap/ZipZap.h>
+```
 	
 Reading an existing zip file:
-
-	ZZArchive* oldArchive = [ZZArchive archiveWithURL:[NSURL fileURLWithPath:@"/tmp/old.zip"]
-	                                            error:nil];
-	ZZArchiveEntry* firstArchiveEntry = oldArchive.entries[0];
-	NSLog(@"The first entry's uncompressed size is %lu bytes.", (unsigned long)firstArchiveEntry.uncompressedSize);
-	NSLog(@"The first entry's data is: %@.", [firstArchiveEntry newDataWithError:nil]);
+```objective-c
+ZZArchive* oldArchive = [ZZArchive archiveWithURL:[NSURL fileURLWithPath:@"/tmp/old.zip"]
+                                            error:nil];
+ZZArchiveEntry* firstArchiveEntry = oldArchive.entries[0];
+NSLog(@"The first entry's uncompressed size is %lu bytes.", (unsigned long)firstArchiveEntry.uncompressedSize);
+NSLog(@"The first entry's data is: %@.", [firstArchiveEntry newDataWithError:nil]);
+```
 	
 Writing a new zip file:
-
-	ZZArchive* newArchive = [[ZZArchive alloc] initWithURL:[NSURL fileURLWithPath:@"/tmp/new.zip"]
-	                                               options:@{ZZOpenOptionsCreateIfMissingKey : @YES}
-	                                                 error:nil];
-	[newArchive updateEntries:
-						 @[
-						 [ZZArchiveEntry archiveEntryWithFileName:@"first.text"
-														 compress:YES
-														dataBlock:^(NSError** error)
-															  {
-																  return [@"hello, world" dataUsingEncoding:NSUTF8StringEncoding];
-															  }]
-						 ]
-					    error:nil];
+```objective-c
+ZZArchive* newArchive = [[ZZArchive alloc] initWithURL:[NSURL fileURLWithPath:@"/tmp/new.zip"]
+                                               options:@{ZZOpenOptionsCreateIfMissingKey : @YES}
+                                                 error:nil];
+[newArchive updateEntries:
+                     @[
+                     [ZZArchiveEntry archiveEntryWithFileName:@"first.text"
+                                                     compress:YES
+                                                    dataBlock:^(NSError** error)
+                                                          {
+                                                              return [@"hello, world" dataUsingEncoding:NSUTF8StringEncoding];
+                                                          }]
+                     ]
+                    error:nil];
+```
 
 Updating an existing zip file:
-
-	ZZArchive* oldArchive = [ZZArchive archiveWithURL:[NSURL fileURLWithPath:@"/tmp/old.zip"]
-	                                            error:nil];
-	[oldArchive updateEntries:
-	 [oldArchive.entries arrayByAddingObject:
-	  [ZZArchiveEntry archiveEntryWithFileName:@"second.text"
-									  compress:YES
-									 dataBlock:^(NSError** error)
-										   {
-											   return [@"bye, world" dataUsingEncoding:NSUTF8StringEncoding];
-										   }]]
-						error:nil];
+```objective-c
+ZZArchive* oldArchive = [ZZArchive archiveWithURL:[NSURL fileURLWithPath:@"/tmp/old.zip"]
+                                            error:nil];
+[oldArchive updateEntries:
+ [oldArchive.entries arrayByAddingObject:
+  [ZZArchiveEntry archiveEntryWithFileName:@"second.text"
+                                  compress:YES
+                                 dataBlock:^(NSError** error)
+                                       {
+                                           return [@"bye, world" dataUsingEncoding:NSUTF8StringEncoding];
+                                       }]]
+                    error:nil];
+```
 
 Advanced uses: [Recipes](https://github.com/pixelglow/ZipZap/wiki/Recipes)
 
