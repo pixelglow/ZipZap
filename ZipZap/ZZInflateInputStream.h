@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ZZInflateInputStream : NSInputStream
 
-+ (NSData*)decompressData:(NSData*)data
++ (nullable NSData*)decompressData:(NSData*)data
 	 withUncompressedSize:(NSUInteger)uncompressedSize;
 
 - (instancetype)initWithStream:(NSInputStream*)upstream;
