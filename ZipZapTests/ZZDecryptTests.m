@@ -198,6 +198,18 @@
 	}
 }
 
+
+- (void)testExtractingAndAes256DecryptingSmallCorruptedZipEntryData
+{
+	ZZArchive* zipFile = [ZZArchive archiveWithURL:[[NSBundle bundleForClass:self.class] URLForResource:@"small-test-encrypted-aes256-corrupted" withExtension:@"zip"] error:nil];
+	ZZArchiveEntry *fileEntry = zipFile.entries[0];
+	
+	NSError* error = nil;
+	NSData* data = [fileEntry newDataWithPassword:@"12345678" error:&error];
+	XCTAssertNil(data, @"[fileEntry newStreamWithError:...] must return a nil stream");
+	XCTAssertEqual(error.code, ZZLocalFileReadErrorCode, @"[fileEntry newDataWithPassword:...] should set error to ZZLocalFileReadErrorCode");
+}
+
 - (void)testExtractingAndAes256DecryptingSmallZipEntryData
 { // This file was small to begin with, encrypted with AES and Store compression mode
 	ZZArchive* zipFile = [ZZArchive archiveWithURL:[[NSBundle bundleForClass:self.class] URLForResource:@"small-test-encrypted-aes256" withExtension:@"zip"]
