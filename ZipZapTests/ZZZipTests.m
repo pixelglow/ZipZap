@@ -11,6 +11,23 @@
 #import "ZZTasks.h"
 #import "ZZZipTests.h"
 
+static NSString* zipInfoDecodeString(NSString* string)
+{
+	// newer zipinfo decodes non-Latin1 UTF-8 sequence to ?, so need to replicate this in comparison
+	NSMutableString* encodedString = [[NSMutableString alloc] init];
+	for (NSUInteger i = 0, n = string.length; i < n; ++i)
+	{
+		unichar ch = [string characterAtIndex:i];
+		if (ch < 0x100)
+			[encodedString appendString:[NSString stringWithCharacters:&ch length:1]];
+		else if (ch < 0x800)
+			[encodedString appendString:@"??"];
+		else
+			[encodedString appendString:@"???"];
+	}
+	return encodedString;
+}
+
 @implementation ZZZipTests
 {
 	NSURL* _zipFileURL;
@@ -120,14 +137,22 @@
 								   1,
 								   @"Zip entry #%lu last modified date must be within 1s of the new entry last modified date.",
 								   (unsigned long)index);
+		
+		NSString* fileName = nextNewEntry[@"fileName"];
+		NSString* rawFileName = [[NSString alloc] initWithData:nextNewEntry[@"rawFileName"] encoding:NSUTF8StringEncoding];
+		if ([nextZipInfo[8] rangeOfString:@"?"].location != NSNotFound)
+		{
+			fileName = zipInfoDecodeString(fileName);
+			rawFileName = zipInfoDecodeString(rawFileName);
+		}
 
 		XCTAssertEqualObjects(nextZipInfo[8],
-							 nextNewEntry[@"fileName"],
+							 fileName,
 							 @"Zip entry #%lu file name must match new entry file name.",
 							 (unsigned long)index);
 
-		XCTAssertEqualObjects([nextZipInfo[8] dataUsingEncoding:NSUTF8StringEncoding],
-							  nextNewEntry[@"rawFileName"],
+		XCTAssertEqualObjects(nextZipInfo[8],
+							  rawFileName,
 							  @"Zip entry #%lu raw file name must match new entry raw file name.",
 							  (unsigned long)index);
 		
