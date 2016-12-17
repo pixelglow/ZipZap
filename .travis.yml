@@ -1,4 +1,4 @@
 language: objective-c
 osx_image: xcode7
 xcode_project: ZipZap.xcodeproj
-xcode_scheme: ZipZap (OS X Static Library)
+xcode_scheme: ZipZap (macOS Static Library)
