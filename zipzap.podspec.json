@@ -16,6 +16,7 @@
   "platforms": {
     "ios": "9.3",
     "osx": "10.11",
+	"tvos": "9.2",
     "watchos": "3.0"
   },
   "requires_arc": true,
