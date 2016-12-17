@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/pixelglow/ZipZap.svg)](https://travis-ci.org/pixelglow/ZipZap)
 
-**ZipZap** is a zip file I/O library for Mac OS X and iOS.
+**ZipZap** is a zip file I/O library for macOS and iOS.
 
 The zip file is an ideal container for compound Objective-C documents. Zip files are widely used and well understood. You can randomly access their parts. The format compresses decently and has extensive operating system and tool support. So we want to make this format an even easier choice for you. Thus, the library features:
 
@@ -15,8 +15,8 @@ As an independent project:
 
 * In the Terminal, run `git clone https://github.com/pixelglow/ZipZap.git`.
 * Within the *ZipZap* directory, open the *ZipZap.xcodeproj* Xcode project.
-* In the Xcode project, select either the *ZipZap (iOS Framework)*, *ZipZap (iOS Static Library)*, *ZipZap (OS X Framework)* or *ZipZap (OS X Static Library)*  scheme from the drop down.
-* You can now build, test (Mac OS X only) or analyze with the selected scheme.
+* In the Xcode project, select either the *ZipZap (iOS Framework)*, *ZipZap (iOS Static Library)*, *ZipZap (macOS Framework)* or *ZipZap (macOS Static Library)*  scheme from the drop down.
+* You can now build, test (macOS only) or analyze with the selected scheme.
 * The built libraries and test cases are in a subdirectory of *~/Library/Developer/Xcode/DerivedData*.
 
 As a project integrated with your own workspace:
@@ -86,10 +86,10 @@ Require
 
 * **Build**: Xcode 7 and later.
 * **Link**: Only system libraries; no third-party libraries needed.
-  * *ApplicationServices.framework* (Mac OS X) or *ImageIO.framework* (iOS)
+  * *ApplicationServices.framework* (macOS) or *ImageIO.framework* (iOS)
   * *Foundation.framework*
   * *libz.dylib*
-* **Run**: Mac OS X 10.9 (Mavericks) or iOS 7.0 and later.
+* **Run**: macOS 10.9 (Mavericks) or iOS 7.0 and later.
 
 Support
 -------

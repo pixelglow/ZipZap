@@ -684,9 +684,9 @@
 			productReference = D87BA1F81B3D6DEA00ED7EB3 /* ZipZap.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		D899CF81162C5EC100112F49 /* ZipZap (OS X Static Library) */ = {
+		D899CF81162C5EC100112F49 /* ZipZap (macOS Static Library) */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = D899CFA6162C5EC100112F49 /* Build configuration list for PBXNativeTarget "ZipZap (OS X Static Library)" */;
+			buildConfigurationList = D899CFA6162C5EC100112F49 /* Build configuration list for PBXNativeTarget "ZipZap (macOS Static Library)" */;
 			buildPhases = (
 				D899CF7E162C5EC100112F49 /* Sources */,
 				D899CF7F162C5EC100112F49 /* Frameworks */,
@@ -696,7 +696,7 @@
 			);
 			dependencies = (
 			);
-			name = "ZipZap (OS X Static Library)";
+			name = "ZipZap (macOS Static Library)";
 			productName = ZipZap;
 			productReference = D899CF82162C5EC100112F49 /* libZipZap.a */;
 			productType = "com.apple.product-type.library.static";
@@ -736,9 +736,9 @@
 			productReference = D899CFB0162C5EEB00112F49 /* libZipZap.a */;
 			productType = "com.apple.product-type.library.static";
 		};
-		D8D140D21B423B1100C411B0 /* ZipZap (OS X Framework) */ = {
+		D8D140D21B423B1100C411B0 /* ZipZap (macOS Framework) */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = D8D140EA1B423B1100C411B0 /* Build configuration list for PBXNativeTarget "ZipZap (OS X Framework)" */;
+			buildConfigurationList = D8D140EA1B423B1100C411B0 /* Build configuration list for PBXNativeTarget "ZipZap (macOS Framework)" */;
 			buildPhases = (
 				D8D140CE1B423B1100C411B0 /* Sources */,
 				D8D140CF1B423B1100C411B0 /* Frameworks */,
@@ -749,7 +749,7 @@
 			);
 			dependencies = (
 			);
-			name = "ZipZap (OS X Framework)";
+			name = "ZipZap (macOS Framework)";
 			productName = ZipZap;
 			productReference = D8D140D31B423B1100C411B0 /* ZipZap.framework */;
 			productType = "com.apple.product-type.framework";
@@ -784,8 +784,8 @@
 			targets = (
 				D87BA1F71B3D6DEA00ED7EB3 /* ZipZap (iOS Framework) */,
 				D899CFAF162C5EEB00112F49 /* ZipZap (iOS Static Library) */,
-				D8D140D21B423B1100C411B0 /* ZipZap (OS X Framework) */,
-				D899CF81162C5EC100112F49 /* ZipZap (OS X Static Library) */,
+				D8D140D21B423B1100C411B0 /* ZipZap (macOS Framework) */,
+				D899CF81162C5EC100112F49 /* ZipZap (macOS Static Library) */,
 				BF8624AB1BB7495200C12EEE /* ZipZap (tvOS Framework) */,
 				BF8624D11BB74B1F00C12EEE /* ZipZap (tvOS Static Library) */,
 				D899CF95162C5EC100112F49 /* ZipZapTests */,
@@ -1011,7 +1011,7 @@
 /* Begin PBXTargetDependency section */
 		D899CF9B162C5EC100112F49 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = D899CF81162C5EC100112F49 /* ZipZap (OS X Static Library) */;
+			target = D899CF81162C5EC100112F49 /* ZipZap (macOS Static Library) */;
 			targetProxy = D899CF9A162C5EC100112F49 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -1430,7 +1430,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		D899CFA6162C5EC100112F49 /* Build configuration list for PBXNativeTarget "ZipZap (OS X Static Library)" */ = {
+		D899CFA6162C5EC100112F49 /* Build configuration list for PBXNativeTarget "ZipZap (macOS Static Library)" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D899CFA7162C5EC100112F49 /* Debug */,
@@ -1457,7 +1457,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		D8D140EA1B423B1100C411B0 /* Build configuration list for PBXNativeTarget "ZipZap (OS X Framework)" */ = {
+		D8D140EA1B423B1100C411B0 /* Build configuration list for PBXNativeTarget "ZipZap (macOS Framework)" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D8D140E61B423B1100C411B0 /* Debug */,

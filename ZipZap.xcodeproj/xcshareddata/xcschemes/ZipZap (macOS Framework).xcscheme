@@ -16,7 +16,7 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "D8D140D21B423B1100C411B0"
                BuildableName = "ZipZap.framework"
-               BlueprintName = "ZipZap (OS X Framework)"
+               BlueprintName = "ZipZap (macOS Framework)"
                ReferencedContainer = "container:ZipZap.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -47,7 +47,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "D8D140D21B423B1100C411B0"
             BuildableName = "ZipZap.framework"
-            BlueprintName = "ZipZap (OS X Framework)"
+            BlueprintName = "ZipZap (macOS Framework)"
             ReferencedContainer = "container:ZipZap.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -65,7 +65,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "D8D140D21B423B1100C411B0"
             BuildableName = "ZipZap.framework"
-            BlueprintName = "ZipZap (OS X Framework)"
+            BlueprintName = "ZipZap (macOS Framework)"
             ReferencedContainer = "container:ZipZap.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
