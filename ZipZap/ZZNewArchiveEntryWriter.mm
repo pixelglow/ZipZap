@@ -105,7 +105,12 @@ namespace ZZDataConsumer
 		}
 		
 		// use data descriptor for crc + size if any blocks provided
-		ZZGeneralPurposeBitFlag sizeInDataDescriptorFlag = dataBlock || streamBlock || dataConsumerBlock ? ZZGeneralPurposeBitFlag::sizeInDataDescriptor : ZZGeneralPurposeBitFlag::none;
+		// However, if dataBlock is provided, we don't use the data descriptor.
+		// This is because on Android / Java, ZipInputStream cannot support STORED
+		// method with data descriptor. We need to put the crc32 and file size
+		// upfront in local file header. However, for us, this is only zero cost if
+		// we use data block.
+		ZZGeneralPurposeBitFlag sizeInDataDescriptorFlag = ((dataBlock && compressionLevel != 0) || streamBlock || dataConsumerBlock) ? ZZGeneralPurposeBitFlag::sizeInDataDescriptor : ZZGeneralPurposeBitFlag::none;
 		centralFileHeader->generalPurposeBitFlag = localFileHeader->generalPurposeBitFlag = compressionFlag | sizeInDataDescriptorFlag | ZZGeneralPurposeBitFlag::languageEncoding;
 
 		centralFileHeader->compressionMethod = localFileHeader->compressionMethod = compressionLevel ? ZZCompressionMethod::deflated : ZZCompressionMethod::stored;
@@ -184,10 +189,7 @@ namespace ZZDataConsumer
 	
 	// save current offset, then write out all of local file to the file handle
 	centralFileHeader->relativeOffsetOfLocalHeader = [channelOutput offset] + initialSkip;
-	if (![channelOutput writeData:_localFileHeader
-							error:error])
-		return NO;
-	
+
 	ZZDataDescriptor dataDescriptor;
 	dataDescriptor.signature = ZZDataDescriptor::sign;
 	dataDescriptor.crc32 = 0;
@@ -205,6 +207,10 @@ namespace ZZDataConsumer
 
 		if (_compressionLevel)
 		{
+			// Write the local file header.
+			if (![channelOutput writeData:_localFileHeader
+									error:error])
+				return NO;
 			// use of one the blocks to write to a stream that deflates directly to the output file handle
 			ZZDeflateOutputStream* outputStream = [[ZZDeflateOutputStream alloc] initWithChannelOutput:channelOutput
 																					  compressionLevel:_compressionLevel];
@@ -269,11 +275,18 @@ namespace ZZDataConsumer
 				{
 					// if data block, write the data directly to output file handle
 					NSData* data = _dataBlock(&err);
-					if (data && [channelOutput writeData:data error:&err])
+					if (data)
 					{
 						dataDescriptor.compressedSize = dataDescriptor.uncompressedSize = (uint32_t)data.length;
 						dataDescriptor.crc32 = (uint32_t)crc32(0, (const Bytef*)data.bytes, dataDescriptor.uncompressedSize);
-						bad = NO;
+						ZZLocalFileHeader *localFileHeader = [self localFileHeader];
+						localFileHeader->crc32 = dataDescriptor.crc32;
+						localFileHeader->compressedSize = dataDescriptor.compressedSize;
+						localFileHeader->uncompressedSize = dataDescriptor.uncompressedSize;
+						// Successfully write out the local file header and the actual data.
+						if ([channelOutput writeData:_localFileHeader error:&err] &&
+							[channelOutput writeData:data error:&err])
+							bad = NO;
 					}
 				}
 				
@@ -285,6 +298,10 @@ namespace ZZDataConsumer
 			}
 			else
 			{
+				// Write the local file header.
+				if (![channelOutput writeData:_localFileHeader
+										error:error])
+					return NO;
 				// if stream block, data consumer block or no block, use to write to a stream that just outputs to the output file handle
 				ZZStoreOutputStream* outputStream = [[ZZStoreOutputStream alloc] initWithChannelOutput:channelOutput];
 				
@@ -317,6 +334,9 @@ namespace ZZDataConsumer
 	centralFileHeader->compressedSize = dataDescriptor.compressedSize;
 	centralFileHeader->uncompressedSize = dataDescriptor.uncompressedSize;
 	if ((_dataBlock || _streamBlock || _dataConsumerBlock) &&
+		// Only write data descriptor if we don't have size in data descriptor.
+		(centralFileHeader->generalPurposeBitFlag & ZZGeneralPurposeBitFlag::sizeInDataDescriptor) !=
+		ZZGeneralPurposeBitFlag::none &&
 		![channelOutput writeData:[NSData dataWithBytesNoCopy:&dataDescriptor
 													   length:sizeof(dataDescriptor)
 												 freeWhenDone:NO]
