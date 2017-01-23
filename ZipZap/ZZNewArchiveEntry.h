@@ -28,6 +28,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)init NS_UNAVAILABLE;
 
+- (instancetype)init NS_UNAVAILABLE;
+
 - (instancetype)initWithFileName:(NSString*)fileName
 						fileMode:(mode_t)fileMode
 					lastModified:(NSDate*)lastModified

@@ -14,6 +14,12 @@
 	uint32_t _offset;
 }
 
+-(instancetype) init
+{
+	[self doesNotRecognizeSelector:_cmd];
+	return nil;
+}
+
 - (instancetype)initWithData:(NSMutableData*)data
 {
 	if ((self = [super init]))

@@ -34,6 +34,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)init NS_UNAVAILABLE;
 
+- (instancetype)init NS_UNAVAILABLE;
+
 - (instancetype)initWithCentralFileHeader:(struct ZZCentralFileHeader*)centralFileHeader
 						  localFileHeader:(struct ZZLocalFileHeader*)localFileHeader NS_DESIGNATED_INITIALIZER;
 

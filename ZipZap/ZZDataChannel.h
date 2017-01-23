@@ -18,6 +18,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)init NS_UNAVAILABLE;
 
+- (instancetype)init NS_UNAVAILABLE;
+
 - (instancetype)initWithData:(NSData*)data NS_DESIGNATED_INITIALIZER;
 
 - (nullable instancetype)temporaryChannel:(out NSError**)error;

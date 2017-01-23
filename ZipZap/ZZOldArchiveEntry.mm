@@ -37,6 +37,12 @@
 	ZZEncryptionMode _encryptionMode;
 }
 
+-(instancetype) init
+{
+	[self doesNotRecognizeSelector:_cmd];
+	return nil;
+}
+
 - (instancetype)initWithCentralFileHeader:(struct ZZCentralFileHeader*)centralFileHeader
 						  localFileHeader:(struct ZZLocalFileHeader*)localFileHeader
 {

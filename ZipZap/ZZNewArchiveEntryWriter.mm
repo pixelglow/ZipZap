@@ -47,6 +47,12 @@ namespace ZZDataConsumer
 	BOOL (^_dataConsumerBlock)(CGDataConsumerRef dataConsumer, NSError** error);
 }
 
+-(instancetype) init
+{
+	[self doesNotRecognizeSelector:_cmd];
+	return nil;
+}
+
 - (instancetype)initWithFileName:(NSString*)fileName
 						fileMode:(mode_t)fileMode
 					lastModified:(NSDate*)lastModified

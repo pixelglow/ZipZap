@@ -24,6 +24,8 @@ static const size_t ENDOFCENTRALDIRECTORY_MINSEARCH = sizeof(ZZEndOfCentralDirec
 
 @interface ZZArchive ()
 
+- (instancetype)init NS_UNAVAILABLE;
+
 - (instancetype)initWithChannel:(id<ZZChannel>)channel
 						options:(NSDictionary*)options
 						  error:(out NSError**)error NS_DESIGNATED_INITIALIZER;
@@ -51,6 +53,12 @@ static const size_t ENDOFCENTRALDIRECTORY_MINSEARCH = sizeof(ZZEndOfCentralDirec
 	return [[self alloc] initWithChannel:[[ZZDataChannel alloc] initWithData:data]
 								 options:nil
 								   error:error];
+}
+
+-(instancetype) init
+{
+	[self doesNotRecognizeSelector:_cmd];
+	return nil;
 }
 
 - (instancetype)initWithURL:(NSURL*)URL

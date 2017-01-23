@@ -14,6 +14,12 @@
 	NSData* _allData;
 }
 
+-(instancetype) init
+{
+	[self doesNotRecognizeSelector:_cmd];
+	return nil;
+}
+
 - (instancetype)initWithData:(NSData*)data
 {
 	if ((self = [super init]))
