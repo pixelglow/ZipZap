@@ -250,9 +250,19 @@
 
 - (NSString*)fileNameWithEncoding:(NSStringEncoding)encoding
 {
-	return [[NSString alloc] initWithBytes:_centralFileHeader->fileName()
+	
+	NSString *encodedString = nil;
+	
+	if (encoding == CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingDOSLatinUS)) {
+		BOOL lossyConversion = NO;
+		NSData *data = [NSData dataWithBytesNoCopy:_centralFileHeader->fileName() length:_centralFileHeader->fileNameLength freeWhenDone:NO];
+		[NSString stringEncodingForData:data encodingOptions:nil convertedString:&encodedString usedLossyConversion:&lossyConversion];
+	} else {
+	  encodedString = [[NSString alloc] initWithBytes:_centralFileHeader->fileName()
 									length:_centralFileHeader->fileNameLength
 								  encoding:encoding];
+	}
+	return encodedString;
 }
 
 - (BOOL)checkEncryptionAndCompression:(out NSError**)error
