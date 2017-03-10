@@ -67,79 +67,91 @@ static const uInt _flushLength = 1024;
 
 - (void)open
 {
-	deflateInit2(&_stream,
-				 _compressionLevel,
-				 Z_DEFLATED,
-				 -15,
-				 8,
-				 Z_DEFAULT_STRATEGY);
-	_status = NSStreamStatusOpen;
+	if (_status == NSStreamStatusNotOpen)
+	{
+		deflateInit2(&_stream,
+					 _compressionLevel,
+					 Z_DEFLATED,
+					 -15,
+					 8,
+					 Z_DEFAULT_STRATEGY);
+		_status = NSStreamStatusOpen;
+	}
 }
 
 - (void)close
 {
-	uint8_t flushBuffer[_flushLength];
-	_stream.next_in = Z_NULL;
-	_stream.avail_in = 0;
-	
-	// flush out all remaining deflated bytes, a bufferfull at a time
-	BOOL flushing = YES;
-	while (flushing)
+	if (_status != NSStreamStatusClosed)
 	{
-		_stream.next_out = flushBuffer;
-		_stream.avail_out = _flushLength;
-		
-		flushing = deflate(&_stream, Z_FINISH) == Z_OK;
-				
-		if (_stream.avail_out < _flushLength)
-		{
-			NSError* __autoreleasing flushError;
-			if (![_channelOutput writeData:[NSData dataWithBytesNoCopy:flushBuffer
-																length:_flushLength - _stream.avail_out
-														  freeWhenDone:NO]
-									 error:&flushError])
+		@autoreleasepool {
+			uint8_t flushBuffer[_flushLength];
+			_stream.next_in = Z_NULL;
+			_stream.avail_in = 0;
+			
+			// flush out all remaining deflated bytes, a bufferfull at a time
+			BOOL flushing = YES;
+			while (flushing)
 			{
-				_status = NSStreamStatusError;
-				_error = flushError;
+				_stream.next_out = flushBuffer;
+				_stream.avail_out = _flushLength;
+				
+				flushing = deflate(&_stream, Z_FINISH) == Z_OK;
+				
+				if (_stream.avail_out < _flushLength)
+				{
+					NSError* __autoreleasing flushError;
+					if (![_channelOutput writeData:[NSData dataWithBytesNoCopy:flushBuffer
+																		length:_flushLength - _stream.avail_out
+																  freeWhenDone:NO]
+											 error:&flushError])
+					{
+						_status = NSStreamStatusError;
+						_error = flushError;
+					}
+				}
 			}
+			
+			deflateEnd(&_stream);
+			_status = NSStreamStatusClosed;
 		}
 	}
-	
-	deflateEnd(&_stream);
-	_status = NSStreamStatusClosed;
 }
 
 - (NSInteger)write:(const uint8_t*)buffer maxLength:(NSUInteger)length
 {
-	// allocate an output buffer large enough to fit deflated output
-	// NOTE: we ensure that we can deflate at least one byte, since write:maxLength: need not deflate all bytes
-	uLong maxLength = deflateBound(&_stream, length);
-	NSMutableData* outputBuffer = [[NSMutableData alloc] initWithLength:maxLength];
+	NSUInteger bytesWritten = 0;
 	
-	// deflate buffer to output buffer
-	_stream.next_in = (Bytef*)buffer;
-	_stream.avail_in = (uInt)length;
-	_stream.next_out = (Bytef*)outputBuffer.mutableBytes;
-	_stream.avail_out = (uInt)maxLength;
-	deflate(&_stream, Z_NO_FLUSH);
-	
-	// write out deflated output if any
-	outputBuffer.length = maxLength - _stream.avail_out;
-	if (outputBuffer.length > 0)
-	{
-		NSError* __autoreleasing writeError;
-		if (![_channelOutput writeData:outputBuffer
-								 error:&writeError])
+	@autoreleasepool {
+		// allocate an output buffer large enough to fit deflated output
+		// NOTE: we ensure that we can deflate at least one byte, since write:maxLength: need not deflate all bytes
+		uLong maxLength = deflateBound(&_stream, length);
+		NSMutableData* outputBuffer = [[NSMutableData alloc] initWithLength:maxLength];
+		
+		// deflate buffer to output buffer
+		_stream.next_in = (Bytef*)buffer;
+		_stream.avail_in = (uInt)length;
+		_stream.next_out = (Bytef*)outputBuffer.mutableBytes;
+		_stream.avail_out = (uInt)maxLength;
+		deflate(&_stream, Z_NO_FLUSH);
+		
+		// write out deflated output if any
+		outputBuffer.length = maxLength - _stream.avail_out;
+		if (outputBuffer.length > 0)
 		{
-			_status = NSStreamStatusError;
-			_error = writeError;
-			return -1;
+			NSError* __autoreleasing writeError;
+			if (![_channelOutput writeData:outputBuffer
+									 error:&writeError])
+			{
+				_status = NSStreamStatusError;
+				_error = writeError;
+				return -1;
+			}
 		}
+		
+		// accumulate checksum only on bytes that were deflated
+		bytesWritten = length - _stream.avail_in;
+		_crc32 = (uint32_t)crc32(_crc32, buffer, (uInt)bytesWritten);
 	}
-
-	// accumulate checksum only on bytes that were deflated
-	NSUInteger bytesWritten = length - _stream.avail_in;
-	_crc32 = (uint32_t)crc32(_crc32, buffer, (uInt)bytesWritten);
 	
 	return bytesWritten;
 }
