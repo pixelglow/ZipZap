@@ -161,12 +161,6 @@ static const size_t ENDOFCENTRALDIRECTORY_MINSEARCH = sizeof(ZZEndOfCentralDirec
 		ZZLocalFileHeader* nextLocalFileHeader = (ZZLocalFileHeader*)(beginContent
 																	  + nextCentralFileHeader->relativeOffsetOfLocalHeader);
 		
-		/*
-		 return [[NSString alloc] initWithBytes:_centralFileHeader->fileName()
-		 length:_centralFileHeader->fileNameLength
-		 encoding:encoding];
-*/
-		
 		ZZOldArchiveEntry *entry = [[ZZOldArchiveEntry alloc] initWithCentralFileHeader:nextCentralFileHeader
 																		localFileHeader:nextLocalFileHeader];
 		
