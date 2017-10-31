@@ -141,6 +141,8 @@ static const size_t ENDOFCENTRALDIRECTORY_MINSEARCH = sizeof(ZZEndOfCentralDirec
 	ZZCentralFileHeader* nextCentralFileHeader = (ZZCentralFileHeader*)(beginContent
 																		+ endOfCentralDirectoryRecord->offsetOfStartOfCentralDirectoryWithRespectToTheStartingDiskNumber);
 	NSMutableArray<ZZArchiveEntry*>* entries = [NSMutableArray array];
+	NSMutableDictionary<NSString *, ZZArchiveEntry*> *entriesDictionary = [NSMutableDictionary dictionary];
+	
 	for (NSUInteger index = 0; index < endOfCentralDirectoryRecord->totalNumberOfEntriesInTheCentralDirectory; ++index)
 	{
 		// sanity check:
@@ -159,8 +161,18 @@ static const size_t ENDOFCENTRALDIRECTORY_MINSEARCH = sizeof(ZZEndOfCentralDirec
 		ZZLocalFileHeader* nextLocalFileHeader = (ZZLocalFileHeader*)(beginContent
 																	  + nextCentralFileHeader->relativeOffsetOfLocalHeader);
 		
-		[entries addObject:[[ZZOldArchiveEntry alloc] initWithCentralFileHeader:nextCentralFileHeader
-																localFileHeader:nextLocalFileHeader]];
+		/*
+		 return [[NSString alloc] initWithBytes:_centralFileHeader->fileName()
+		 length:_centralFileHeader->fileNameLength
+		 encoding:encoding];
+*/
+		
+		ZZOldArchiveEntry *entry = [[ZZOldArchiveEntry alloc] initWithCentralFileHeader:nextCentralFileHeader
+																		localFileHeader:nextLocalFileHeader];
+		
+		[entries addObject:entry];
+		[entriesDictionary setObject:entry forKey:entry.fileName];
+		
 		
 		nextCentralFileHeader = nextCentralFileHeader->nextCentralFileHeader();
 	}
@@ -168,6 +180,7 @@ static const size_t ENDOFCENTRALDIRECTORY_MINSEARCH = sizeof(ZZEndOfCentralDirec
 	// having successfully negotiated the new contents + entries, replace in one go
 	_contents = contents;
 	_entries = entries;
+	_entriesDictionary = entriesDictionary;
 	return YES;
 }
 
