@@ -56,6 +56,7 @@ NS_ASSUME_NONNULL_BEGIN
  * The array of ZZArchiveEntry entries within this archive.
  */
 @property (readonly, nonatomic) NSArray<ZZArchiveEntry*>* entries;
+@property (readonly, nonatomic) NSDictionary<NSString *, ZZArchiveEntry*>* entriesDictionary;
 
 /**
  * Creates a new archive with the zip file at the given file URL.
