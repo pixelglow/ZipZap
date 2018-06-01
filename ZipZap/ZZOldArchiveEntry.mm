@@ -250,9 +250,14 @@
 
 - (NSString*)fileNameWithEncoding:(NSStringEncoding)encoding
 {
-	return [[NSString alloc] initWithBytes:_centralFileHeader->fileName()
-									length:_centralFileHeader->fileNameLength
-								  encoding:encoding];
+	// Sanitize path traversal characters if they're present in the file name to prevent directory backtracking. Ignoring these characters mimicks the default behavior of the Unarchiving tool on macOS.
+	NSString *rawFilePath = [[NSString alloc] initWithBytes:_centralFileHeader->fileName() length:_centralFileHeader->fileNameLength encoding:encoding];
+	
+	// Add URL percent encoding to the path as it may contain non-english accented characters that would break NSURL
+	rawFilePath = [rawFilePath stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+	
+	// Standardize the URL (remove any path oddities) before removing the percent encoding
+	return [[[[NSURL URLWithString:rawFilePath] standardizedURL] absoluteString] stringByRemovingPercentEncoding];
 }
 
 - (BOOL)checkEncryptionAndCompression:(out NSError**)error
