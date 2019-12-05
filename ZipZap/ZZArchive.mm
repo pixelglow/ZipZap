@@ -100,6 +100,8 @@ static const size_t ENDOFCENTRALDIRECTORY_MINSEARCH = sizeof(ZZEndOfCentralDirec
 	{
 		if (canMiss && readError.code == NSFileReadNoSuchFileError && [readError.domain isEqualToString:NSCocoaErrorDomain])
 		{
+			_contents = nil;
+			_entries = nil;
 			return YES;
 		}
 		else

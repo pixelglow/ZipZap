@@ -92,8 +92,7 @@
 
 - (NSDate*)lastModified
 {
-	// This is an abstract class. This method cannot be called and should instead be implemented by a subclass.
-	return (id _Nonnull)nil;
+	return nil;
 }
 
 - (NSUInteger)crc32
@@ -123,8 +122,7 @@
 
 - (NSData*)rawFileName
 {
-	// This is an abstract class. This method cannot be called and should instead be implemented by a subclass.
-	return (id _Nonnull)nil;
+	return nil;
 }
 
 - (NSStringEncoding)encoding
@@ -149,8 +147,7 @@
 
 - (NSString*)fileNameWithEncoding:(NSStringEncoding)encoding
 {
-	// This is an abstract class. This method cannot be called and should instead be implemented by a subclass.
-	return (id _Nonnull)nil;
+	return nil;
 }
 
 - (NSData*)newDataWithError:(NSError**)error
@@ -175,8 +172,7 @@
 
 - (id<ZZArchiveEntryWriter>)newWriterCanSkipLocalFile:(BOOL)canSkipLocalFile
 {
-	// This is an abstract class. This method cannot be called and should instead be implemented by a subclass.
-	return (id _Nonnull)nil;
+	return nil;
 }
 
 @end
