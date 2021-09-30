@@ -14,7 +14,7 @@ let package = Package(
             path: "ZipZap"
         ),
             exclude: [
-                "ZipZap/Info.plist"
+                "Info.plist"
             ]
     ]
 )
