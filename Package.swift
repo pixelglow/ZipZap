@@ -11,10 +11,10 @@ let package = Package(
     targets: [
         .target(
             name: "ZipZap",
-            path: "ZipZap"
-        ),
+            path: "ZipZap",
             exclude: [
                 "Info.plist"
             ]
+        )
     ]
 )
