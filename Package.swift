@@ -16,4 +16,5 @@ let package = Package(
             exclude: [
                 "ZipZap/Info.plist"
             ]
+    ]
 )
